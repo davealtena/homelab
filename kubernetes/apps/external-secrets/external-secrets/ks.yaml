@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: external-secrets
+  name: &app external-secrets
   namespace: flux-system
 spec:
   targetNamespace: external-secrets
   commonMetadata:
     labels:
-      app.kubernetes.io/name: external-secrets
+      app.kubernetes.io/name: *app
   path: ./kubernetes/main/apps/external-secrets/external-secrets/app
   prune: true
   sourceRef:
