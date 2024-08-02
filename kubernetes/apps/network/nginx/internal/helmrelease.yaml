@@ -28,8 +28,8 @@ spec:
       replicaCount: 2
       service:
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: internal.devbu.io
-          io.cilium/lb-ipam-ips: 192.168.42.121
+          external-dns.alpha.kubernetes.io/hostname: internal.altena.io
+          io.cilium/lb-ipam-ips: 192.168.2.129
       ingressClassResource:
         name: internal
         default: true
@@ -72,7 +72,7 @@ spec:
           namespaceSelector:
             any: true
       extraArgs:
-        default-ssl-certificate: network/devbu-io-tls
+        default-ssl-certificate: network/altena-io-tls
       terminationGracePeriodSeconds: 120
       topologySpreadConstraints:
         - maxSkew: 1
