@@ -16,7 +16,7 @@ spec:
             email: dave@altena.io
             apiKeySecretRef:
               name: cloudflare-secret
-              key: CLOUDFLARE_API_KEY
+              key: CLOUDFLARE_API_TOKEN
         selector:
           dnsZones: ["altena.io"]
 ---
@@ -37,6 +37,6 @@ spec:
             email: dave@altena.io
             apiKeySecretRef:
               name: cloudflare-secret
-              key: CLOUDFLARE_API_KEY
+              key: CLOUDFLARE_API_TOKEN
         selector:
           dnsZones: ["altena.io"]
