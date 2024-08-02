@@ -14,7 +14,7 @@ spec:
       - dns01:
           cloudflare:
             email: dave@altena.io
-            apiKeySecretRef:
+            apiTokenSecretRef:
               name: cloudflare-secret
               key: CLOUDFLARE_API_TOKEN
         selector:
@@ -35,7 +35,7 @@ spec:
       - dns01:
           cloudflare:
             email: dave@altena.io
-            apiKeySecretRef:
+            apiTokenSecretRef:
               name: cloudflare-secret
               key: CLOUDFLARE_API_TOKEN
         selector:
