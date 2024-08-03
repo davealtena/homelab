@@ -143,5 +143,5 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/target: internal.altena.io
         ingressClassName: internal
-        hosts: ["prometheus.altena.io"]
+        hosts: ["grafana.altena.io"]
         pathType: Prefix
