@@ -46,6 +46,6 @@ spec:
       - --events
       - --ignore-ingress-tls-spec
       - --ingress-class=internal
-      - --pihole-tls-skip-verify=true #TODO: Fix when TLS is configured on pi-hole
+      - --pihole-tls-skip-verify #TODO: Fix when TLS is configured on pi-hole
     securityContext:
       fsGroup: 65534
