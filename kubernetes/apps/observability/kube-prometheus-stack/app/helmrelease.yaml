@@ -137,6 +137,10 @@ spec:
               targetLabel: kubernetes_node
     grafana:
       enabled: true
+      admin:
+        existingSecret: "grafana-admin-secret"
+        userKey: admin-user
+        passwordKey: admin-password
       forceDeployDashboards: true
       ingress:
         enabled: true
