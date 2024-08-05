@@ -25,7 +25,7 @@ bootstrap_tls_sans: ["fake"]
 bootstrap_sops_age_pubkey: $BOOTSTRAP_AGE_PUBLIC_KEY
 bootstrap_bgp:
   enabled: false
-bootstrap_github_address: https://github.com/onedr0p/cluster-template
+bootstrap_github_address: https://github.com/ /cluster-template
 bootstrap_github_branch: main
 bootstrap_github_webhook_token: fake
 bootstrap_cloudflare:
