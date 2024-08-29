@@ -4,16 +4,22 @@ metadata:
   name: csi-driver-nfs
   namespace: kube-system
 spec:
-  releaseName: csi-nfs
+  interval: 5m
   chart:
     spec:
       chart: csi-driver-nfs
+      version: 4.8.0
       sourceRef:
         kind: HelmRepository
         name: csi-driver-nfs
         namespace: flux-system
-      version: 4.8.0
-  interval: 5m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
   values:
     storageClass:
       create: true
@@ -23,10 +29,3 @@ spec:
     nfs:
       server: "192.168.2.100"
       path: "/mypool/media"
-    resources:
-      requests:
-        memory: "64Mi"
-        cpu: "100m"
-      limits:
-        memory: "128Mi"
-        cpu: "200m"
