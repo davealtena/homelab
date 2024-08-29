@@ -5,6 +5,7 @@ resources:
   - ./namespace.yaml
   - ./cilium/ks.yaml
   - ./coredns/ks.yaml
+  - ./csi-nfs-driver
   - ./metrics-server/ks.yaml
   - ./reloader/ks.yaml
   - ./kubelet-csr-approver/ks.yaml

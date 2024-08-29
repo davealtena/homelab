@@ -1,16 +1,15 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app snapshot-controller
+  name: &app nfs-csi-driver
   namespace: flux-system
 spec:
-  targetNamespace: volsync-system
+  targetNamespace: kube-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/volsync-system/snapshot-controller/app
+  path: ./kubernetes/apps/kube-system/csi-nfs-driver/app
   prune: true
   sourceRef:
     kind: GitRepository
