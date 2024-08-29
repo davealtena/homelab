@@ -23,8 +23,10 @@ spec:
     storageClass:
       create: true
       name: nfs-csi-sc
-      defaultClass: false
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "false"
+      parameters:
+        server: 192.168.2.100
+        share: /mypool/media
       reclaimPolicy: Delete
-    nfs:
-      server: "192.168.2.100"
-      path: "/mypool/media"
+      volumeBindingMode: Immediate
