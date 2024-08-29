@@ -7,7 +7,7 @@ spec:
   releaseName: csi-nfs
   chart:
     spec:
-      chart: nfs-subdir-external-provisioner
+      chart: csi-driver-nfs
       sourceRef:
         kind: HelmRepository
         name: csi-driver-nfs
