@@ -10,7 +10,7 @@ spec:
       chart: nfs-subdir-external-provisioner
       sourceRef:
         kind: HelmRepository
-        name: csi-driver-nfs
+        name: csi-nfs-driver
         namespace: kube-system
       version: 4.0.18
   interval: 5m
