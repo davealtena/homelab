@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: csi-nfs-driver
+  name: csi-driver-nfs
   namespace: kube-system
 spec:
   releaseName: csi-nfs
@@ -10,7 +10,7 @@ spec:
       chart: nfs-subdir-external-provisioner
       sourceRef:
         kind: HelmRepository
-        name: csi-nfs-driver
+        name: csi-driver-nfs
         namespace: kube-system
       version: 4.0.18
   interval: 5m
@@ -21,7 +21,7 @@ spec:
       defaultClass: false
       reclaimPolicy: Delete
     nfs:
-      server: "192.168.1.100"
+      server: "192.168.2.100"
       path: "/mypool/media"
     resources:
       requests:
