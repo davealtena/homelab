@@ -30,3 +30,6 @@ spec:
         share: /mypool/media
       reclaimPolicy: Delete
       volumeBindingMode: Immediate
+      mountOptions:
+        - nfsvers=3
+        - nolock

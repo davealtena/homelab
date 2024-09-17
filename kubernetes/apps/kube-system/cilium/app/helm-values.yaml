@@ -16,7 +16,19 @@ cni:
 endpointRoutes:
   enabled: true
 hubble:
-  enabled: false
+  enabled: true
+  metrics:
+    enabled: true
+    port: 9091
+  ui:
+    enabled: true
+    ingress:
+      enabled: true
+      annotations:
+        external-dns.alpha.kubernetes.io/target: internal.altena.io
+      ingressClassName: internal
+      hosts:
+        - hubble.altena.io
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: "10.69.0.0/16"
