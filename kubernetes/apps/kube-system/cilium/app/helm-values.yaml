@@ -18,8 +18,17 @@ endpointRoutes:
 hubble:
   enabled: true
   metrics:
+    enabled:
+      - dns:query;ignoreAAAA
+      - drop
+      - tcp
+      - flow
+      - port-distribution
+      - icmp
+      - http
+  relay:
     enabled: true
-    port: 9091
+    rollOutPods: true
   ui:
     enabled: true
     ingress:
