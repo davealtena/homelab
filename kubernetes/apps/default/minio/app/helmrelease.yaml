@@ -115,7 +115,7 @@ spec:
     persistence:
       config:
         type: nfs
-        server: expanse.internal
-        path: /eros/Minio
+        server: 192.168.2.100
+        path: /mypool/Minio
         globalMounts:
           - path: /data
