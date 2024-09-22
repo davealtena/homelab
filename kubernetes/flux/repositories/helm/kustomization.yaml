@@ -14,7 +14,7 @@ resources:
   - ./metrics-server.yaml
   - ./ingress-nginx.yaml
   - ./openebs.yaml
-  - ./piraeus.yaml
+  - ./pireaus.yaml
   - ./postfinance.yaml
   - ./prometheus-community.yaml
   - ./rook-ceph.yaml
