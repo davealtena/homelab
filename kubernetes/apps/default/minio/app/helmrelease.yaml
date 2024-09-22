@@ -116,6 +116,6 @@ spec:
       config:
         type: nfs
         server: 192.168.2.100
-        path: /mypool/minio
+        path: /mnt/zfs/minio
         globalMounts:
           - path: /data
