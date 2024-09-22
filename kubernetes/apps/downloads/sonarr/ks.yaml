@@ -23,5 +23,5 @@ spec:
     - name: external-secrets-stores
   postBuild:
     substitute:
-      APP: *appname
+      APP: *name
       VOLSYNC_CLAIM: sonarr-config
