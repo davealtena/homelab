@@ -37,9 +37,10 @@ spec:
               tag: 1.4.4@sha256:738abd74a569b91b6fd2fb009b78d11028a0b7bbcb4ea98510afacee8d797c15
             env:
               TZ: Europe/Amsterdam
-            envFrom:
-              - secretRef:
-                  name: bazarr-secret
+            # TODO: Enable this secret ones Plex's installed
+            # envFrom:
+            #   - secretRef:
+            #       name: bazarr-secret
             probes:
               liveness: &probes
                 enabled: true
