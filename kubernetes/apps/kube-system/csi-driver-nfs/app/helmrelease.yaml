@@ -27,7 +27,7 @@ spec:
         storageclass.kubernetes.io/is-default-class: "false"
       parameters:
         server: 192.168.2.100
-        share: /mypool/media
+        share: /mnt/zfs/pvc
       reclaimPolicy: Delete
       volumeBindingMode: Immediate
       mountOptions:
