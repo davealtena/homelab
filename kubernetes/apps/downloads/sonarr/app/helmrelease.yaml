@@ -96,7 +96,7 @@ spec:
 
     persistence:
       config:
-        existingClaim: sonarr-config
+        existingClaim: sonarr
       add-ons:
         type: emptyDir
       tmp:
