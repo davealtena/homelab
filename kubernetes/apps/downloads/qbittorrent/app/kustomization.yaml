@@ -6,6 +6,7 @@ resources:
   # TODO: Enable here and in HelmRelease once pushover and cross-seed are installed
   # - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ./pvc.yaml
   - ../../../../templates/gatus/guarded
 configMapGenerator:
 #   - name: qbittorrent-loki-rules
