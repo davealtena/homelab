@@ -36,7 +36,12 @@ spec:
               repository: ghcr.io/onedr0p/home-assistant
               tag: 2024.9.2@sha256:2ed30ce9d13cdc6b284fcd55596849e130fbe116a3b5cee546d810957b1b5693
             env:
-              TZ: Europe/Amsterdam
+              - name: TZ
+                value: Europe/Amsterdam
+              - name: HASS_HTTP_TRUSTED_PROXY_1
+                value: "192.168.2.0/24"
+              - name: HASS_HTTP_TRUSTED_PROXY_2
+                value: "10.69.0.0/16"
             # envFrom:
             #   - secretRef:
             #       name: home-assistant-secret
