@@ -13,3 +13,4 @@ spec:
   dnsNames:
     - altena.io
     - "*.altena.io"
+
