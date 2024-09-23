@@ -38,7 +38,6 @@ spec:
               repository: ghcr.io/onedr0p/radarr-develop
               tag: 5.10.4.9218@sha256:f986ba978d450226de00d8174552f62cc877aca7693bb1b32e7ac70af62f8f8d
             env:
-              COMPlus_EnableDiagnostics: "0"
               RADARR__INSTANCE_NAME: Radarr
               RADARR__PORT: &port 7878
               RADARR__AUTHENTICATION_METHOD: External
@@ -82,11 +81,11 @@ spec:
 
     ingress:
       app:
-        className: internal
         annotations:
           external-dns.alpha.kubernetes.io/target: internal.altena.io
+        className: internal
         hosts:
-          - host: radarr.altena.io
+          - host: "{{ .Release.Name }}.altena.io"
             paths:
               - path: /
                 service:
