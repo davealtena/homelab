@@ -1,0 +1,14 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-hass-egress
+spec:
+  endpointSelector:
+    matchLabels:
+      app: home-assistant
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        k8s-app: external-network
+    toCIDR:
+    - 192.168.2.0/24
