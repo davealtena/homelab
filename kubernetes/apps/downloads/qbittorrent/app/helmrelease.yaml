@@ -126,3 +126,4 @@ spec:
         path: /mnt/zfs/media
         globalMounts:
           - path: /media/Downloads/qbittorrent
+            subPath: Downloads/qbittorrent

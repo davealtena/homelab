@@ -106,4 +106,4 @@ spec:
         server: 192.168.2.100
         path: /mnt/zfs/media
         globalMounts:
-          - path: /data/media
+          - path: /media
