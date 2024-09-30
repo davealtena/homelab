@@ -48,7 +48,13 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  - NET_ADMIN
+                  - NET_RAW
+                  - NET_BROADCAST
             resources:
               requests:
                 cpu: 10m
