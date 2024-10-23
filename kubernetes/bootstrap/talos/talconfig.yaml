@@ -3,7 +3,7 @@
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
 talosVersion: v1.7.6
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.31.0
+kubernetesVersion: v1.31.2
 
 clusterName: "olympus"
 endpoint: https://192.168.2.101:6443
