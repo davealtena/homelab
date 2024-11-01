@@ -1,0 +1,21 @@
+---
+apiVersion: "argoproj.io/v1alpha1"
+kind: "AppProject"
+metadata:
+  name: "homelab" #TODO: Template
+  namespace: "argocd"
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  description: "K8S Homelab for altena.io" #TODO: Template
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  destinations:
+    - namespace: "*"
+      server: '*'
+  orphanedResources:
+    warn: false
+  sourceRepos:
+    - '*'
+

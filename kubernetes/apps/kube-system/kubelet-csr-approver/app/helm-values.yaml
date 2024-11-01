@@ -1,3 +1,0 @@
----
-providerRegex: ^(artemis|apollo|athena)$
-bypassDnsResolution: true

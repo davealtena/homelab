@@ -3,6 +3,7 @@
 Thumbs.db
 # k8s
 kubeconfig
+kubeconfig.yaml
 talosconfig
 .decrypted~*.yaml
 .config.env
