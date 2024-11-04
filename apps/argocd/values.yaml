@@ -50,6 +50,21 @@ configs:
     # The scope value can be a string, or a list of strings.
     scopes: '[email,groups]'
 
+  repositories:
+    private-github:
+      name: argo-homelab
+      url: https://github.com/davealtena/argo-homelab.git
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: github-deploy-key
+            key: password
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: github-deploy-key
+            key: username
+
   styles: |
     .ui-banner {
       background: #D0312D;
