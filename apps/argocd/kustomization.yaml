@@ -36,3 +36,6 @@ patches:
   target:
     kind: Deployment
     name: argocd-server
+
+- path: overlay/argocd-deployment.yaml
+- path: overlay/argocd-dex.yaml
