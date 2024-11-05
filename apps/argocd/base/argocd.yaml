@@ -13,7 +13,7 @@ spec:
     server: https://kubernetes.default.svc
 
   source:
-    path: argo
+    path: apps/argocd
     repoURL: https://github.com/davealtena/argo-homelab
     targetRevision: HEAD
     # directory:
