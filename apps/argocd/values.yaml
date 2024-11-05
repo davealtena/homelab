@@ -21,8 +21,8 @@ configs:
     private-github:
       name: argo-homelab
       url: https://github.com/davealtena/argo-homelab.git
-      username: YXJnby1ob21lbGFiCg== # base64-encoded value
-      password: Z2hwX2hqaWp3QXRzaTl5enN2a3pCbkk2OGdERk5SVTh5cjJhbTYxYwo= # base64-encoded value
+      username: admin
+      password: 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
 
   cm:
     kustomize.buildOptions: "--enable-helm"
