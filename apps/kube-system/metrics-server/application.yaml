@@ -24,6 +24,6 @@ spec:
         releaseName: metrics-server
         valueFiles:
           - $values/apps/metrics-server/values.yaml
-    - repoURL: 'http://gitea.localdomain/sjoerd/argocd.git'
+    - repoURL: https://github.com/davealtena/argo-homelab
       targetRevision: HEAD
       ref: values

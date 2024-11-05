@@ -36,9 +36,9 @@ spec:
         releaseName: kube-prometheus-stack
         valueFiles:
           - $values/apps/kube-prometheus-stack/values.yaml
-    - repoURL: 'http://gitea.localdomain/sjoerd/argocd.git'
+    - repoURL: https://github.com/davealtena/argo-homelab
       targetRevision: HEAD
       ref: values
     - path: apps/kube-prometheus-stack/manifests
-      repoURL: 'http://gitea.localdomain/sjoerd/argocd.git'
+      repoURL: https://github.com/davealtena/argo-homelab
       targetRevision: HEAD
