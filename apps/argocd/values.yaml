@@ -21,16 +21,9 @@ configs:
     private-github:
       name: argo-homelab
       url: https://github.com/davealtena/argo-homelab.git
-      password:
-        valueFrom:
-          secretKeyRef:
-            name: github-deploy-key
-            key: password
-      username:
-        valueFrom:
-          secretKeyRef:
-            name: github-deploy-key
-            key: username
+      username: YXJnby1ob21lbGFiCg== # base64-encoded value
+      password: Z2hwX2hqaWp3QXRzaTl5enN2a3pCbkk2OGdERk5SVTh5cjJhbTYxYwo= # base64-encoded value
+
   cm:
     kustomize.buildOptions: "--enable-helm"
 
