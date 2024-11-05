@@ -1,0 +1,8 @@
+#gateway/ns.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gateway
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+  

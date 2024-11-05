@@ -1,0 +1,40 @@
+# gateway/gateway-with-infrastructure.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: cilium-gateway
+  namespace: gateway
+  annotations:
+    # https://cert-manager.io/docs/usage/gateway/
+    cert-manager.io/cluster-issuer: acme-stronk-issuer-staging
+spec:
+  gatewayClassName: cilium
+  # https://github.com/cilium/cilium/issues/21926
+  # https://github.com/cilium/cilium/pull/33042
+  # addresses:
+  #   - type: IPAddress
+  #     value: 192.168.178.95
+  infrastructure:
+    annotations:
+      io.cilium/lb-ipam-ips: "192.168.178.92"
+  listeners:
+    - protocol: HTTP
+      port: 80
+      name: http-gateway
+      hostname: "*.stronk.org"
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: HTTPS
+      port: 443
+      name: https-gateway
+      hostname: "*.stronk.org"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: stronk-org-tls
+            group: core
+      allowedRoutes:
+        namespaces:
+          from: All

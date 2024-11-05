@@ -1,0 +1,133 @@
+# https://github.com/cilium/cilium/blob/main/install/kubernetes/cilium/values.yaml
+
+# debug:
+#   enabled: true
+#   verbose: flow
+
+############################
+# Settings for cilium to install on Talos
+# https://docs.cilium.io/en/stable/installation/k8s-install-helm/
+# also read the Talos howto to cilium
+# https://www.talos.dev/v1.7/kubernetes-guides/network/deploying-cilium/
+#
+ipam:
+  mode: kubernetes
+kubeProxyReplacement: true
+
+securityContext:
+  capabilities:
+    ciliumAgent: 
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cleanCiliumState: 
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+
+cgroup:
+  autoMount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+
+k8sServiceHost: localhost
+k8sServicePort: 7445
+
+# end
+############################
+
+ingressController:
+  enabled: true
+  loadbalancerMode: dedicated
+  default: true # make cilium ingress the default
+# encryption:
+#   enabled: true
+#   type: wireguard
+
+# -- Enable Layer 7 network policy. Needed for gateway api and ingress - enabled by default
+l7Proxy: true
+
+loadbalancer:
+  l7:
+    backend: envoy
+envoyConfig:
+  enabled: true
+
+# no more need for metallb
+l2announcements:
+  enabled: true
+
+k8sClientRateLimit:
+  qps: 10
+  burst: 20
+
+# gateway api will replace ingress in the long term
+gatewayAPI:
+  enabled: false #true
+  # https://docs.cilium.io/en/stable/network/servicemesh/gateway-api/gateway-api/#host-network-mode
+  hostNetwork:
+    enabled: false #true
+    nodes:
+      matchLabels:
+        role: infra
+        component: gateway-api
+
+# Roll out cilium agent and operator pods automatically when ConfigMap is updated.
+rollOutCiliumPods: true
+
+operator:
+  rollOutPods: true
+
+# nodeIPAM:
+#   enabled: true
+# hostPort:
+#   enabled: true
+externalIPs:
+  enabled: true
+# hostFirewall:
+#   enabled: false
+
+
+envoy:
+  enabled: true
+  securityContext:
+    capabilities:
+      keepCapNetBindService: true
+      envoy:
+      # Add NET_BIND_SERVICE to the list (keep the others!)
+        - NET_BIND_SERVICE
+        - CAP_NET_ADMIN 
+        - CAP_BPF
+        - NET_ADMIN
+        - SYS_ADMIN
+        - SYS_RESOURCE
+
+hubble:
+  enabled: false
+  # relay:
+  #   enabled: true
+  # ui:
+  #   enabled: true
+  # metrics:
+  #   #serviceMonitor:
+  #   #  enabled: true
+  #   enabled:
+  #   - dns:query;ignoreAAAA
+  #   - drop
+  #   - tcp
+  #   - flow
+  #   - icmp
+  #   - http
+
+prometheus:
+  enabled: true
+  #serviceMonitor:
+  # enabled: true

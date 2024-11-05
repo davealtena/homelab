@@ -1,0 +1,10 @@
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "default-pool"
+spec:
+  # ipFamilyPolicy: PreferDualStack
+  blocks:
+  # - cidr: "2004::0/64"
+    - start: "192.168.178.90"
+      stop: "192.168.178.99"

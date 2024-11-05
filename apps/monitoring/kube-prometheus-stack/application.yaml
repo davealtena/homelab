@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+
+spec:
+  project: default
+
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: kube-prometheus-stack
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jqPathExpressions:
+      - .spec.rules[].backendRefs[].group
+      - .spec.rules[].backendRefs[].kind
+      - .spec.rules[].backendRefs[].weight
+
+  sources:
+    # https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+    - chart: kube-prometheus-stack
+      repoURL: 'https://prometheus-community.github.io/helm-charts'
+      targetRevision: 62.3.*
+      helm:
+        releaseName: kube-prometheus-stack
+        valueFiles:
+          - $values/apps/kube-prometheus-stack/values.yaml
+    - repoURL: 'http://gitea.localdomain/sjoerd/argocd.git'
+      targetRevision: HEAD
+      ref: values
+    - path: apps/kube-prometheus-stack/manifests
+      repoURL: 'http://gitea.localdomain/sjoerd/argocd.git'
+      targetRevision: HEAD

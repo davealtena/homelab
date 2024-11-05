@@ -1,0 +1,13 @@
+# https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+# https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack?modal=values
+
+prometheus:
+  prometheusSpec:
+    externalUrl: https://prometheus.stronk.org
+
+prometheus-node-exporter:
+  namespaceOverride: "kube-prometheus-node-exporter"
+
+grafana:
+  adminPassword: "snarfbork"
+  defaultDashboardsTimezone: browser

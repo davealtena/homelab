@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+
+spec:
+  project: default
+
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: kube-system
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      #allowEmpty: false
+    syncOptions:
+    - ServerSideApply=true
+    - PruneLast=true
+    - ApplyOutOfSyncOnly=true
+
+  sources:
+    - path: apps/cilium
+      repoURL: http://gitea.localdomain/sjoerd/argocd.git
+      targetRevision: HEAD

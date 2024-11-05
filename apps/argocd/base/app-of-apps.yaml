@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  source:
+    path: apps
+    repoURL: https://github.com/davealtena/argo-homelab
+    targetRevision: HEAD
+    # NOTE adding "directory" to a kustomize app will break things.
+    directory:
+      recurse: true
+      # cilium is special, when the cluster is up you must manually install
+      # cilium usingf kustomize. Then install argocd as well. After that argocd
+      # will take over the deployment via `/app/cilium/
+      # See /README.md !!
+      include: '*/application*.yaml'
+      #exclude: '{*/manifests/*,*/templates/*,*/base/*,/*/overlays/*}'
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=false
+    automated:
+      prune: true
+      selfHeal: true
