@@ -1,0 +1,46 @@
+# https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
+# https://artifacthub.io/packages/helm/argo-cd-oci/argo-cd
+#
+global:
+  domain: argocd.altena.io
+  logging:
+    level: warn
+
+# redis-ha:
+#   enabled: true
+
+configs:
+  params:
+    server.insecure: true
+  secret:
+  ## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
+  ## `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+    # snarfbork
+    argocdServerAdminPassword: '$2a$10$O1Qr3xYGr4XFQ5xf6LmZDOz9ti7PSkRd6gP9oFu8sJ547ZzhNf1ye'
+  repositories:
+    gitea:
+      url: 'https://github.com/davealtena/argo-homelab'
+      name: 'argocd'
+  cm:
+    kustomize.buildOptions: "--enable-helm"
+
+    resource.exclusions: |
+      - apiGroups:
+          - cilium.io
+        kinds:
+          - CiliumIdentity
+        clusters:
+          - "*"
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: cilium
+    hostname: argocd.altena.io
+    # annotations:
+    #   cert-manager.io/cluster-issuer: acme-stronk-issuer-staging
+    tls: false # TLS enabled on server pod (instead of terminating tls on ingress)
+    extraTls:
+      - hosts:
+        - argocd.altena.io
+        secretName: argocd-server-tls
