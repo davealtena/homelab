@@ -13,7 +13,7 @@ spec:
     namespace: argocd
   project: default
   sources:
-  - repoURL: https://github.com/davealtena/argo-homelab #TODO: Template
+  - repoURL: https://argoproj.github.io/argo-helm #TODO: Template
     chart: "argo-cd"
     targetRevision: 7.3.4
     helm:
