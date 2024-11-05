@@ -4,6 +4,10 @@ kind: Kustomization
 namespace: argocd
 
 resources:
+- base/projects
+
+- base/core/argocd.yaml
+
 - base/argocd.yaml
 - base/app-of-apps.yaml
 - base/namespace.yaml
