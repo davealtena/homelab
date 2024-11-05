@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: app-of-apps
+  name: cilium
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,7 +10,7 @@ spec:
   project: default
 
   source:
-    path: apps
+    path: apps/kube-system/cilium
     repoURL: https://github.com/davealtena/argo-homelab
     targetRevision: HEAD
     # NOTE adding "directory" to a kustomize app will break things.
