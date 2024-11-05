@@ -7,6 +7,7 @@ resources:
 - base/argocd.yaml
 - base/app-of-apps.yaml
 - base/namespace.yaml
+- base/github-deploy-key.yaml
 
 # https://kubectl.docs.kubernetes.io/references/kustomize/builtins/#_helmchartinflationgenerator_
 helmCharts:

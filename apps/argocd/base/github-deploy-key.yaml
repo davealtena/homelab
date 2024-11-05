@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: github-deploy-key
+    namespace: argocd
+data:
+    username: YXJnby1ob21lbGFiCg==
+    password: Z2hwX2hqaWp3QXRzaTl5enN2a3pCbkk2OGdERk5SVTh5cjJhbTYxYwo=

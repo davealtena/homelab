@@ -18,9 +18,19 @@ configs:
     # snarfbork
     argocdServerAdminPassword: '$2a$10$O1Qr3xYGr4XFQ5xf6LmZDOz9ti7PSkRd6gP9oFu8sJ547ZzhNf1ye'
   repositories:
-    gitea:
-      url: 'https://github.com/davealtena/argo-homelab'
-      name: 'argocd'
+    private-github:
+      name: argo-homelab
+      url: https://github.com/davealtena/argo-homelab.git
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: github-deploy-key
+            key: password
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: github-deploy-key
+            key: username
   cm:
     kustomize.buildOptions: "--enable-helm"
 
