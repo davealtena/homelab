@@ -3,7 +3,7 @@ kind: Application
 metadata:
   name: cilium
 spec:
-  project: kube-system
+  project: cluster
   source:
     repoURL: https://github.com/davealtena/argo-homelab
     path: apps/kube-system/cilium
