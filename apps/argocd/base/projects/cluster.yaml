@@ -1,16 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: kube-system
+  name: cluster
 spec:
-  description: Kube-System Project
+  description: Cluster-wide project
   sourceRepos:
   - '*'
   destinations:
-  - namespace: kube-system
-    server: https://kubernetes.default.svc
-  - namespace: argocd
-    server: https://kubernetes.default.svc
+  - namespace: '*'
+    server: '*'
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
