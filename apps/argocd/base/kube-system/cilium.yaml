@@ -10,6 +10,7 @@ spec:
     targetRevision: main
   destination:
     namespace: kube-system
+    name: in-cluster
   syncPolicy:
     automated:
       prune: true
