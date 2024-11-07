@@ -15,9 +15,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - ServerSideApply=true
-      - Prune=true
     retry:
       limit: 5
       backoff:
