@@ -1,7 +1,0 @@
-# apiVersion: v1
-# kind: Namespace
-# metadata:
-#   name: kube-system
-#   # https://www.talos.dev/v1.7/kubernetes-guides/configuration/pod-security/
-#   labels:
-#     pod-security.kubernetes.io/enforce: privileged
