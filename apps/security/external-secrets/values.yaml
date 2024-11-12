@@ -1,3 +1,0 @@
-# external-secrets/helm/values.yaml
-serviceAccount:
-  create: true
