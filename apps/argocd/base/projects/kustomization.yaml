@@ -4,6 +4,7 @@ resources:
 - cluster.yaml
 - core.yaml
 - networking.yaml
+- security.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-wave: "1"
