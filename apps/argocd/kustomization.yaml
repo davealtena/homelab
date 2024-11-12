@@ -8,6 +8,8 @@ resources:
 
 - base/core/argocd.yaml
 - base/core/kube-system.yaml
+- base/core/networking.yaml
+- base/core/security.yaml
 
 - base/namespace.yaml
 
