@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: external-secrets-webhook
-  namespace: security
+  namespace: external-secrets
 spec:
   template:
     spec:
