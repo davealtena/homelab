@@ -4,9 +4,23 @@ metadata:
   name: external-secrets-webhook
   namespace: external-secrets
 spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: external-secrets
+      app.kubernetes.io/name: external-secrets-webhook
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: external-secrets
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: external-secrets-webhook
+        app.kubernetes.io/version: v0.10.5
+        helm.sh/chart: external-secrets-0.10.5
     spec:
       automountServiceAccountToken: true
       containers:
       - args:
-        - --dns-name=external-secrets-webhook.security.svc
+        - --dns-name=external-secrets-webhook..svc
+        name: webhook
