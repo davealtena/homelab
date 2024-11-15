@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-secrets-webhook
+  namespace: security
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: true
+      containers:
+      - args:
+        - --dns-name=external-secrets-webhook.security.svc

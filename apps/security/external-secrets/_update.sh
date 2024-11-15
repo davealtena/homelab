@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-kustomize build . --enable-helm > _templated/external-secrets-operator.yaml
+kustomize build . --enable-helm > base/external-secrets-operator.yaml
