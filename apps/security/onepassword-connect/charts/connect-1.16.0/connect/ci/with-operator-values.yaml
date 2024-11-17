@@ -1,0 +1,4 @@
+operator:
+  create: true
+  token:
+    name: op-operator-connect-token

@@ -1,0 +1,27 @@
+{{- if eq (tpl (.Values.operator.roleBinding.create | toString) .) "true" -}}
+{{- if .Values.operator.watchNamespace -}}
+{{- $name := .Values.operator.roleBinding.name -}}
+{{- $clusterRoleName := .Values.operator.clusterRole.name -}}
+{{- $serviceAccountName := .Values.operator.serviceAccount.name -}}
+{{- $releaseNamespace := .Release.Namespace -}}
+{{- range $namespace := .Values.operator.watchNamespace }}
+{{- $namespace = tpl $namespace $ -}}
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ $name }}-{{ $namespace }}
+  namespace: {{ $namespace }}
+  labels:
+    {{- include "onepassword-connect.labels" $ | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: {{ $serviceAccountName }}
+  namespace: {{ $releaseNamespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ $clusterRoleName}}
+  apiGroup: rbac.authorization.k8s.io
+---
+{{- end }}
+{{- end }}
+{{- end }}
