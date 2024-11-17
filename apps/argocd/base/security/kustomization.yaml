@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - external-secrets.yaml
+  - onepassword-connect.yaml
 
 namespace: argocd
 
