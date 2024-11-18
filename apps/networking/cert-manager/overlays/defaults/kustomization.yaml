@@ -1,0 +1,5 @@
+resources:
+- ../../base
+
+- issuers.yaml
+- ../secrets/cloudflare-api-external-secret.yaml
