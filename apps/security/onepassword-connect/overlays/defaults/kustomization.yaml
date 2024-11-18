@@ -4,5 +4,4 @@ kind: Kustomization
 namespace: external-secrets
 resources:
   - ../../base
-patches:
-  - path: service.yaml
+

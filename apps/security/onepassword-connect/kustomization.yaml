@@ -20,7 +20,7 @@ helmCharts:
                 tag: 1.7.3@sha256:0601c7614e102eada268dbda6ba4b5886ce77713be2c332ec6a2fd0f028484ba
               env:
                 XDG_DATA_HOME: &configDir /config
-                OP_HTTP_PORT: &apiPort 80
+                OP_HTTP_PORT: &apiPort 8080
                 OP_BUS_PORT: 11220
                 OP_BUS_PEERS: localhost:11221
                 OP_SESSION:
