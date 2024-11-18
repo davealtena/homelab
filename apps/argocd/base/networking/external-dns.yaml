@@ -1,22 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cert-manager
+  name: external-dns
 spec:
   project: networking
   source:
     repoURL: https://github.com/davealtena/argo-homelab
-    path: apps/networking/cert-manager/overlays/defaults
+    path: apps/networking/external-dns
     targetRevision: main
   destination:
-    namespace: cert-manager
+    namespace: kube-system
     name: in-cluster
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
     retry:
       limit: 5
       backoff:
