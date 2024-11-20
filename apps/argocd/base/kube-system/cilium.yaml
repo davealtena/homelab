@@ -6,7 +6,7 @@ spec:
   project: cluster
   source:
     repoURL: https://github.com/davealtena/argo-homelab
-    path: apps/kube-system/cilium
+    path: apps/kube-system/cilium/overlays/defaults
     targetRevision: main
   destination:
     namespace: kube-system
