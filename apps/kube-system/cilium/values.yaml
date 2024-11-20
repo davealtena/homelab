@@ -1,29 +1,16 @@
-# https://github.com/cilium/cilium/blob/main/install/kubernetes/cilium/values.yaml
-
-# debug:
-#   enabled: true
-#   verbose: flow
-
-############################
-# Settings for cilium to install on Talos
-# https://docs.cilium.io/en/stable/installation/k8s-install-helm/
-# also read the Talos howto to cilium
-# https://www.talos.dev/v1.7/kubernetes-guides/network/deploying-cilium/
-#
-
 ipam: # https://docs.cilium.io/en/stable/network/concepts/ipam/
   mode: kubernetes
 kubeProxyReplacement: true
 
-# for gateway api Cilium must be configured with NodePort enabled, using 
-# nodePort.enabled=true or  by enabling the kube-proxy replacement 
+# for gateway api Cilium must be configured with NodePort enabled, using
+# nodePort.enabled=true or  by enabling the kube-proxy replacement
 # with kubeProxyReplacement=true
 nodePort:
   enabled: true
 
 securityContext:
   capabilities:
-    ciliumAgent: 
+    ciliumAgent:
       - CHOWN
       - KILL
       - NET_ADMIN
@@ -35,7 +22,7 @@ securityContext:
       - FOWNER
       - SETGID
       - SETUID
-    cleanCiliumState: 
+    cleanCiliumState:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
@@ -48,13 +35,10 @@ cgroup:
 k8sServiceHost: localhost
 k8sServicePort: 7445
 
-# end
-############################
-
 ingressController:
   enabled: true
   loadbalancerMode: dedicated
-  default: true # make cilium ingress the default
+  default: true
 # encryption:
 #   enabled: true
 #   type: wireguard
@@ -93,16 +77,6 @@ rollOutCiliumPods: true
 operator:
   rollOutPods: true
 
-# nodeIPAM:
-#   enabled: true
-# hostPort:
-#   enabled: true
-# externalIPs:
-#   enabled: true
-# hostFirewall:
-#   enabled: false
-
-
 envoy:
   enabled: true
   securityContext:
@@ -111,7 +85,7 @@ envoy:
       envoy:
       # Add NET_BIND_SERVICE to the list (keep the others!)
         - NET_BIND_SERVICE
-        # - CAP_NET_ADMIN 
+        # - CAP_NET_ADMIN
         # - CAP_BPF
         # - NET_ADMIN
         # - SYS_RESOURCE
@@ -140,5 +114,3 @@ hubble:
 
 prometheus:
   enabled: true
-  #serviceMonitor:
-  # enabled: true

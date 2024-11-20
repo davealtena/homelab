@@ -10,12 +10,7 @@ resources:
   - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml
   - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml
   - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
-  # - base/Namespace-cilium.yaml
-  - base/Namespace-gateway.yaml
-  - base/CiliumL2AnnouncementPolicy.yaml
-  - base/CiliumLoadBalancerIPPool.yaml
-  - base/GatewayClass.yaml
-  - base/Gateway.yaml
+
 
 
 # https://kubectl.docs.kubernetes.io/references/kustomize/builtins/#_helmchartinflationgenerator_
