@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # Pre Flux-Kustomizations
+  - ./namespace.yaml
+  # Flux-Kustomizations
+  - ./bazarr/ks.yaml
+  - ./cross-seed/ks.yaml
+  - ./prowlarr/ks.yaml
+  - ./qbittorrent/ks.yaml
+  - ./radarr/ks.yaml
+  - ./sabnzbd/ks.yaml
+  - ./sonarr/ks.yaml

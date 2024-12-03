@@ -1,8 +1,0 @@
-# prometheus node exporter needs increased privileges
-# https://www.talos.dev/v1.7/kubernetes-guides/configuration/pod-security/
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kube-prometheus-node-exporter
-  labels:
-    pod-security.kubernetes.io/enforce: privileged

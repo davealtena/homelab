@@ -4,7 +4,7 @@ version: '3'
 
 vars:
   BOOTSTRAP_DIR: '{{.ROOT_DIR}}/bootstrap'
-  KUBERNETES_DIR: '{{.ROOT_DIR}}/apps'
+  KUBERNETES_DIR: '{{.ROOT_DIR}}/kubernetes'
   SCRIPTS_DIR: '{{.ROOT_DIR}}/scripts'
   BOOTSTRAP_CONFIG_FILE: '{{.ROOT_DIR}}/config.yaml'
   MAKEJINJA_CONFIG_FILE: '{{.ROOT_DIR}}/makejinja.toml'

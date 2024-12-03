@@ -1,0 +1,134 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: bazarr
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.4.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  dependsOn:
+    - name: volsync
+      namespace: volsync-system
+  values:
+    controllers:
+      bazarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/bazarr
+              tag: 1.4.4@sha256:738abd74a569b91b6fd2fb009b78d11028a0b7bbcb4ea98510afacee8d797c15
+            env:
+              TZ: Europe/Amsterdam
+            # TODO: Enable this secret ones Plex's installed
+            # envFrom:
+            #   - secretRef:
+            #       name: bazarr-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 6767
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+          subcleaner:
+            image:
+              repository: registry.k8s.io/git-sync/git-sync
+              tag: v4.2.4@sha256:8bfbf28623690fba06c65ec392e42023d28ecfc7e0fbfd4443388d020dc112ea
+            env:
+              GITSYNC_REPO: https://github.com/KBlixt/subcleaner
+              GITSYNC_REF: master
+              GITSYNC_PERIOD: 24h
+              GITSYNC_ROOT: /add-ons
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 128Mi
+            securityContext: *securityContext
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [10000]
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      app:
+        controller: bazarr
+        ports:
+          http:
+            port: *port
+    ingress:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.altena.io
+        className: internal
+        hosts:
+          - host: bazarr.altena.io
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+    persistence:
+      add-ons:
+        type: emptyDir
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /config/cache
+      config:
+        existingClaim: bazarr
+      log:
+        type: emptyDir
+        globalMounts:
+          - path: /config/log
+      media:
+        type: nfs
+        server: 192.168.2.100
+        path: /mnt/zfs/media
+        globalMounts:
+          - path: /media
+      scripts:
+        type: configMap
+        name: bazarr-scripts
+        defaultMode: 0775
+        globalMounts:
+          - readOnly: true
+      tmp:
+        type: emptyDir

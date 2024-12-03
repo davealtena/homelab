@@ -1,8 +1,0 @@
-apiVersion: "cilium.io/v2alpha1"
-kind: CiliumLoadBalancerIPPool
-metadata:
-  name: "default-pool"
-spec:
-  blocks:
-    - start: "192.168.2.150"
-      stop: "192.168.2.200"

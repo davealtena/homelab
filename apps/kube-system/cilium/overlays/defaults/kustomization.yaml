@@ -1,8 +1,0 @@
-resources:
-  - ../../base
-
-  - namespace-gateway.yaml
-  - CiliumL2AnnouncementPolicy.yaml
-  - CiliumLoadBalancerIPPool.yaml
-  - GatewayClass.yaml
-  - Gateway.yaml
