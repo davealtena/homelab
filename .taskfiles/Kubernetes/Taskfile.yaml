@@ -1,19 +1,50 @@
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
-version: "3"
+version: '3'
 
 vars:
   KUBECONFORM_SCRIPT: "{{.SCRIPTS_DIR}}/kubeconform.sh"
 
 tasks:
 
+  apply-ks:
+    desc: Apply a Flux KS for a cluster [PATH=required]
+    cmd: >
+      flux build --namespace flux-system ks {{base .PATH}}
+      --kustomization-file {{.KUBERNETES_DIR}}/apps/{{.PATH}}/ks.yaml
+      --path {{.KUBERNETES_DIR}}/apps/{{.PATH}}{{- if contains "not found" .KS }}--dry-run \{{ end }}
+      | yq 'with(select(.apiVersion == "kustomize.toolkit.fluxcd.io/v1" and .kind == "Kustomization"); .metadata.namespace = "flux-system")' -
+      | kubectl apply --server-side --field-manager=kustomize-controller --filename -
+    requires:
+      vars: [PATH]
+    vars:
+      KS:
+        sh: flux --namespace flux-system get kustomizations {{base .PATH}} 2>&1
+    preconditions:
+      - test -f {{.KUBERNETES_DIR}}/apps/{{.PATH}}/ks.yaml
+      - which flux kubectl yq
+
+  reconcile:
+    desc: Force update Flux to pull in changes from your Git repository
+    cmd: flux --namespace flux-system reconcile kustomization cluster --with-source
+    preconditions:
+      - test -f {{.KUBECONFIG}}
+      - which flux
+
+  kubeconform:
+    desc: Validate Kubernetes manifests with kubeconform
+    cmd: bash {{.KUBECONFORM_SCRIPT}} {{.KUBERNETES_DIR}}
+    preconditions:
+      - test -f {{.KUBECONFORM_SCRIPT}}
+      - which kubeconform
+
   resources:
     desc: Gather common resources in your cluster, useful when asking for support
     cmds:
-      - for: { var: resource }
+      - for: { var: RESOURCE }
         cmd: kubectl get {{.ITEM}} {{.CLI_ARGS | default "-A"}}
     vars:
-      resource: >-
+      RESOURCE: >-
         nodes
         gitrepositories
         kustomizations
@@ -23,14 +54,6 @@ tasks:
         certificaterequests
         ingresses
         pods
-
-  kubeconform:
-    desc: Validate Kubernetes manifests with kubeconform
-    cmd: bash {{.KUBECONFORM_SCRIPT}} {{.KUBERNETES_DIR}}
     preconditions:
-      - msg: Missing kubeconform script
-        sh: test -f {{.KUBECONFORM_SCRIPT}}
-
-  .reset:
-    internal: true
-    cmd: rm -rf {{.KUBERNETES_DIR}}
+      - test -f {{.KUBECONFIG}}
+      - which kubectl
