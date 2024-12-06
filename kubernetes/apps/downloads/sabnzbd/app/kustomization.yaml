@@ -6,7 +6,6 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./pvc.yaml
-  - ../../../../templates/gatus/guarded
 configMapGenerator:
   - name: sabnzbd-scripts
     files:
