@@ -71,15 +71,11 @@ spec:
     service:
       app:
         controller: home-assistant
-        annotations:
-          io.cilium/lb-ipam-ips: "192.168.22.132"
         ports:
           http:
             port: 8123
     ingress:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "192.168.2.132"
         className: internal
         hosts:
           - host: hass.altena.io
