@@ -7,5 +7,5 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./external-dns/ks.yaml
-  - ./gateway-api/ks.yaml
+  - ./gateway-api-crds/ks.yaml
   - ./nginx/ks.yaml
