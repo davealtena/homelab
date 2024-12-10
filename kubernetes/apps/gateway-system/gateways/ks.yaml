@@ -5,7 +5,7 @@ metadata:
   name: &app gateway-api-internal
   namespace: flux-system
 spec:
-  targetNamespace: kube-system
+  targetNamespace: gateway-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -27,13 +27,13 @@ spec:
 #   name: &app gateway-api-internal
 #   namespace: flux-system
 # spec:
-#   targetNamespace: kube-system
+#   targetNamespace: gateway-system
 #   commonMetadata:
 #     labels:
 #       app.kubernetes.io/name: *app
 #   dependsOn:
 #     - name: cilium
-#   path: ./kubernetes/apps/gateway-system/gatewayclasses/external
+#   path: ./kubernetes/apps/gateway-system/gateway/external
 #   prune: false # never should be deleted
 #   sourceRef:
 #     kind: GitRepository
