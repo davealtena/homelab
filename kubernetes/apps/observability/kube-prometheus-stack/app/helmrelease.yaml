@@ -28,8 +28,6 @@ spec:
   dependsOn:
     - name: prometheus-operator-crds
       namespace: observability
-    - name: openebs
-      namespace: openebs-system
   values:
     crds:
       enabled: false
@@ -48,7 +46,7 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: openebs-hostpath
+              storageClassName: nfs-csi-sc
               resources:
                 requests:
                   storage: 1Gi
@@ -101,7 +99,7 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: openebs-hostpath
+              storageClassName: nfs-csi-sc
               resources:
                 requests:
                   storage: 75Gi

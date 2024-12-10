@@ -1,19 +1,18 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app minio
+  name: &app gateway-api
   namespace: flux-system
 spec:
-  targetNamespace: default
+  targetNamespace: kube-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
-  path: ./kubernetes/apps/default/minio/app
-  prune: true
+    - name: cilium
+  path: ./kubernetes/apps/network/gateway-api/crd/defaults
+  prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
@@ -21,6 +20,3 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
-  postBuild:
-    substitute:
-      APP: *app
