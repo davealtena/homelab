@@ -7,3 +7,4 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./gateway-api-crds/ks.yaml
+  - ./gateways/ks.yaml

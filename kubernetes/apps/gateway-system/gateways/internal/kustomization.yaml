@@ -1,0 +1,4 @@
+resources:
+- ./internal-gateway.yaml
+- ./networkpolicy.yaml
+

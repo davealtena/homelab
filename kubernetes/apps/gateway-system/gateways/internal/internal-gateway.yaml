@@ -1,0 +1,25 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: internal-gateway
+  namespace: gateway-system
+  annotations:
+    # Cilium-specific annotation to define routing mode
+    # Helps Cilium understand the purpose of this gateway
+    cilium.io/routing-mode: internal
+spec:
+  gatewayClassName: cilium
+  listeners:
+    - name: internal-http
+      port: 80
+      protocol: HTTP
+      # Control which routes can use this gateway
+      allowedRoutes:
+        namespaces:
+          # Selective namespace filtering
+          # Only allows routes from namespaces with specific labels
+          selector:
+            matchLabels:
+              # Label to identify internal network services
+              network-scope: internal
