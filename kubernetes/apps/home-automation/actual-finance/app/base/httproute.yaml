@@ -2,15 +2,20 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: your-app-route
-  namespace: home-automation  # Your app's namespace
+  name: actual-route
+  namespace: home-automation
+
 spec:
   parentRefs:
-    - name: main-gateway      # Gateway name
-      namespace: gateway-system  # Gateway's namespace
+    - name: internal-gateway
+      namespace: gateway-system
+
+  # Fully qualified domain name for the service
   hostnames:
-    - your-domain.com
+    - "actual.altena.io"
+
+  # Routing rules
   rules:
     - backendRefs:
-        - name: your-service
+        - name: actual
           port: 80
