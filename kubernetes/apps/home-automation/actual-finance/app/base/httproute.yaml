@@ -4,13 +4,13 @@ kind: HTTPRoute
 metadata:
   name: actual-route
   namespace: home-automation
-
 spec:
+  # Reference to the gateway
   parentRefs:
-    - name: internal-gateway
+    - name: internal-tls-gateway
       namespace: gateway-system
 
-  # Fully qualified domain name for the service
+  # Specific hostname for the Actual service
   hostnames:
     - "actual.altena.io"
 

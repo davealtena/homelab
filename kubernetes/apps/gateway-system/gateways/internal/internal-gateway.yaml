@@ -2,24 +2,24 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: internal-gateway
+  name: internal-tls-gateway
   namespace: gateway-system
-  annotations:
-    # Cilium-specific annotation to define routing mode
-    # Helps Cilium understand the purpose of this gateway
-    cilium.io/routing-mode: internal
 spec:
+  # Use Cilium as the Gateway implementation
   gatewayClassName: cilium
   listeners:
-    - name: internal-http
-      port: 80
-      protocol: HTTP
-      # Control which routes can use this gateway
-      allowedRoutes:
-        namespaces:
-          # Selective namespace filtering
-          # Only allows routes from namespaces with specific labels
-          selector:
-            matchLabels:
-              # Label to identify internal network services
-              network-scope: internal
+    - name: https
+      # Standard HTTPS port
+      port: 443
+      # HTTPS protocol for encrypted traffic
+      protocol: HTTPS
+      # Wildcard hostname to match all subdomains
+      hostname: "*.altena.io"
+      # TLS configuration
+      tls:
+        # Terminate TLS at the gateway
+        mode: Terminate
+        # Reference to the certificate secret
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-altena-io-tls

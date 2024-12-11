@@ -1,0 +1,16 @@
+# Wildcard Certificate for altena.io
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-altena-io
+  namespace: gateway-system
+spec:
+  # Secret name where the certificate will be stored
+  secretName: wildcard-altena-io-tls
+  # Wildcard DNS name for your domain
+  dnsNames:
+    - "*.altena.io"
+  # Reference to your Let's Encrypt ClusterIssuer
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
