@@ -74,3 +74,10 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
+gatewayAPI:
+  enabled: true
+  # https://docs.cilium.io/en/stable/network/servicemesh/gateway-api/gateway-api/#host-network-mode
+  hostNetwork:
+    enabled: false
+nodePort:
+  enabled: true

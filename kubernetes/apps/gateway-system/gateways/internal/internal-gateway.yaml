@@ -6,23 +6,33 @@ metadata:
   namespace: gateway-system
   annotations:
     external-dns.alpha.kubernetes.io/hostname: internal-gateway.altena.io
-    io.cilium/lb-ipam-ips: 192.168.2.131
 spec:
-  # Use Cilium as the Gateway implementation
   gatewayClassName: cilium
+  # https://github.com/cilium/cilium/issues/21926
+  # https://github.com/cilium/cilium/pull/33042
+  # addresses:
+  #   - type: IPAddress
+  #     value: 192.168.178.95
+  infrastructure:
+    annotations:
+      io.cilium/lb-ipam-ips: 192.168.2.131
   listeners:
-    - name: https
-      # Standard HTTPS port
-      port: 443
-      # HTTPS protocol for encrypted traffic
-      protocol: HTTPS
-      # Wildcard hostname to match all subdomains
+    - protocol: HTTPS
+      port: 80
+      name: http-gateway
       hostname: "*.altena.io"
-      # TLS configuration
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: HTTPS
+      name: https-gateway
+      port: 443
+      hostname: "*.altena.io"
       tls:
-        # Terminate TLS at the gateway
         mode: Terminate
-        # Reference to the certificate secret
         certificateRefs:
           - kind: Secret
             name: wildcard-altena-io-tls
+      allowedRoutes:
+        namespaces:
+          from: All
