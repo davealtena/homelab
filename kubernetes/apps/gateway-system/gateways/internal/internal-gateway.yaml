@@ -4,6 +4,9 @@ kind: Gateway
 metadata:
   name: internal-tls-gateway
   namespace: gateway-system
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: internal-gateway.altena.io
+    io.cilium/lb-ipam-ips: 192.168.2.131
 spec:
   # Use Cilium as the Gateway implementation
   gatewayClassName: cilium
