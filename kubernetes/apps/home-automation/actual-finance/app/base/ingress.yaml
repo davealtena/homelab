@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: internal
   rules:
-  - host: actual.altena.io
+  - host: finance.altena.io
     http:
       paths:
       - path: /
@@ -17,5 +17,5 @@ spec:
               name: web
   tls:
   - hosts:
-    - actual.altena.io
+    - finance.altena.io
     secretName: altena-io-tls
