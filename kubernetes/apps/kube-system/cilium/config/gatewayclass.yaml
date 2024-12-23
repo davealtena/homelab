@@ -1,7 +1,6 @@
 # gateway/gateway-class.yaml
-apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
-  name: cilium
+  name: cluster-gateway
 spec:
   controllerName: io.cilium/gateway-controller
