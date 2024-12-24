@@ -12,7 +12,7 @@ spec:
 
   # Specific hostname for the Actual service
   hostnames:
-    - "actual.altena.io"
+    - "finance.altena.io"
 
   # Routing rules
   rules:
