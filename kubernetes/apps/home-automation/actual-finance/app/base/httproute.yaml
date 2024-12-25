@@ -16,6 +16,11 @@ spec:
 
   # Routing rules
   rules:
-    - backendRefs:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
         - name: actual
           port: 80
+
