@@ -8,14 +8,9 @@ metadata:
     external-dns.alpha.kubernetes.io/hostname: internal-gateway.altena.io
 spec:
   gatewayClassName: cilium
-  # https://github.com/cilium/cilium/issues/21926
-  # https://github.com/cilium/cilium/pull/33042
-  # addresses:
-  #   - type: IPAddress
-  #     value: 192.168.178.95
-  infrastructure:
-    annotations:
-      io.cilium/lb-ipam-ips: 192.168.2.131
+  addresses:
+    - type: IPAddress
+      value: 192.168.2.131
   listeners:
     - protocol: HTTPS
       port: 80
