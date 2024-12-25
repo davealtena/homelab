@@ -22,5 +22,5 @@ spec:
             value: /
       backendRefs:
         - name: actual
-          port: 80
+          port: 5006
 
