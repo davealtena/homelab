@@ -9,9 +9,8 @@ spec:
   selector:
     app: actual
   ports:
-    - name: web
-      port: 80
+    - name: http
+      port: 5006
       targetPort: 5006
       protocol: TCP
-  loadBalancerClass: tailscale
-  type: LoadBalancer
+  type: ClusterIP
