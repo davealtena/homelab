@@ -4,8 +4,6 @@ kind: Gateway
 metadata:
   name: internal-tls-gateway
   namespace: gateway-system
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: internal-gateway.altena.io
 spec:
   gatewayClassName: cilium
   # https://github.com/cilium/cilium/issues/21926
