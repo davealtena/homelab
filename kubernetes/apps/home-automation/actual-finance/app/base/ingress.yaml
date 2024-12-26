@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: actual-finance
+  annotations:
+    external-dns.alpha.kubernetes.io/target: internal.altena.io
 spec:
   ingressClassName: internal
   rules:
