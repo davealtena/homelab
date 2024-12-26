@@ -3,7 +3,7 @@
 version: '3'
 
 vars:
-  TALHELPER_CLUSTER_DIR: '{{.KUBERNETES_DIR}}/bootstrap/talos/clusterconfig'
+  TALHELPER_CLUSTER_DIR: '{{.KUBERNETES_DIR}}/config/talos/clusterconfig'
   TALHELPER_CONFIG_FILE: '{{.ROOT_DIR}}/config/talos/talconfig.yaml'
   TALOSCONFIG: '{{.TALHELPER_CLUSTER_DIR}}/talosconfig'
 
