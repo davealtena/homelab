@@ -38,7 +38,7 @@ spec:
               - name: HASS_HTTP_TRUSTED_PROXY_1
                 value: "192.168.2.0/24"
               - name: HASS_HTTP_TRUSTED_PROXY_2
-                value: "10.69.0.0/16"
+                value: "10.69.1.0/16"
             # envFrom:
             #   - secretRef:
             #       name: home-assistant-secret
