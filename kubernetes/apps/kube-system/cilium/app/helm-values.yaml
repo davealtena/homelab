@@ -47,9 +47,14 @@ kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 l2announcements:
   enabled: true
+l7Proxy: true
 loadBalancer:
   algorithm: maglev
   mode: snat
+  l7:
+    backend: envoy
+envoyConfig:
+  enabled: true
 localRedirectPolicy: true
 operator:
   replicas: 1
