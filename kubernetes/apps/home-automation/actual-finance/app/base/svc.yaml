@@ -10,7 +10,7 @@ spec:
     app: actual
   ports:
     - name: http
-      port: 5006
+      port: 80
       targetPort: 5006
       protocol: TCP
   type: ClusterIP
