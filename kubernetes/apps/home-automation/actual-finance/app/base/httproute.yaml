@@ -23,4 +23,3 @@ spec:
       backendRefs:
         - name: actual
           port: 5006
-
