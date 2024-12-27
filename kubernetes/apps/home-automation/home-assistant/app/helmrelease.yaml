@@ -58,6 +58,10 @@ spec:
               capabilities:
                 drop:
                   - ALL
+              env:
+                TZ: Europe/Amsterdam
+                HASS_HTTP_TRUSTED_PROXY_1: 192.168.2.0/24
+                HASS_HTTP_TRUSTED_PROXY_2: 10.69.0.0/16
     service:
       app:
         controller: home-assistant
