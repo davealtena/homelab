@@ -27,50 +27,40 @@ spec:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                "name": "multus-iot",
+                "namespace": "network",
+                "ips": ["192.168.2.130/24"],
+                "mac": "3e:59:e4:f7:43:08"
+              }]
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65533
+            fsGroup: 65533
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
               repository: ghcr.io/onedr0p/home-assistant
-              tag: 2024.9.2@sha256:2ed30ce9d13cdc6b284fcd55596849e130fbe116a3b5cee546d810957b1b5693
-            env:
-              - name: TZ
-                value: Europe/Amsterdam
-              - name: HASS_HTTP_TRUSTED_PROXY_1
-                value: "192.168.2.0/24"
-              - name: HASS_HTTP_TRUSTED_PROXY_2
-                value: "10.69.1.0/16"
-            # envFrom:
-            #   - secretRef:
-            #       name: home-assistant-secret
+              tag: 2024.12.5@sha256:638e519c874a06389ce6f03e435dd80a6697e8692eac88b459775839410f3439
+            resources:
+              requests:
+                cpu: 47m
+                memory: 2Gi
+              limits:
+                memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - NET_ADMIN
-                  - NET_RAW
-                  - NET_BROADCAST
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 2Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: home-assistant
-        annotations:
-          io.cilium/lb-ipam-ips: 192.168.2.130
-        type: LoadBalancer
         ports:
           http:
             port: 8123
@@ -81,6 +71,7 @@ spec:
           - host: hass.altena.io
             paths:
               - path: /
+                pathType: Prefix
                 service:
                   identifier: app
                   port: http
