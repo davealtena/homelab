@@ -19,11 +19,12 @@ spec:
         - name: install-cni-plugins
           image: ghcr.io/k8snetworkplumbingwg/multus-cni:v4.1.4
           command:
-            - "cp"
+            - /bin/sh
+            - -c
           args:
-            - "-f"
-            - "/usr/src/multus-cni/bin/macvlan"
-            - "/host/opt/cni/bin/macvlan"
+            - |
+              cp -f /usr/src/multus-cni/bin/macvlan /host/opt/cni/bin/macvlan &&
+              chmod +x /host/opt/cni/bin/macvlan
           volumeMounts:
             - name: cni-bin-dir
               mountPath: /host/opt/cni/bin
