@@ -5,7 +5,7 @@ metadata:
   name: &app cnpg-operator-crd
   namespace: flux-system
 spec:
-  targetNamespace: kube-system
+  targetNamespace: cnpg-operator
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
