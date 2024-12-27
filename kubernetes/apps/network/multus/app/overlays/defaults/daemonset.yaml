@@ -1,5 +1,3 @@
----
-# daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -17,6 +15,18 @@ spec:
     spec:
       serviceAccountName: multus
       hostNetwork: true
+      initContainers:
+        - name: install-cni-plugins
+          image: ghcr.io/k8snetworkplumbingwg/multus-cni:v4.1.4
+          command:
+            - "cp"
+          args:
+            - "-f"
+            - "/usr/src/multus-cni/bin/macvlan"
+            - "/host/opt/cni/bin/macvlan"
+          volumeMounts:
+            - name: cni-bin-dir
+              mountPath: /host/opt/cni/bin
       containers:
         - name: multus
           image: ghcr.io/k8snetworkplumbingwg/multus-cni:v4.1.4
