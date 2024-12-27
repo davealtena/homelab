@@ -1,0 +1,7 @@
+resources:
+- ../../base
+- daemonset.yaml
+- job.yaml
+- networkattachementdefinition.yaml
+- serviceaccount.yaml
+- rbac.yaml

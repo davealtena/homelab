@@ -1,0 +1,54 @@
+---
+# daemonset.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: multus
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app: multus
+  template:
+    metadata:
+      labels:
+        app: multus
+    spec:
+      serviceAccountName: multus
+      hostNetwork: true
+      containers:
+        - name: multus
+          image: ghcr.io/k8snetworkplumbingwg/multus-cni:v4.1.4
+          command:
+            - /thin_entrypoint
+          args:
+            - --multus-conf-file=/config/00-multus.conf
+            - --cni-bin-dir=/opt/cni/bin
+            - --cni-conf-dir=/etc/cni/net.d
+          resources:
+            requests:
+              cpu: "10m"
+            limits:
+              memory: "512Mi"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: config
+              mountPath: /config/00-multus.conf
+              subPath: 00-multus.conf
+              readOnly: true
+            - name: cni-net-dir
+              mountPath: /etc/cni/net.d
+            - name: cni-bin-dir
+              mountPath: /opt/cni/bin
+      volumes:
+        - name: config
+          configMap:
+            name: multus-configmap
+        - name: cni-net-dir
+          hostPath:
+            path: /etc/cni/net.d
+        - name: cni-bin-dir
+          hostPath:
+            path: /opt/cni/bin
