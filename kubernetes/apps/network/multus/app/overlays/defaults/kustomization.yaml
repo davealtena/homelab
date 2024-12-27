@@ -1,2 +1,6 @@
 resources:
 - ../../base
+- networkattachementdefinition.yaml
+
+patches:
+  - path: daemonset-patch.yaml
