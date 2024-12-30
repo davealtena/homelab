@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,17 +10,27 @@ spec:
     matchLabels:
       app: zigbee2mqtt
   template:
+    metadata:
+      labels:
+        app: zigbee2mqtt    # Added missing labels
     spec:
       containers:
         - name: zigbee2mqtt
           image: koenkk/zigbee2mqtt:latest-dev
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
           env:
             - name: TZ
               value: Europe/Amsterdam
-            - name: "ZIGBEE2MQTT_DATA"
+            - name: ZIGBEE2MQTT_DATA
               value: "/data"
-            - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER # optional - can also be configured in the configuration.yaml in the configmap
+            - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
               value: "mqtt://mosquitto"
           securityContext:
             privileged: true
@@ -40,23 +49,26 @@ spec:
             - name: ttyacm
               mountPath: /dev/ttyACM0
           livenessProbe:
-            tcpSocket:
-              port: 8080
-            initialDelaySeconds: 0
+            httpGet:              # Changed to HTTP probe
+              path: /
+              port: http
+            initialDelaySeconds: 30
             failureThreshold: 3
             timeoutSeconds: 1
             periodSeconds: 10
           readinessProbe:
-            tcpSocket:
-              port: 8080
-            initialDelaySeconds: 0
+            httpGet:              # Changed to HTTP probe
+              path: /
+              port: http
+            initialDelaySeconds: 30
             failureThreshold: 3
             timeoutSeconds: 1
             periodSeconds: 10
           startupProbe:
-            tcpSocket:
-              port: 8080
-            initialDelaySeconds: 0
+            httpGet:              # Changed to HTTP probe
+              path: /
+              port: http
+            initialDelaySeconds: 30
             failureThreshold: 30
             timeoutSeconds: 1
             periodSeconds: 5
