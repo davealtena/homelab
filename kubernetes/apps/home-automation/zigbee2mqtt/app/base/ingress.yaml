@@ -1,13 +1,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: actual-finance
+  name: zigbee2mqtt
   annotations:
     external-dns.alpha.kubernetes.io/target: internal.altena.io
 spec:
   ingressClassName: internal
   rules:
-  - host: finance.altena.io
+  - host: zigbee2mqtt.altena.io
     http:
       paths:
       - path: /

@@ -1,0 +1,16 @@
+permit_join: true
+homeassistant: true
+mqtt:
+  base_topic: zigbee2mqtt
+  server: "mqtt://mosquitto.homeassistant"
+serial:
+  port: /dev/ttyACM0
+frontend:
+  port: 8080
+advanced:
+  log_level: debug
+  log_output:
+  - console
+  - file
+devices: /data/devices.yaml
+groups: /data/groups.yaml

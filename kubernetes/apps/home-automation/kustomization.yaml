@@ -8,4 +8,4 @@ resources:
   # Flux-Kustomizations
   - ./actual-finance/ks.yaml
   - ./home-assistant/ks.yaml
-
+  - ./zigbee2mqtt/ks.yaml

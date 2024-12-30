@@ -4,8 +4,6 @@ metadata:
   name: actual
   labels:
     app: actual
-  annotations:
-    tailscale.com/hostname: "finance"
 spec:
   selector:
     app: actual
@@ -14,5 +12,4 @@ spec:
       port: 80
       targetPort: 5006
       protocol: TCP
-  loadBalancerClass: tailscale
   type: LoadBalancer
