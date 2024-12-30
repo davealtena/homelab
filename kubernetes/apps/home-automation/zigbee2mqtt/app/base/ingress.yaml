@@ -14,6 +14,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: actual
+            name: zigbee2mqtt
             port:
               name: web
