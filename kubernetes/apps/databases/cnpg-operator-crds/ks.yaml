@@ -9,7 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cnpg-operator/cnpg-operator-crds/crd/defaults
+  path: ./kubernetes/apps/databases/cnpg-operator-crds/crd/defaults
   prune: false
   sourceRef:
     kind: GitRepository
