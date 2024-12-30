@@ -24,7 +24,7 @@ spec:
       retries: 3
   dependsOn:
     - name: onepassword-connect
-      namespace: external-secrets
+      namespace: security
   values:
     installCRDs: true
     serviceMonitor:
