@@ -32,6 +32,8 @@ spec:
               value: "/data"
             - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
               value: "mqtt://mosquitto"
+            - name: ZIGBEE2MQTT_CONFIG_SERIAL_PORT
+              value: "tcp://192.168.2.113:6638"
           securityContext:
             privileged: true
           ports:
