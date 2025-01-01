@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/apps/database/emqx/operator
+  path: ./kubernetes/apps/databases/emqx/operator
   prune: true
   sourceRef:
     kind: GitRepository
@@ -34,7 +34,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/apps/database/emqx/cluster
+  path: ./kubernetes/apps/databases/emqx/cluster
   prune: true
   sourceRef:
     kind: GitRepository
