@@ -69,26 +69,18 @@ spec:
             image:
               repository: ghcr.io/coder/code-server
               tag: 4.96.2@sha256:6b8c0e944caec80057e71d2c2f352cee38fe00ae4b7515fc4458eb300844f699
-            args:
-              - --auth
-              - none
-              - --disable-telemetry
-              - --disable-update-check
-              - --user-data-dir
-              - /config/.code-server
-              - --extensions-dir
-              - /config/.code-server
-              - --port
-              - "12321"
-              - /config
-            env:
-              HASS_SERVER: http://localhost:8123
+            args: [
+              "--auth", "none",
+              "--user-data-dir", "/config/.vscode",
+              "--extensions-dir", "/config/.vscode",
+              "--port", "12321",
+              "/config"
+            ]
             resources:
               requests:
                 cpu: 10m
               limits:
                 memory: 512Mi
-
     service:
       app:
         controller: home-assistant
@@ -104,11 +96,16 @@ spec:
         hosts:
           - host: hass.altena.io
             paths:
-              - path: /(.*)
+              - path: /
                 service:
                   identifier: app
                   port: http
-              - path: /code/(.*)
+      code-server:
+        className: internal
+        hosts:
+          - host: hass-code.altena.io
+            paths:
+              - path: /
                 service:
                   identifier: app
                   port: code-server
@@ -130,7 +127,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
-      run:
-        type: emptyDir
-        globalMounts:
-          - path: /run
