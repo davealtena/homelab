@@ -44,7 +44,7 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/home-assistant
+              repository: ghcr.io/home-assistant/home-assistant
               tag: 2024.12.5@sha256:638e519c874a06389ce6f03e435dd80a6697e8692eac88b459775839410f3439
             resources:
               requests:
