@@ -1,0 +1,4 @@
+resources:
+  - ./helmrelease.yaml
+  - ./pvc-cache.yaml
+  - ./pvc-config.yaml

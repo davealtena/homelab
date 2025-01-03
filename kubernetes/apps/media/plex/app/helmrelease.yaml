@@ -1,0 +1,130 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: plex
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.0
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 30m
+  values:
+    controllers:
+      plex:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 44
+              - 109
+              - 65542 # gladius:external-services
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/plex
+              tag: 1.41.3.9314-a0bfb8370@sha256:38fcbef239341db591f8ff87f20777d9a783b79f757fc42e360041d7ba78eada
+            env:
+              PLEX_ADVERTISE_URL: https://192.168.2.132:32400,https://plex.altena.io:443
+              PLEX_NO_AUTH_NETWORKS: 10.244.0.0/16
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /identity
+                    port: 32400
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 9248M
+
+    service:
+      app:
+        controller: plex
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 192.168.2.132
+        ports:
+          http:
+            port: 32400
+
+    ingress:
+      app:
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+        className: internal
+        hosts:
+          - host: plex.altena.io
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+
+    persistence:
+      config:
+        existingClaim: plex-config
+        advancedMounts:
+          plex:
+            app:
+              - path: /config
+      plex-cache:
+        existingClaim: plex-cache
+        advancedMounts:
+          plex:
+            app:
+              - path: /config/Library/Application Support/Plex Media Server/Cache
+      logs:
+        type: emptyDir
+        advancedMounts:
+          plex:
+            app:
+              - path: /config/Library/Application Support/Plex Media Server/Logs
+      nfs-nas-media:
+        type: nfs
+        server: 192.168.2.100
+        path: /mnt/zfs/media
+        advancedMounts:
+          plex:
+            app:
+              - path: /data/nas-media/Library
+                subPath: Library
+      transcode:
+        type: emptyDir
+        advancedMounts:
+          plex:
+            app:
+              - path: /transcode
