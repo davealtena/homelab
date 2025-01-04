@@ -38,7 +38,8 @@ spec:
               repository: ghcr.io/onedr0p/plex
               tag: 1.41.3.9314-a0bfb8370@sha256:38fcbef239341db591f8ff87f20777d9a783b79f757fc42e360041d7ba78eada
             env:
-              PLEX_ADVERTISE_URL: https://192.168.2.132:32400,https://plex.altena.io:443
+              PLEX_PREFER_APP_HTTPS: "0"
+              PLEX_ADVERTISE_URL: http://192.168.2.132:32400,https://plex.altena.io:443
               PLEX_NO_AUTH_NETWORKS: 10.69.0.0/16,192.168.2.0/24
             probes:
               liveness: &probes
@@ -83,7 +84,7 @@ spec:
     ingress:
       app:
         annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+          nginx.ingress.kubernetes.io/backend-protocol: HTTP
         className: internal
         hosts:
           - host: plex.altena.io
