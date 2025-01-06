@@ -57,6 +57,7 @@ tasks:
       - which flux kubectl sops
 
   apps:
+    internal: true
     dir: '{{.KUBERNETES_DIR}}/bootstrap/talos'
     cmds:
       - until kubectl wait --for=condition=Ready=False nodes --all --timeout=600s; do sleep 10; done
