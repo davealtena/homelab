@@ -6,11 +6,11 @@ metadata:
   name: &app actual-finance
   namespace: flux-system
 spec:
-  targetNamespace: home-automation
+  targetNamespace: selfhosted
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/home-automation/actual-finance/app
+  path: ./kubernetes/apps/selfhosted/actual-finance/app
   prune: true
   sourceRef:
     kind: GitRepository
