@@ -36,7 +36,7 @@ tasks:
     cmds:
       - task: '{{if ne .ROLLOUT true}}down{{else}}noop{{end}}'
       - talosctl --nodes {{.HOSTNAME}} upgrade --image="factory.talos.dev/installer/{{.TALOS_SCHEMATIC_ID}}:{{.TALOS_VERSION}}" --timeout=10m
-      - talosctl --nodes {{.HOSTNAME}} health --wait-timeout=10m --server=false
+      - talosctl --nodes {{.HOSTNAME}} health
       - task: '{{if ne .ROLLOUT true}}up{{else}}noop{{end}}'
     vars:
       TALOS_SCHEMATIC_ID:

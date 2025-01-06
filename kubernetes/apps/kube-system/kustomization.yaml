@@ -8,4 +8,3 @@ resources:
   - ./csi-driver-nfs/ks.yaml
   - ./metrics-server/ks.yaml
   - ./reloader/ks.yaml
-  - ./kubelet-csr-approver/ks.yaml
