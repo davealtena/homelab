@@ -9,7 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: cloudnative-pg
-  path: ./kubernetes/apps/databases/cnpg-operator-crds/crd/defaults
+  path: ./kubernetes/apps/databases/cnpg-operator/app
   prune: false
   sourceRef:
     kind: GitRepository
