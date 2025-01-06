@@ -17,7 +17,6 @@ resources:
   - ./ingress-nginx.yaml
   - ./openebs.yaml
   - ./pireaus.yaml
-  - ./postfinance.yaml
   - ./prometheus-community.yaml
   - ./rook-ceph.yaml
   - ./spegel.yaml
