@@ -2,7 +2,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cnpg-operator-crd
+  name: cnpg-operator
   namespace: flux-system
 spec:
   targetNamespace: databases
