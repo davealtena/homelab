@@ -1,39 +1,21 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
 sonarr:
   sonarr_main:
     base_url: http://sonarr.downloads.svc.cluster.local:8989
     api_key: !env_var SONARR_API_KEY
-
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
-
     include:
+      # Quality definitions optimized for streaming
       - template: sonarr-quality-definition-series
-      # 1080p
+      # Focus on 1080p WEB-DL
       - template: sonarr-v4-quality-profile-web-1080p
       - template: sonarr-v4-custom-formats-web-1080p
-      # 2160p
-      - template: sonarr-v4-quality-profile-web-2160p
-      - template: sonarr-v4-custom-formats-web-2160p
-
     quality_profiles:
       - name: WEB-1080p
-      - name: WEB-2160p
-
     custom_formats:
-      # HDR Formats
       - trash_ids:
-          # Comment out the next line if you and all of your users' setups are fully DV compatible
-          - 9b27ab6498ec0f31a3353992e19434ca # DV (WEBDL)
-
-          # HDR10+ Boost - Uncomment the next two lines if any of your devices DO support HDR10+
-          # - 0dad0a507451acddd754fe6dc3a7f5e7 # HDR10+ Boost
-          # - 385e9e8581d33133c3961bdcdeffb7b4 # DV HDR10+ Boost
-        assign_scores_to:
-          - name: WEB-2160p
-
-      - trash_ids:
+          # Avoid problematic releases
           - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
           - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
           - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
@@ -41,29 +23,24 @@ sonarr:
           - 1b3994c551cbb92a2c781af061f4ab44 # Scene
         assign_scores_to:
           - name: WEB-1080p
-          - name: WEB-2160p
 
 radarr:
   radarr_main:
     base_url: http://radarr.downloads.svc.cluster.local:7878
     api_key: !env_var RADARR_API_KEY
-
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
-
     include:
+      # Use streaming optimized quality definition
       - template: radarr-quality-definition-sqp-streaming
-      # 2160p
-      - template: radarr-custom-formats-sqp-1-2160p
-      - template: radarr-quality-profile-sqp-1-2160p-4k-only-imax-e
-
+      # 1080p profile instead of 2160p
+      - template: radarr-quality-profile-sqp-2-1080p-bluray-webdl
     quality_profiles:
-      - name: SQP-1 (2160p)
-        min_format_score: 2000
-
+      - name: SQP-2 (1080p)
+        min_format_score: 0  # Allow more releases to be considered
     custom_formats:
       - trash_ids:
-          - 7a0d1ad358fee9f5b074af3ef3f9d9ef # hallowed
+          # Avoid unwanted release types
           - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
           - 90cedc1fea7ea5d11298bebd3d1d3223 # EVO (no WEBDL)
           - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5 # No-RlsGroup
@@ -71,4 +48,4 @@ radarr:
           - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
           - f537cf427b64c38c8e36298f657e4828 # Scene
         assign_scores_to:
-          - name: SQP-1 (2160p)
+          - name: SQP-2 (1080p)
