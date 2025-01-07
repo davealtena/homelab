@@ -116,7 +116,7 @@ spec:
       nfs-nas-media:
         type: nfs
         server: 192.168.2.100
-        path: /mnt/zfs/media
+        path: /mnt/zfs/media/Downloads
         advancedMounts:
           plex:
             app:
