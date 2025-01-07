@@ -24,7 +24,7 @@ spec:
       retries: 3
   dependsOn:
     - name: minio
-      namespace: default
+      namespace: storage
     - name: snapshot-controller
       namespace: volsync-system
   values:
