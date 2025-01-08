@@ -8,5 +8,5 @@ resources:
   # Flux-Kustomizations
   - ./external-dns/ks.yaml
   - ./k8s-gateway/ks.yaml
-  - ./multus/ks.yaml
+  #- ./multus/ks.yaml
   - ./nginx/ks.yaml
