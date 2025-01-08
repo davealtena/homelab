@@ -64,6 +64,12 @@ spec:
                 drop:
                   - ALL
     persistence:
+      config:
+        existingClaim: recyclarr
+        advancedMounts:
+          recyclarr:
+            app:
+              - path: /config
       config-file:
         type: configMap
         name: recyclarr-configmap
@@ -71,10 +77,3 @@ spec:
           - path: /config/recyclarr.yml
             subPath: recyclarr.yml
             readOnly: true
-      config:
-        existingClaim: recyclarr
-        advancedMounts:
-          recyclarr:
-            app:
-              - path: /config
-
