@@ -76,4 +76,3 @@ spec:
         globalMounts:
           - path: /config/recyclarr.yml
             subPath: recyclarr.yml
-            readOnly: true
