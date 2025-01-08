@@ -5,10 +5,11 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ./pvc.yaml
 configMapGenerator:
   - name: recyclarr-configmap
     files:
-      - config/recyclarr.yml
+      - config/recyclarr.yaml
 generatorOptions:
   disableNameSuffixHash: true
   annotations:

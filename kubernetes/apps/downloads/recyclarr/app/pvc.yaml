@@ -1,0 +1,13 @@
+---
+# Separate PVC manifest
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: recyclarr
+  namespace: downloads
+spec:
+  accessModes: ["ReadWriteMany"]
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: nfs-csi-sc
