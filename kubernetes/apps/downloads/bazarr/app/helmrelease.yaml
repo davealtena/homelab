@@ -34,7 +34,7 @@ spec:
           app:
             image:
               repository: ghcr.io/onedr0p/bazarr
-              tag: 1.4.4@sha256:738abd74a569b91b6fd2fb009b78d11028a0b7bbcb4ea98510afacee8d797c15
+              tag: 1.5.1@sha256:dab8017cadadece962e775cc096e0be18848c700bd08183fe18c0feec60cff28
             env:
               TZ: Europe/Amsterdam
             # TODO: Enable this secret ones Plex's installed
