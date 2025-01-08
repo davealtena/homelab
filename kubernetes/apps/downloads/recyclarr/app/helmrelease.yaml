@@ -65,7 +65,7 @@ spec:
                   - ALL
     persistence:
       config:
-        existingClaim: recyclarr
+        existingClaim: recyclarr-config
         advancedMounts:
           recyclarr:
             app:
