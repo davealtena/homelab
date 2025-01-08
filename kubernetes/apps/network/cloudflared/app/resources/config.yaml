@@ -1,0 +1,10 @@
+---
+originRequest:
+  originServerName: external.altena.io
+
+ingress:
+  - hostname: altena.io
+    service: https://nginx-external-controller.network.svc.cluster.local:443
+  - hostname: "*.altena.io"
+    service: https://nginx-external-controller.network.svc.cluster.local:443
+  - service: http_status:404
