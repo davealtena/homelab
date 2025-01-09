@@ -6,6 +6,7 @@ resources:
   - ./bjw-s.yaml
   - ./cilium.yaml
   - ./cnpg.yaml
+  - ./controlplaneio.yaml
   - ./coredns.yaml
   - ./csi-nfs-driver.yaml
   - ./emqx.yaml
