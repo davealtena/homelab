@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: cloudflared
+  name: echo-server
 spec:
   interval: 30m
   chart:
@@ -22,42 +22,29 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: nginx-external
-      namespace: network
   values:
     controllers:
-      cloudflared:
+      echo-server:
         replicas: 2
         strategy: RollingUpdate
-        annotations:
-          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: docker.io/cloudflare/cloudflared
-              tag: 2025.1.0@sha256:3247f3ef49eda23244b8aa5583f82b7c3880b0d057e1172d0e818f5e678d9f27
+              repository: ghcr.io/mendhak/http-https-echo
+              tag: 35
             env:
-              NO_AUTOUPDATE: true
-              TUNNEL_CRED_FILE: /etc/cloudflared/creds/credentials.json
-              TUNNEL_METRICS: 0.0.0.0:8080
-              TUNNEL_ORIGIN_ENABLE_HTTP2: true
-              TUNNEL_TRANSPORT_PROTOCOL: quic
-              TUNNEL_POST_QUANTUM: true
-            args:
-              - tunnel
-              - --config
-              - /etc/cloudflared/config/config.yaml
-              - run
-              - eba50d97-d1c7-4981-87ef-93c4fe1d49f4
+              HTTP_PORT: &port 80
+              LOG_WITHOUT_NEWLINE: true
+              LOG_IGNORE_PATH: /healthz
+              PROMETHEUS_ENABLED: true
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /ready
-                    port: &port 8080
+                    path: /healthz
+                    port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -67,11 +54,13 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+              seccompProfile:
+                type: RuntimeDefault
             resources:
               requests:
                 cpu: 10m
               limits:
-                memory: 256Mi
+                memory: 64Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -80,31 +69,26 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: cloudflared
+        controller: echo-server
         ports:
           http:
             port: *port
     serviceMonitor:
       app:
-        serviceName: cloudflared
+        serviceName: echo-server
         endpoints:
           - port: http
             scheme: http
             path: /metrics
             interval: 1m
             scrapeTimeout: 10s
-    persistence:
-      config:
-        type: configMap
-        name: cloudflared-configmap
-        globalMounts:
-          - path: /etc/cloudflared/config/config.yaml
-            subPath: config.yaml
-            readOnly: true
-      creds:
-        type: secret
-        name: cloudflared-tunnel-secret
-        globalMounts:
-          - path: /etc/cloudflared/creds/credentials.json
-            subPath: credentials.json
-            readOnly: true
+    ingress:
+      app:
+        className: external
+        hosts:
+          - host: "{{ .Release.Name }}.altena.io"
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
