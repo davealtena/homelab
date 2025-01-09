@@ -1,0 +1,10 @@
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: cloudflared-tunnel
+spec:
+  endpoints:
+    - dnsName: external.altena.io
+      recordType: CNAME
+      targets: ["eba50d97-d1c7-4981-87ef-93c4fe1d49f4.cfargotunnel.com"]
