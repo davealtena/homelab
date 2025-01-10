@@ -2,9 +2,6 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
 
-vars:
-  KUBECONFORM_SCRIPT: "{{.SCRIPTS_DIR}}/kubeconform.sh"
-
 tasks:
 
   apply-ks:
@@ -30,30 +27,3 @@ tasks:
     preconditions:
       - test -f {{.KUBECONFIG}}
       - which flux
-
-  kubeconform:
-    desc: Validate Kubernetes manifests with kubeconform
-    cmd: bash {{.KUBECONFORM_SCRIPT}} {{.KUBERNETES_DIR}}
-    preconditions:
-      - test -f {{.KUBECONFORM_SCRIPT}}
-      - which kubeconform
-
-  resources:
-    desc: Gather common resources in your cluster, useful when asking for support
-    cmds:
-      - for: { var: RESOURCE }
-        cmd: kubectl get {{.ITEM}} {{.CLI_ARGS | default "-A"}}
-    vars:
-      RESOURCE: >-
-        nodes
-        gitrepositories
-        kustomizations
-        helmrepositories
-        helmreleases
-        certificates
-        certificaterequests
-        ingresses
-        pods
-    preconditions:
-      - test -f {{.KUBECONFIG}}
-      - which kubectl

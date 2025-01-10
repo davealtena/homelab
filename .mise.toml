@@ -1,0 +1,4 @@
+[env]
+KUBECONFIG = '{{config_root}}/kubernetes/main/kubeconfig'
+SOPS_AGE_KEY_FILE = '{{config_root}}/age.key'
+TALOSCONFIG = '{{config_root}}/kubernetes/main/talosconfig'
