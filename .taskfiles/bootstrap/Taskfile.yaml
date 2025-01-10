@@ -4,9 +4,9 @@ version: '3'
 
 vars:
   GITHUB_DEPLOY_KEY_FILE: '{{.KUBERNETES_DIR}}/bootstrap/flux/github-deploy-key.sops.yaml'
-  TALHELPER_CLUSTER_DIR: '{{.ROOT_DIR}}/config/talos/clusterconfig'
-  TALHELPER_SECRET_FILE: '{{.ROOT_DIR}}/config/talos/talsecret.sops.yaml'
-  TALHELPER_CONFIG_FILE: '{{.ROOT_DIR}}/config/talos/talconfig.yaml'
+  TALHELPER_CLUSTER_DIR: '{{.KUBERNETES_DIR}}/main/talos/clusterconfig'
+  TALHELPER_SECRET_FILE: '{{.KUBERNETES_DIR}}/main/talos/talsecret.sops.yaml'
+  TALHELPER_CONFIG_FILE: '{{.KUBERNETES_DIR}}/main/talos/talconfig.yaml'
 
 env:
   TALOSCONFIG: '{{.TALHELPER_CLUSTER_DIR}}/talosconfig'
@@ -68,47 +68,3 @@ tasks:
         sh: test -f {{.KUBECONFIG}}
       - msg: Missing helmfile
         sh: test -f {{.KUBERNETES_DIR}}/bootstrap/helmfile.yaml
-
-  age-keygen:
-    desc: Bootstrap the Sops Age key
-    cmd: age-keygen --output {{.SOPS_AGE_KEY_FILE}}
-    status:
-      - test -f {{.SOPS_AGE_KEY_FILE}}
-
-  encrypt:
-    desc: Encrypt all Kubernetes SOPS secrets
-    cmd: |
-      find "{{.KUBERNETES_DIR}}" -type f -name "*.sops.*" | while read -r file; do
-          if sops filestatus "${file}" | jq --exit-status ".encrypted == false" &>/dev/null; then
-              sops --encrypt --in-place "${file}"
-          fi
-      done
-    preconditions:
-      - msg: Missing Sops config file
-        sh: test -f {{.SOPS_CONFIG_FILE}}
-      - msg: Missing Sops Age key file
-        sh: test -f {{.SOPS_AGE_KEY_FILE}}
-
-  clean:
-    desc: Clean files and directories no longer needed after cluster bootstrap
-    cmds:
-      # Create backup directory
-      - mkdir -p {{.ROOT_DIR}}/.private
-      # Clean up CI
-      - rm -rf {{.ROOT_DIR}}/.github/tests
-      - rm -rf {{.ROOT_DIR}}/.github/workflows/e2e.yaml
-      # Clean up devcontainer
-      - rm -rf {{.ROOT_DIR}}/.devcontainer/ci
-      - rm -rf {{.ROOT_DIR}}/.github/workflows/devcontainer.yaml
-      # Move bootstrap directory to gitignored directory
-      - mv {{.BOOTSTRAP_DIR}} {{.ROOT_DIR}}/.private/bootstrap-{{.TS}}
-      - mv {{.MAKEJINJA_CONFIG_FILE}} {{.ROOT_DIR}}/.private/makejinja-{{.TS}}.toml
-      # Update renovate.json5
-      - sed -i {{if eq OS "darwin"}}''{{end}} 's/(..\.j2)\?//g' {{.ROOT_DIR}}/.github/renovate.json5
-    vars:
-      TS: '{{now | unixEpoch}}'
-    preconditions:
-      - msg: Missing bootstrap directory
-        sh: test -d {{.BOOTSTRAP_DIR}}
-      - msg: Missing Renovate config file
-        sh: test -f {{.ROOT_DIR}}/.github/renovate.json5
