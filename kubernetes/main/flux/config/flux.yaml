@@ -18,7 +18,7 @@ metadata:
 spec:
   interval: 10m
   path: ./
-  prune: true
+  prune: false # Set back to true
   wait: true
   sourceRef:
     kind: OCIRepository

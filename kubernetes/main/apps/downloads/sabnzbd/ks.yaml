@@ -13,7 +13,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
   path: ./kubernetes/main/apps/downloads/sabnzbd/app
-  prune: true
+  prune: false # Set back to true
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
