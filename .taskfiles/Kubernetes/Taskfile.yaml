@@ -18,7 +18,7 @@ tasks:
       KS:
         sh: flux --namespace flux-system get kustomizations {{base .PATH}} 2>&1
     preconditions:
-      - test -f {{.KUBERNETES_DIR}}/apps/{{.PATH}}/ks.yaml
+      - test -f {{.KUBERNETES_DIR}}/main/apps/{{.PATH}}/ks.yaml
       - which flux kubectl yq
 
   reconcile:

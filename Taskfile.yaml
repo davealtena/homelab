@@ -8,12 +8,12 @@ shopt: [globstar]
 vars:
   CLUSTER: '{{.CLUSTER | default "main"}}'
   CLUSTER_DIR: '{{.ROOT_DIR}}/kubernetes/{{.CLUSTER}}'
-  KUBERNETES_DIR: '{{ROOT_DIR}}/kubernetes'
+  KUBERNETES_DIR: '{{.ROOT_DIR}}/kubernetes'
 
 env:
-  KUBECONFIG: '{{.CLUSTER_DIR}}/kubeconfig'
+  KUBECONFIG: '{{.ROOT_DIR}}/kubernetes/main/kubeconfig'
   SOPS_AGE_KEY_FILE: '{{.ROOT_DIR}}/age.key'
-  TALOSCONFIG: '{{.KUBERNETES_DIR}}/main/talos/clusterconfig/talosconfig'
+  TALOSCONFIG: '{{.ROOT_DIR}}/main/talos/clusterconfig/talosconfig'
 
 includes:
   bootstrap: .taskfiles/bootstrap
