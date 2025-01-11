@@ -45,7 +45,7 @@ releases:
     values:
       - ../apps/flux-system/flux-operator/app/helm-values.yaml
     needs:
-      - kube-system/wipe-rook
+      - observability/kube-prometheus-stack-crds
 
   - name: flux-instance
     namespace: flux-system

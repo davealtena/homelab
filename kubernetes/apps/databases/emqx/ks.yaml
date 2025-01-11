@@ -16,7 +16,7 @@ spec:
   prune: true #Revert  # Set back to true
   sourceRef:
     kind: GitRepository
-    name: home-kubernetes
+    name: flux-system
   wait: true
   dependsOn:
     - name: cert-manager
@@ -38,7 +38,7 @@ spec:
   prune: true #Revert  # Set back to true
   sourceRef:
     kind: GitRepository
-    name: home-kubernetes
+    name: flux-system
   wait: true
   dependsOn:
     - name: emqx-operator
