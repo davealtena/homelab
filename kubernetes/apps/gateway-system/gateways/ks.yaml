@@ -12,7 +12,7 @@ spec:
   dependsOn:
     - name: cilium
   path: ./kubernetes/apps/gateway-system/gateways/internal
-  prune: false # never should be deleted
+  prune: true #Revert  # never should be deleted
   sourceRef:
     kind: GitRepository
     name: home-kubernetes

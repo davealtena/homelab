@@ -14,7 +14,7 @@ spec:
     - name: certificates
     - name: external-secrets-stores
   path: ./kubernetes/apps/network/nginx/internal
-  prune: false
+  prune: true #Revert
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
@@ -38,7 +38,7 @@ spec:
     - name: certificates
     - name: external-secrets-stores
   path: ./kubernetes/apps/network/nginx/external
-  prune: false
+  prune: true #Revert
   sourceRef:
     kind: GitRepository
     name: home-kubernetes

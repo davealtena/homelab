@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 10m
   path: ./kubernetes/apps/downloads/prowlarr/app
-  prune: false # Set back to true
+  prune: true #Revert  # Set back to true
   sourceRef:
     kind: GitRepository
     name: home-kubernetes

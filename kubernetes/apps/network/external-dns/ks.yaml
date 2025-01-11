@@ -13,7 +13,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
   path: ./kubernetes/apps/network/external-dns/cloudflare
-  prune: false
+  prune: true #Revert
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
@@ -36,7 +36,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
   path: ./kubernetes/apps/network/external-dns/pihole
-  prune: false
+  prune: true #Revert
   sourceRef:
     kind: GitRepository
     name: home-kubernetes

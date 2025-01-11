@@ -13,7 +13,7 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/media/plex/app
-  prune: false # Set back to true
+  prune: true #Revert  # Set back to true
   sourceRef:
     kind: GitRepository
     name: home-kubernetes

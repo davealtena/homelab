@@ -13,7 +13,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
   path: ./kubernetes/apps/observability/kube-prometheus-stack/app
-  prune: false # Set back to true
+  prune: true #Revert  # Set back to true
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
