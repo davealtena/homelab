@@ -3,7 +3,7 @@ age:
   key_file: /Users/daltena/git/homelab/argo-homelab/age.key
 creation_rules:
   - # IMPORTANT: This rule MUST be above the others
-    path_regex: kubernetes/main/talos/.*\.sops\.ya?ml
+    path_regex: kubernetes//talos/.*\.sops\.ya?ml
     key_groups:
       - age:
           - "age1yrzd67uvapjjawwjgfc7drkyu8pk2m800w4knjzrg69jxkm0afcqnr9qfz"
