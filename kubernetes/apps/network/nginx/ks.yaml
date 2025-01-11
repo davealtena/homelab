@@ -37,11 +37,7 @@ spec:
   dependsOn:
     - name: certificates
     - name: external-secrets-stores
-<<<<<<< HEAD:kubernetes/apps/network/nginx/ks.yaml
   path: ./kubernetes/apps/network/nginx/external
-=======
-  path: ./kubernetes/main/apps/network/nginx/external
->>>>>>> main:kubernetes/main/apps/network/nginx/ks.yaml
   prune: true #Revert
   sourceRef:
     kind: GitRepository
