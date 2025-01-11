@@ -35,7 +35,11 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
+<<<<<<< HEAD:kubernetes/apps/network/external-dns/ks.yaml
   path: ./kubernetes/apps/network/external-dns/pihole
+=======
+  path: ./kubernetes/main/apps/network/external-dns/pihole
+>>>>>>> main:kubernetes/main/apps/network/external-dns/ks.yaml
   prune: true #Revert
   sourceRef:
     kind: GitRepository

@@ -37,7 +37,11 @@ spec:
     - name: certificates-import
     - name: cert-manager-issuers
     - name: external-secrets-stores
+<<<<<<< HEAD:kubernetes/apps/cert-manager/certificates/ks.yaml
   path: ./kubernetes/apps/cert-manager/certificates/app
+=======
+  path: ./kubernetes/main/apps/cert-manager/certificates/app
+>>>>>>> main:kubernetes/main/apps/cert-manager/certificates/ks.yaml
   prune: true #Revert
   sourceRef:
     kind: GitRepository

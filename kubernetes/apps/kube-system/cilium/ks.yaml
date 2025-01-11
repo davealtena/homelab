@@ -31,7 +31,11 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cilium
+<<<<<<< HEAD:kubernetes/apps/kube-system/cilium/ks.yaml
   path: ./kubernetes/apps/kube-system/cilium/config
+=======
+  path: ./kubernetes/main/apps/kube-system/cilium/config
+>>>>>>> main:kubernetes/main/apps/kube-system/cilium/ks.yaml
   prune: true #Revert  # never should be deleted
   sourceRef:
     kind: GitRepository
