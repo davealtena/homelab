@@ -31,7 +31,7 @@ metadata:
 spec:
   interval: 30m
   dependsOn:
-    - name: cluster-meta
+    - name: cluster-metadata
   path: ./kubernetes/apps
   prune: true
   sourceRef:
