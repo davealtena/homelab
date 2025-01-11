@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: cloudnative-pg
   path: ./kubernetes/main/apps/databases/cnpg-operator/app
-  prune: false
+  prune: true #Revert
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
