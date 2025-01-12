@@ -11,7 +11,7 @@ spec:
       "plugins": [
         {
           "type": "macvlan",
-          "master": "*",
+          "master": "ens18",
           "mode": "bridge",
           "capabilities": {
             "ips": true
@@ -20,7 +20,7 @@ spec:
             "type": "host-local",
             "ranges": [[{
               "subnet": "192.168.2.0/24",
-              "rangeStart": "192.168.2.160",
+              "rangeStart": "192.168.2.161",
               "rangeEnd": "192.168.2.190"
             }]],
             "routes": [
