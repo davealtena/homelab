@@ -1,3 +1,4 @@
+---
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
@@ -10,13 +11,16 @@ spec:
       "plugins": [
         {
           "type": "macvlan",
-          "master": "ens18",
+          "master": "bond0",
           "mode": "bridge",
           "capabilities": {
             "ips": true
           },
           "ipam": {
-            "type": "static"
+            "type": "static",
+            "routes": [
+              { "dst": "192.168.2.0/24", "gw": "192.168.2.254" }
+            ]
           }
         },
         {
