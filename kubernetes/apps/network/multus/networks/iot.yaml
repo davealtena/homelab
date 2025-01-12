@@ -11,21 +11,13 @@ spec:
       "plugins": [
         {
           "type": "macvlan",
-          "master": "*",
+          "master": "ens18",
           "mode": "bridge",
           "capabilities": {
             "ips": true
           },
           "ipam": {
-            "type": "host-local",
-            "ranges": [[{
-              "subnet": "192.168.2.0/24",
-              "rangeStart": "192.168.2.161",
-              "rangeEnd": "192.168.2.190"
-            }]],
-            "routes": [
-              { "dst": "192.168.2.0/24", "gw": "192.168.2.254" }
-            ]
+            "type": "static"
           }
         },
         {
