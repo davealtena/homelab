@@ -20,7 +20,7 @@ spec:
   wait: true
   dependsOn:
     - name: cilium
-      namespace: kube-system
+      namespace: flux-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
