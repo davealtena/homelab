@@ -18,6 +18,8 @@ rules:
     verbs:
       - "get"
       - "update"
+      - "list"
+      - "watch"
   - apiGroups:
       - ""
       - "events.k8s.io"
