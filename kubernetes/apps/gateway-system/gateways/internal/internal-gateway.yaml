@@ -2,7 +2,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: internal-tls-gateway
+  name: internal-gateway
   namespace: gateway-system
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
