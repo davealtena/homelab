@@ -42,6 +42,7 @@ spec:
     provider: pihole
     sources:
       - gateway-httproute
+      - ingress
     registry: noop
     env:
       - name: EXTERNAL_DNS_PIHOLE_SERVER
