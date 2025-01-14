@@ -39,11 +39,8 @@ spec:
     loglevel: info
     serviceMonitor:
       enabled: true
-    provider: pihole
-    sources:
-      - gateway-httproute
-      - ingress
-    registry: noop
+    provider:
+      name: pihole
     env:
       - name: EXTERNAL_DNS_PIHOLE_SERVER
         value: http://192.168.2.111
@@ -53,6 +50,13 @@ spec:
             name: pihole-password
             key: *secret
     extraArgs:
+      - --source=gateway-httproute
+      - --source=service
+      - --source=ingress
+      - --gateway-namespace=gateway-system
+      - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
+      - --crd-source-kind=DNSEndpoint
+      - --events
       - --ignore-ingress-tls-spec
       - --ingress-class=internal
       - --pihole-tls-skip-verify #TODO: Fix when TLS is configured on pi-hole
