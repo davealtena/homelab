@@ -27,7 +27,7 @@ metadata:
   name: &app gateway-api-internal-gateway
   namespace: flux-system
 spec:
-  targetNamespace: gateway-system
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
