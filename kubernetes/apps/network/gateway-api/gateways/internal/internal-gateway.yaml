@@ -19,13 +19,6 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-    - protocol: HTTPS
-      name: https-gateway
-      port: 443
-      hostname: "*.altena.io"
-      allowedRoutes:
-        namespaces:
-          from: Same
     # Catch traffic for Grafana Dashboard
     - name: grafana
       hostname: grafana.altena.io
