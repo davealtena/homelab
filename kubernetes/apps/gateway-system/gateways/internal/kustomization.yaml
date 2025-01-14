@@ -1,5 +1,4 @@
 resources:
 - ./certificate.yaml
 - ./internal-gateway.yaml
-- ./networkpolicy.yaml
 
