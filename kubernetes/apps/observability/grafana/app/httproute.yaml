@@ -9,7 +9,7 @@ metadata:
 spec:
   parentRefs:
     - name: internal-gateway
-      namespace: gateway-system
+      namespace: network
       sectionName: grafana
   rules:
     - matches:
