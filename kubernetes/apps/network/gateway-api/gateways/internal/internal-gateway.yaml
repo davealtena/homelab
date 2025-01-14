@@ -26,7 +26,10 @@ spec:
       port: 443
       allowedRoutes:
         namespaces:
-          from: All
+          from: Selector
+          selector:
+            matchLabels:
+              internal-gateway-access: "true"
       tls:
         mode: Terminate
         certificateRefs:
