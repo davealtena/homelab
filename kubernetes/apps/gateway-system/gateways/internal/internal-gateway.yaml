@@ -5,21 +5,17 @@ metadata:
   name: internal-tls-gateway
   namespace: gateway-system
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: internal-gateway.altena.io
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    external-dns.alpha.kubernetes.io/target: 192.168.2.131
 spec:
   gatewayClassName: cilium
-  # https://github.com/cilium/cilium/issues/21926
-  # https://github.com/cilium/cilium/pull/33042
-  # addresses:
-  #   - type: IPAddress
-  #     value: 192.168.2.132
-  infrastructure:
-    annotations:
-      io.cilium/lb-ipam-ips: 192.168.2.131
+  addresses:
+    - type: IPAddress
+      value: 192.168.2.132
   listeners:
-    - protocol: HTTP
+    - name: http-gateway
       port: 80
-      name: http-gateway
+      protocol: HTTP
       hostname: "*.altena.io"
       allowedRoutes:
         namespaces:
@@ -28,11 +24,21 @@ spec:
       name: https-gateway
       port: 443
       hostname: "*.altena.io"
+      allowedRoutes:
+        namespaces:
+          from: Same
+    # Catch traffic for Grafana Dashboard
+    - name: grafana
+      hostname: grafana.altena.io
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              internal-gateway-access: "true"
       tls:
         mode: Terminate
         certificateRefs:
-          - kind: Secret
-            name: wildcard-altena-io-tls
-      allowedRoutes:
-        namespaces:
-          from: All
+          - name: grafana-altena-io
