@@ -10,7 +10,7 @@ spec:
   parentRefs:
     - name: internal-gateway
       namespace: network
-      sectionName: grafana
+      sectionName: gateway-system
   rules:
     - matches:
       - path:
