@@ -28,7 +28,7 @@ spec:
             - name: storage
               accessMode: ReadWriteOnce
               size: 50Mi
-              storageClass: ceph-block
+              storageClass: openebs-hostpath
               globalMounts:
                 - path: /alertmanager
 
