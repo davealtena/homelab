@@ -2,7 +2,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+    # Pre Flux-Kustomizations
   - ./namespace.yaml
+    # Flux-Kustomizations
+  - ./alertmanager/ks.yaml
   - ./grafana/ks.yaml
-  - ./prometheus-operator-crds/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
+  - ./node-exporter/ks.yaml
+  - ./prometheus-operator-crds/ks.yaml

@@ -33,23 +33,7 @@ spec:
       enabled: false
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
-      ingress:
-        enabled: true
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.altena.io
-        ingressClassName: internal
-        hosts: ["alertmanager.altena.io"]
-        pathType: Prefix
-      alertmanagerSpec:
-        useExistingSecret: true
-        configSecret: alertmanager-secret
-        storage:
-          volumeClaimTemplate:
-            spec:
-              storageClassName: nfs-csi-sc
-              resources:
-                requests:
-                  storage: 1Gi
+      enabled: false
     kubelet:
       enabled: true
     kubeApiServer:
@@ -104,18 +88,7 @@ spec:
                 requests:
                   storage: 75Gi
     nodeExporter:
-      enabled: true
-    prometheus-node-exporter:
-      fullnameOverride: node-exporter
-      prometheus:
-        monitor:
-          enabled: true
-          relabelings:
-            - action: replace
-              regex: (.*)
-              replacement: $1
-              sourceLabels: ["__meta_kubernetes_pod_node_name"]
-              targetLabel: kubernetes_node
+      enabled: false
     kubeStateMetrics:
       enabled: true
     kube-state-metrics:
