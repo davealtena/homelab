@@ -61,6 +61,11 @@ spec:
         hosts: ["prometheus.altena.io"]
         pathType: Prefix
       prometheusSpec:
+        alertingEndpoints:
+          - namespace: observability
+            name: alertmanager
+            port: 9093
+            apiVersion: v2
         scrapeInterval: 1m # Must match interval in Grafana Helm chart
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
