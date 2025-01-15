@@ -12,7 +12,7 @@ spec:
   dependsOn:
     - name: cilium
   path: ./kubernetes/apps/network/gateway-api/gateway-api-crds
-  prune: true #Revert  # never should be deleted
+  prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -35,7 +35,7 @@ spec:
     - name: cilium
     - name: gateway-api-crd
   path: ./kubernetes/apps/network/gateway-api/gateways/internal
-  prune: true #Revert  # never should be deleted
+  prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: flux-system

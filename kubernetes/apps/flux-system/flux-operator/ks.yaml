@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/flux-system/flux-operator/app
-  prune: true #Revert  # never should be deleted
+  prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -33,7 +33,7 @@ spec:
   dependsOn:
     - name: flux-operator
   path: ./kubernetes/apps/flux-system/flux-operator/instance
-  prune: true #Revert  # never should be deleted
+  prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: flux-system
