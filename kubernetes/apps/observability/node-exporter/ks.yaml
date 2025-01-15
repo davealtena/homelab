@@ -6,13 +6,13 @@ metadata:
   name: &appname node-exporter
   namespace: flux-system
 spec:
-  targetNamespace: monitoring
+  targetNamespace: obeservability
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/monitoring/node-exporter/app"
+  path: "./kubernetes/apps/obeservability/node-exporter/app"
   prune: true
   sourceRef:
     kind: GitRepository
