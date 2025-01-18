@@ -35,3 +35,33 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: grafana-altena-io
+    # catch traffic for the prometheus dashboard
+    - name: prometheus
+      hostname: prometheus.altena.io
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              internal-gateway-access: "true"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: prometheus-altena-io
+    # catch traffic for the alertmanager dashboard
+    - name: alertmanager
+      hostname: alertmanager.altena.io
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              internal-gateway-access: "true"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: alertmanager-altena-io

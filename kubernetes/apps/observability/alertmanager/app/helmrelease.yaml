@@ -64,16 +64,16 @@ spec:
           http:
             port: 9093
 
-    ingress:
-      app:
-        className: internal
-        hosts:
-          - host: alertmanager.altena.io
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+    route:
+      main:
+        enabled: true
+        labels:
+          route-label: external-dns-internal
+        parentRefs:
+          - name: internal-gateway
+            namespace: network
+            sectionName: alertmanager
+
 
     persistence:
       config:
