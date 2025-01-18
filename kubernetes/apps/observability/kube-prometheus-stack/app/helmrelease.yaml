@@ -53,13 +53,15 @@ spec:
     kubeProxy:
       enabled: false
     prometheus:
-      ingress:
-        enabled: true
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.altena.io
-        ingressClassName: internal
-        hosts: ["prometheus.altena.io"]
-        pathType: Prefix
+      route:
+        main:
+          enabled: true
+          labels:
+            route-label: external-dns-internal
+          parentRefs:
+            - name: internal-gateway
+              namespace: network
+              sectionName: prometheus
       prometheusSpec:
         alertingEndpoints:
           - namespace: observability
