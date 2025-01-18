@@ -12,13 +12,14 @@ spec:
     - type: IPAddress
       value: 192.168.2.130
   listeners:
-    - name: http-gateway
-      port: 80
-      protocol: HTTP
+    # catch all local http -> https
+    - name: http-redirect
       hostname: "*.altena.io"
+      protocol: HTTP
+      port: 80
       allowedRoutes:
         namespaces:
-          from: All
+          from: Same
     # Catch traffic for Grafana Dashboard
     - name: grafana
       hostname: grafana.altena.io
