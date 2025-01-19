@@ -227,6 +227,9 @@ spec:
         enabled: true
         labels:
           route-label: external-dns-internal
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: "grafana.local.altena.io"
+          external-dns.alpha.kubernetes.io/target: "grafana.altena.io"
         parentRefs:
           - name: internal-gateway
             namespace: network

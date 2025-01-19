@@ -14,7 +14,7 @@ spec:
   listeners:
     # catch all local http -> https
     - name: http-redirect
-      hostname: "*.altena.io"
+      hostname: "*.local.altena.io"
       protocol: HTTP
       port: 80
       allowedRoutes:
@@ -22,7 +22,7 @@ spec:
           from: Same
     # Catch traffic for Grafana Dashboard
     - name: grafana
-      hostname: grafana.altena.io
+      hostname: grafana.local.altena.io
       protocol: HTTPS
       port: 443
       allowedRoutes:
@@ -37,7 +37,7 @@ spec:
           - name: grafana-altena-io
     # catch traffic for the prometheus dashboard
     - name: prometheus
-      hostname: prometheus.altena.io
+      hostname: prometheus.local.altena.io
       protocol: HTTPS
       port: 443
       allowedRoutes:
@@ -52,7 +52,7 @@ spec:
           - name: prometheus-altena-io
     # catch traffic for the alertmanager dashboard
     - name: alertmanager
-      hostname: alertmanager.altena.io
+      hostname: alertmanager.local.altena.io
       protocol: HTTPS
       port: 443
       allowedRoutes:
