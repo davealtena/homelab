@@ -71,12 +71,10 @@ spec:
           route-label: external-dns-internal
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "alertmanager.local.altena.io"
-          external-dns.alpha.kubernetes.io/target: "alertmanager.altena.io"
         parentRefs:
           - name: internal-gateway
             namespace: network
             sectionName: alertmanager
-
 
     persistence:
       config:

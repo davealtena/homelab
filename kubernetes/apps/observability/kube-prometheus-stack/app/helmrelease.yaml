@@ -60,7 +60,6 @@ spec:
             route-label: external-dns-internal
           annotations:
             external-dns.alpha.kubernetes.io/hostname: "prometheus.local.altena.io"
-            external-dns.alpha.kubernetes.io/target: "prometheus.altena.io"
           parentRefs:
             - name: internal-gateway
               namespace: network
