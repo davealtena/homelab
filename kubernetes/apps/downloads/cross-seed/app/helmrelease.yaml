@@ -95,4 +95,4 @@ spec:
         advancedMounts:
           cross-seed:
             app:
-              - path: /data/nas-media
+              - path: /media
