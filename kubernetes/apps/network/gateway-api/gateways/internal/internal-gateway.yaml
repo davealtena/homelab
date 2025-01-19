@@ -5,11 +5,11 @@ metadata:
   name: internal-gateway
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    external-dns.alpha.kubernetes.io/target: 192.168.2.130
 spec:
   gatewayClassName: cilium
   addresses:
-    - type: IPAddress
-      value: 192.168.2.130
+    - value: 192.168.2.130
   listeners:
     # catch all local http -> https
     - name: http-redirect
