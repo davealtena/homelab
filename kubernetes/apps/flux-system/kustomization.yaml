@@ -4,3 +4,11 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./flux-operator/ks.yaml
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: not-used
+      namespace: flux-system
+    unsetOnly: true
