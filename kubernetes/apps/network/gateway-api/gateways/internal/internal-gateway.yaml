@@ -5,7 +5,6 @@ metadata:
   name: internal-gateway
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
-    external-dns.alpha.kubernetes.io/target: 192.168.2.130
 spec:
   gatewayClassName: cilium
   addresses:
