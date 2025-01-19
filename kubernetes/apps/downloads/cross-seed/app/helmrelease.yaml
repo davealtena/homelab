@@ -83,7 +83,7 @@ spec:
             subPath: config.js
             readOnly: true
       qbittorrent:
-        existingClaim: qbittorrent-config
+        existingClaim: qbittorrent
         globalMounts:
           - path: /qbittorrent
       media:
