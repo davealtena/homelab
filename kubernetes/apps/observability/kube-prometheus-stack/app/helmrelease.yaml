@@ -64,6 +64,11 @@ spec:
             - name: internal-gateway
               namespace: network
               sectionName: prometheus
+          additionalRules:
+          - backendRefs:
+            - name: kube-prometheus-stack-prometheus
+              kind: Service
+              port: 9090
       prometheusSpec:
         alertingEndpoints:
           - namespace: observability

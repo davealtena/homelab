@@ -230,6 +230,11 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "grafana.local.altena.io"
         parentRefs:
-          - name: internal-gateway
-            namespace: network
-            sectionName: grafana
+        - name: internal-gateway
+          namespace: network
+          sectionName: grafana
+        additionalRules:
+        - backendRefs:
+          - name: grafana
+            kind: Service
+            port: 8080

@@ -75,6 +75,11 @@ spec:
           - name: internal-gateway
             namespace: network
             sectionName: alertmanager
+        rules:
+          - backendRefs:
+              - name: alertmanager
+                kind: Service
+                port: 9093
 
     persistence:
       config:
