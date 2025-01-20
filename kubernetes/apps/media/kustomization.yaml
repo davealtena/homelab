@@ -6,6 +6,6 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./jellyseer/ks.yaml
+  - ./jellyseerr/ks.yaml
   - ./plex/ks.yaml
 
