@@ -67,6 +67,8 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: alertmanager-altena-io
+        options:
+          cert-manager.io/alt-names: alertmanager.local.altena.io,alertmanager.altena.io
     # catch traffic for the jellyseerr dashboard
     - name: jellyseerr
       hostname: jellyseerr.local.altena.io
