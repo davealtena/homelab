@@ -97,3 +97,18 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: esphome-altena-io
+    # catch traffic for esphome code server
+    - name: esphome
+      hostname: esphome-code.local.altena.io
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              internal-gateway-access: "true"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: esphome-code-altena-io

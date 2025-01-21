@@ -96,8 +96,6 @@ spec:
         enabled: true
         labels:
           route-label: external-dns-internal
-        annotations:
-          nginx.ingress.kubernetes.io/rewrite-target: /$1
         parentRefs:
           - name: internal-gateway
             namespace: network
@@ -106,11 +104,21 @@ spec:
           - matches:
               - path:
                   type: PathPrefix
-                  value: /code/
+                  value: /
             backendRefs:
               - name: app
                 kind: Service
-                port: code-server
+                port: http
+
+      code:
+        enabled: true
+        labels:
+          route-label: external-dns-internal
+        parentRefs:
+          - name: internal-gateway
+            namespace: network
+            sectionName: esphome-code
+        rules:
           - matches:
               - path:
                   type: PathPrefix
@@ -118,7 +126,7 @@ spec:
             backendRefs:
               - name: app
                 kind: Service
-                port: http
+                port: code-server
 
     persistence:
       config:
