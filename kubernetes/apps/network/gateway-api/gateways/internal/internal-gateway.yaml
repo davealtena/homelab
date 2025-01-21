@@ -83,7 +83,7 @@ spec:
         certificateRefs:
           - name: jellyseerr-altena-io
     # catch traffic for esphome
-    - name: esphome
+    - name: esphome-code
       hostname: esphome.local.altena.io
       protocol: HTTPS
       port: 443
