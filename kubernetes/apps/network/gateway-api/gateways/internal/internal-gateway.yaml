@@ -67,8 +67,6 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: alertmanager-altena-io
-        options:
-          cert-manager.io/alt-names: alertmanager.local.altena.io,alertmanager.altena.io
     # catch traffic for the jellyseerr dashboard
     - name: jellyseerr
       hostname: jellyseerr.local.altena.io
@@ -84,3 +82,18 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: jellyseerr-altena-io
+    # catch traffic for esphome
+    - name: esphome
+      hostname: esphome.local.altena.io
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              internal-gateway-access: "true"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: esphome-altena-io
