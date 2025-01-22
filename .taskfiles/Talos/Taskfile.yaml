@@ -1,109 +1,94 @@
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
-version: '3'
-
-vars:
-  TALHELPER_CLUSTER_DIR: '{{.KUBERNETES_DIR}}/main/talos/clusterconfig'
-  TALHELPER_CONFIG_FILE: '{{.ROOT_DIR}}/main/talos/talconfig.yaml'
-  TALOSCONFIG: '{{.TALHELPER_CLUSTER_DIR}}/talosconfig'
-
-env:
-  TALOSCONFIG: '{{.TALOSCONFIG}}'
+version: "3"
 
 tasks:
-
-  apply-config:
-    desc: Apply Talos configuration to a node
-    cmd: talosctl apply-config --mode={{.MODE}} --nodes {{.HOSTNAME}} --file {{.TALHELPER_CLUSTER_DIR}}/{{.CLUSTER_NAME}}-{{.HOSTNAME}}.yaml
-    vars:
-      MODE: '{{.MODE | default "no-reboot"}}'
-      CLUSTER_NAME:
-        sh: yq '.clusterName' {{.TALHELPER_CONFIG_FILE}}
-    requires:
-      vars: [HOSTNAME]
+  generate-clusterconfig:
+    desc: Generate clusterconfig for Talos
     preconditions:
-      - msg: Missing talosconfig
-        sh: test -f {{.TALOSCONFIG}}
-      - msg: Unable to retrieve Talos config
-        sh: talosctl config info &>/dev/null
-      - msg: Node not found
-        sh: talosctl --nodes {{.HOSTNAME}} get machineconfig &>/dev/null
-      - msg: Talos config for node not found
-        sh: test -f {{.TALHELPER_CLUSTER_DIR}}/{{.CLUSTER_NAME}}-{{.HOSTNAME}}.yaml
+      - which op test talhelper
+      - test -f {{.KUBERNETES_DIR}}/talos/talsecret.yaml
+      - test -f {{.KUBERNETES_DIR}}/talos/talconfig.yaml
+      - test -f {{.KUBERNETES_DIR}}/talos/talhelper-secrets.env
+      - op user get --me
+    cmds:
+      - op run --env-file {{.KUBERNETES_DIR}}/talos/talhelper-secrets.env --no-masking -- talhelper genconfig
+        --secret-file {{.KUBERNETES_DIR}}/talos/talsecret.yaml
+        --config-file {{.KUBERNETES_DIR}}/talos/talconfig.yaml
+        --out-dir {{.KUBERNETES_DIR}}/talos/clusterconfig
+
+  apply-clusterconfig:
+    desc: Apply clusterconfig for a Talos cluster
+    vars:
+      CLUSTERCONFIG_FILES:
+        sh: ls {{.KUBERNETES_DIR}}/talos/clusterconfig/*.yaml
+    preconditions:
+      - which ls
+      - test -f "${TALOSCONFIG}"
+    cmds:
+      - for:
+          var: CLUSTERCONFIG_FILES
+        task: _apply-machineconfig
+        vars:
+          FILENAME: "{{.ITEM}}"
+          HOSTNAME: |-
+            {{ trimPrefix (printf "home-ops-") (base .ITEM) | trimSuffix ".yaml" }}
+          DRY_RUN: "{{ .DRY_RUN }}"
+          INSECURE: "{{ .INSECURE }}"
+
+  apply-node:
+    desc: Apply Talos config to a node [NODE=required]
+    preconditions:
+      - which talosctl
+      - test -f "${TALOSCONFIG}"
+      - talosctl --nodes {{.NODE}} get machineconfig
+    requires:
+      vars:
+        - NODE
+    vars:
+      FILE:
+        sh: ls {{.KUBERNETES_DIR}}/talos/clusterconfig/home-ops-{{.NODE}}*.yaml
+    cmds:
+      - task: _apply-machineconfig
+        vars:
+          FILENAME: "{{.FILE}}"
+          HOSTNAME: "{{.NODE}}"
+      - talosctl --nodes {{.NODE}} health
 
   upgrade-node:
-    desc: Upgrade Talos on a single node
-    cmds:
-      - task: '{{if ne .ROLLOUT true}}down{{else}}noop{{end}}'
-      - talosctl --nodes {{.HOSTNAME}} upgrade --image="factory.talos.dev/installer/{{.TALOS_SCHEMATIC_ID}}:{{.TALOS_VERSION}}" --timeout=10m
-      - talosctl --nodes {{.HOSTNAME}} health
-      - task: '{{if ne .ROLLOUT true}}up{{else}}noop{{end}}'
-    vars:
-      TALOS_SCHEMATIC_ID:
-        sh: kubectl get node {{.HOSTNAME}} --output=jsonpath='{.metadata.annotations.extensions\.talos\.dev/schematic}'
-      TALOS_VERSION:
-        sh: yq '.talosVersion' {{.TALHELPER_CONFIG_FILE}}
+    desc: Upgrade Talos on a single node [NODE=required]
+    preconditions:
+      - which talosctl
+      - test -f "${TALOSCONFIG}"
+      - talosctl --nodes {{.NODE}} get machineconfig
     requires:
-      vars: [HOSTNAME]
-    preconditions:
-      - msg: Missing talosconfig
-        sh: test -f {{.TALOSCONFIG}}
-      - msg: Unable to retrieve Talos config
-        sh: talosctl config info &>/dev/null
-      - msg: Node not found
-        sh: talosctl --nodes {{.HOSTNAME}} get machineconfig &>/dev/null
-      - msg: Upstream Talos version not found
-        sh: curl -fsSL -o /dev/null --fail https://github.com/siderolabs/talos/releases/tag/{{.TALOS_VERSION}}
-
-  upgrade-cluster:
-    desc: Upgrade Talos on the whole cluster
-    cmds:
-      - task: down
-      - for: { var: HOSTNAMES }
-        task: upgrade-node
-        vars:
-          HOSTNAME: '{{.ITEM}}'
-          ROLLOUT: true
-      - task: up
+      vars:
+        - NODE
     vars:
-      HOSTNAMES:
-        sh: kubectl get nodes --output=jsonpath='{.items[*].metadata.name}'
-
-  upgrade-k8s:
-    desc: Upgrade Kubernetes
+      FILE:
+        sh: ls {{.KUBERNETES_DIR}}/talos/clusterconfig/home-ops-{{.NODE}}*.yaml
+      TALOS_IMAGE:
+        sh: yq '.machine.install.image' < "{{.FILE}}"
     cmds:
-      - talosctl --nodes {{.KUBERNETES_CONTROLLER}} upgrade-k8s --to {{.KUBERNETES_VERSION}}
-    vars:
-      KUBERNETES_CONTROLLER:
-        sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
-      KUBERNETES_VERSION:
-        sh: yq '.kubernetesVersion' {{.TALHELPER_CONFIG_FILE}}
+      - talosctl --nodes {{.NODE}} upgrade --image="{{.TALOS_IMAGE}}" --timeout=10m
+      - talosctl --nodes {{.NODE}} health
+
+  _apply-machineconfig:
+    internal: true
+    desc: Apply a single Talos machineConfig to a Talos node
     preconditions:
-      - msg: Missing talosconfig
-        sh: test -f {{.TALOSCONFIG}}
-      - msg: Unable to retrieve Talos config
-        sh: talosctl config info &>/dev/null
-      - msg: Node not found
-        sh: talosctl --nodes {{.KUBERNETES_CONTROLLER}} get machineconfig &>/dev/null
-      - msg: Upstream Kubernetes version not found
-        sh: curl -fsSL -o /dev/null --fail https://github.com/siderolabs/kubelet/releases/tag/{{.KUBERNETES_VERSION}}
-
-  reset:
-    desc: Resets nodes back to maintenance mode
-    dir: "{{.KUBERNETES_DIR}}/bootstrap/talos"
-    prompt: This will destroy your cluster and reset the nodes back to maintenance mode... continue?
-    cmd: talhelper gencommand reset --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.TALHELPER_CLUSTER_DIR}} --extra-flags="--reboot {{- if eq .CLI_FORCE false }} --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL{{ end }} --graceful=false --wait=false" | bash
-
-  down:
-    internal: true
-    cmd: flux --namespace flux-system suspend kustomization --all
-
-  up:
-    internal: true
-    cmd: flux --namespace flux-system resume kustomization --all
-
-  # Ref: https://github.com/go-task/task/issues/608
-  noop:
-    internal: true
-    silent: true
-    cmd: noop() { :; }
+      - which talosctl
+      - test -f "{{.FILENAME}}"
+    requires:
+      vars:
+        - HOSTNAME
+        - FILENAME
+    vars:
+      MODE: '{{.MODE | default "auto"}}'
+    cmds:
+      - talosctl apply-config
+        --nodes "{{.HOSTNAME}}"
+        --file "{{.FILENAME}}"
+        --mode="{{.MODE}}"
+        {{ if eq "true" .INSECURE }}--insecure{{ end }}
+        {{ if eq "true" .DRY_RUN }}--dry-run{{ end }}
