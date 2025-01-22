@@ -4,26 +4,28 @@ version: '3'
 
 tasks:
 
-  apply-ks:
-    desc: Apply a Flux KS for a cluster [PATH=required]
-    cmd: >
-      flux build --namespace flux-system ks {{base .PATH}}
-      --kustomization-file {{.KUBERNETES_DIR}}/apps/{{.PATH}}/ks.yaml
-      --path {{.KUBERNETES_DIR}}/apps/{{.PATH}}{{- if contains "not found" .KS }}--dry-run \{{ end }}
-      | yq 'with(select(.apiVersion == "kustomize.toolkit.fluxcd.io/v1" and .kind == "Kustomization"); .metadata.namespace = "flux-system")' -
-      | kubectl apply --server-side --field-manager=kustomize-controller --filename -
-    requires:
-      vars: [PATH]
-    vars:
-      KS:
-        sh: flux --namespace flux-system get kustomizations {{base .PATH}} 2>&1
-    preconditions:
-      - test -f {{.KUBERNETES_DIR}}/main/apps/{{.PATH}}/ks.yaml
-      - which flux kubectl yq
+  cleanup-pods:
+      desc: Clean up pods with a Failed/Pending/Succeeded phase
+      preconditions:
+        - which kubectl
+      cmds:
+        - for:
+            matrix:
+              PHASE:
+                - Failed
+                - Pending
+                - Succeeded
+          cmd: kubectl delete pods --field-selector status.phase={{.ITEM.PHASE}} -A --ignore-not-found=true
 
-  reconcile:
-    desc: Force update Flux to pull in changes from your Git repository
-    cmd: flux --namespace flux-system reconcile kustomization cluster-apps --with-source
+  sync-externalsecrets:
+    desc: Force sync all ExternalSecret resources
     preconditions:
-      - test -f {{.KUBECONFIG}}
-      - which flux
+      - which kubectl
+    vars:
+      SECRETS:
+        sh: kubectl get externalsecret --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
+    cmds:
+      - for:
+          var: SECRETS
+          split: "\n"
+        cmd: kubectl --namespace {{splitList "," .ITEM | first}} annotate externalsecret {{splitList "," .ITEM | last}} force-sync="{{now | unixEpoch}}" --overwrite

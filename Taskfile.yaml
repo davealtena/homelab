@@ -1,31 +1,35 @@
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
-version: '3'
+version: "3"
 
-set: [pipefail]
-shopt: [globstar]
-
-vars:
-  KUBERNETES_DIR: '{{.ROOT_DIR}}/kubernetes'
-
-env:
-  KUBECONFIG: '{{.ROOT_DIR}}/kubernetes//kubeconfig'
-  SOPS_AGE_KEY_FILE: '{{.ROOT_DIR}}/age.key'
-  TALOSCONFIG: '{{.ROOT_DIR}}/main/talos/clusterconfig/talosconfig'
+set:
+  - pipefail
+shopt:
+  - globstar
 
 includes:
-  bootstrap: .taskfiles/bootstrap
-  kubernetes: .taskfiles/kubernetes
-  sops: .taskfiles/sops
-  talos: .taskfiles/talos
+  flux: .taskfiles/flux/Taskfile.yaml
+  kubernetes: .taskfiles/kubernetes/Taskfile.yaml
+  bootstrap: .taskfiles/bootstrap/Taskfile.yaml
+  sops: .taskfiles/sops/Taskfile.yaml
+  talos: .taskfiles/talos/Taskfile.yaml
+
+vars:
+  KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
+  KUBECONFIG: "{{.KUBERNETES_DIR}}/kubeconfig"
+  MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
+  TALOSCONFIG: "{{.KUBERNETES_DIR}}/talos/clusterconfig/talosconfig"
+
+env:
+  KUBECONFIG: "{{.KUBECONFIG}}"
+  MINIJINJA_CONFIG_FILE: "{{.MINIJINJA_CONFIG_FILE}}"
+  TALOSCONFIG: "{{.TALOSCONFIG}}"
 
 tasks:
-
   default:
-    cmd: task --list
     silent: true
+    cmd: task --list
 
-  # Ref: https://github.com/go-task/task/issues/608
   noop:
     internal: true
     silent: true
