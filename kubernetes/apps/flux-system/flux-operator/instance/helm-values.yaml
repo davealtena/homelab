@@ -14,7 +14,7 @@ instance:
     kind: GitRepository
     url: ssh://git@github.com/davealtena/homelab
     ref: refs/heads/main
-    path: kubernetes//flux/cluster
+    path: kubernetes/flux/cluster
     pullSecret: github-deploy-key
   commonMetadata:
     labels:
