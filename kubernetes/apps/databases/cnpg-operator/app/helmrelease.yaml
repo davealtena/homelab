@@ -12,7 +12,7 @@ spec:
       version: 0.23.0
       sourceRef:
         kind: HelmRepository
-        namespace: databases
+        namespace: flux-system
         name: cnpg
       interval: 1h
   install:
