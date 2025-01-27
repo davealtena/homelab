@@ -16,14 +16,15 @@ includes:
 
 vars:
   KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
-  KUBECONFIG: "{{.KUBERNETES_DIR}}/kubeconfig"
-  MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
   TALOSCONFIG: "{{.KUBERNETES_DIR}}/talos/clusterconfig/talosconfig"
+  TALHELPER_CLUSTER_DIR: '{{.KUBERNETES_DIR}}/talos/clusterconfig'
+  TALHELPER_SECRET_FILE: '{{.KUBERNETES_DIR}}/talos/talsecret.sops.yaml'
+  TALHELPER_CONFIG_FILE: '{{.KUBERNETES_DIR}}/talos/talconfig.yaml'
 
 env:
   KUBECONFIG: "{{.KUBECONFIG}}"
-  MINIJINJA_CONFIG_FILE: "{{.MINIJINJA_CONFIG_FILE}}"
   TALOSCONFIG: "{{.TALOSCONFIG}}"
+  MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
 
 tasks:
   default:

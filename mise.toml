@@ -1,8 +1,7 @@
 [env]
-# Kubernetes
+MINIJINJA_CONFIG_FILE = '{{config_root}}/.minijinja.toml'
 KUBECONFIG = '{{config_root}}/kubernetes/kubeconfig'
 TALOSCONFIG = '{{config_root}}/kubernetes/talos/clusterconfig/talosconfig'
-# Taskfile
 TASK_X_ENV_PRECEDENCE = 1
 TASK_X_MAP_VARIABLES = 0
 
