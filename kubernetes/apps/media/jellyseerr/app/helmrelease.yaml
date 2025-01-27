@@ -30,7 +30,7 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/fallenbagel/jellyseerr
+              repository: fallenbagel/jellyseerr
               tag: 2.3.0
             env:
               TZ: Europe/Amsterdam
