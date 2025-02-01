@@ -1,6 +1,7 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: kube-system
 resources:
   - ./namespace.yaml
   - ./cilium/ks.yaml
@@ -8,3 +9,6 @@ resources:
   - ./csi-driver-nfs/ks.yaml
   - ./metrics-server/ks.yaml
   - ./reloader/ks.yaml
+components:
+  - ../../flux/components/alerts
+  - ../../flux/components/namespace

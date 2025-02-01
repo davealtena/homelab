@@ -2,10 +2,8 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: downloads
 resources:
-  # Pre Flux-Kustomizations
-  - ./namespace.yaml
-  # Flux-Kustomizations
   - ./bazarr/ks.yaml
   - ./cross-seed/ks.yaml
   - ./prowlarr/ks.yaml
@@ -14,3 +12,6 @@ resources:
   - ./recyclarr/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./sonarr/ks.yaml
+components:
+  - ../../flux/components/alerts
+  - ../../flux/components/namespace
