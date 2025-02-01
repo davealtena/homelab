@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home-automation/home-assistant/app
   dependsOn:
-    - name: external-secrets-store
+    - name: external-secrets-stores
       namespace: security
   prune: true
   sourceRef:

@@ -39,7 +39,9 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: certificates
+      namespace: cert-manager
     - name: external-secrets-stores
+      namespace: security
   path: ./kubernetes/apps/network/nginx/external
   prune: true
   sourceRef:
