@@ -10,10 +10,11 @@ spec:
     labels:
       app.kubernetes.io/name: cloudnative-pg
   path: ./kubernetes/apps/databases/cnpg-operator/app
-  prune: true #Revert
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m

@@ -10,10 +10,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cert-manager/cert-manager/app
-  prune: true #Revert  # Set back to true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   retryInterval: 1m
@@ -33,11 +34,13 @@ spec:
   dependsOn:
     - name: cert-manager
     - name: external-secrets-stores
+      namespace: security
   path: ./kubernetes/apps/cert-manager/cert-manager/issuers
-  prune: true #Revert  # Set back to true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   retryInterval: 1m

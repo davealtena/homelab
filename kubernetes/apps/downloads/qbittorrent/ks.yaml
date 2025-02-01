@@ -12,11 +12,13 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
+      namespace: security
   path: ./kubernetes/apps/downloads/qbittorrent/app
-  prune: true #Revert  # Set back to true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m

@@ -13,11 +13,14 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/media/plex/app
-  prune: true #Revert  # Set back to true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   dependsOn:
     - name: volsync
+      namespace: volsync-system
     - name: external-secrets-stores
+      namespace: security

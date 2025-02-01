@@ -12,14 +12,17 @@ spec:
       app.kubernetes.io/name: *name
   interval: 10m
   path: ./kubernetes/apps/downloads/sonarr/app
-  prune: true #Revert  # Set back to true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   dependsOn:
     - name: volsync
+      namespace: volsync-system
     - name: external-secrets-stores
+      namespace: security
   postBuild:
     substitute:
       APP: *name

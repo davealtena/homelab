@@ -21,3 +21,4 @@ spec:
   wait: false
   dependsOn:
     - name: external-secrets-stores
+      namespace: security

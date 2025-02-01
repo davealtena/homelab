@@ -11,10 +11,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/selfhosted/actual-finance/app
-  prune: true #Revert  # Set back to true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m
@@ -22,5 +23,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      GATUS_SUBDOMAIN: hass
-      VOLSYNC_CAPACITY: 5Gi

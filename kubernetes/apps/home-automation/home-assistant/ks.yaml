@@ -11,10 +11,14 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home-automation/home-assistant/app
-  prune: true #Revert  # Set back to true
+  dependsOn:
+    - name: external-secrets-store
+      namespace: security
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m

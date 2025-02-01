@@ -11,11 +11,13 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cilium
+      namespace: kube-system
   path: ./kubernetes/apps/network/gateway-api/gateway-api-crds
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m
@@ -33,12 +35,14 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cilium
+      namespace: kube-system
     - name: gateway-api-crd
   path: ./kubernetes/apps/network/gateway-api/gateways/internal
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m

@@ -12,12 +12,15 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: certificates
+      namespace: cert-manager
     - name: external-secrets-stores
+      namespace: security
   path: ./kubernetes/apps/network/nginx/internal
-  prune: true #Revert
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m
@@ -38,7 +41,7 @@ spec:
     - name: certificates
     - name: external-secrets-stores
   path: ./kubernetes/apps/network/nginx/external
-  prune: true #Revert
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

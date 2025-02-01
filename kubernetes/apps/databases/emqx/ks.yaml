@@ -13,13 +13,15 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/databases/emqx/operator
-  prune: true #Revert  # Set back to true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   dependsOn:
     - name: cert-manager
+      namespace: cert-manager
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -35,10 +37,11 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/databases/emqx/cluster
-  prune: true #Revert  # Set back to true
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   dependsOn:
     - name: emqx-operator

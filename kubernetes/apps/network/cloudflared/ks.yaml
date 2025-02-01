@@ -13,11 +13,13 @@ spec:
   dependsOn:
     - name: external-dns-external
     - name: external-secrets-stores
+      namespace: security
   path: ./kubernetes/apps/network/cloudflared/app
-  prune: true #Revert
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m

@@ -11,6 +11,9 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  dependsOn:
+    - name: external-secrets-store
+      namespace: security
   timeout: 5m
   path: "./kubernetes/apps/home-automation/esphome/app"
   prune: true
