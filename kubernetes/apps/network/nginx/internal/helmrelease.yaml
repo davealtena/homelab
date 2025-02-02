@@ -29,7 +29,7 @@ spec:
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: internal.altena.io
-          io.cilium/lb-ipam-ips: 192.168.2.131
+          io.cilium/lb-ipam-ips: 192.168.2.129
         labels:
           route-label: external-dns-internal
       ingressClassResource:
