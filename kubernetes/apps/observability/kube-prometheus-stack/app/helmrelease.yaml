@@ -53,22 +53,13 @@ spec:
     kubeProxy:
       enabled: false
     prometheus:
-      route:
-        main:
-          enabled: true
-          labels:
-            route-label: external-dns-internal
-          annotations:
-            external-dns.alpha.kubernetes.io/hostname: "prometheus.local.altena.io"
-          parentRefs:
-            - name: internal-gateway
-              namespace: network
-              sectionName: prometheus
-          additionalRules:
-          - backendRefs:
-            - name: kube-prometheus-stack-prometheus
-              kind: Service
-              port: 9090
+      ingress:
+        enabled: true
+        ingressClassName: internal-nginx
+        hosts:
+          - prometheus.bjw-s.dev
+        pathType: Prefix
+
       prometheusSpec:
         alertingEndpoints:
           - namespace: observability
