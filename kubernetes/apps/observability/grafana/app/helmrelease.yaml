@@ -222,19 +222,13 @@ spec:
       enabled: false
     testFramework:
       enabled: false
-    route:
-      main:
-        enabled: true
-        labels:
-          route-label: external-dns-internal
-        annotations:
-          external-dns.alpha.kubernetes.io/hostname: "grafana.local.altena.io"
-        parentRefs:
-        - name: internal-gateway
-          namespace: network
-          sectionName: grafana
-        additionalRules:
-        - backendRefs:
-          - name: grafana
-            kind: Service
-            port: 8080
+    ingress:
+      app:
+        className: internal
+        hosts:
+          - host: grafana.altena.io
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http

@@ -75,22 +75,17 @@ spec:
         ports:
           http:
             port: *port
-    route:
-      main:
-        enabled: true
-        labels:
-          route-label: external-dns-internal
-        annotations:
-          external-dns.alpha.kubernetes.io/hostname: "requests.local.altena.io"
-        parentRefs:
-          - name: internal-gateway
-            namespace: network
-            sectionName: jellyseerr
-        rules:
-          - backendRefs:
-              - name: jellyseerr
-                kind: Service
-                port: 80
+
+    ingress:
+      app:
+        className: internal
+        hosts:
+          - host: jellyseerr.altena.io
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
 
     persistence:
       config:

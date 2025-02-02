@@ -64,22 +64,16 @@ spec:
           http:
             port: 9093
 
-    route:
-      main:
-        enabled: true
-        labels:
-          route-label: external-dns-internal
-        annotations:
-          external-dns.alpha.kubernetes.io/hostname: "alertmanager.local.altena.io"
-        parentRefs:
-          - name: internal-gateway
-            namespace: network
-            sectionName: alertmanager
-        rules:
-          - backendRefs:
-              - name: alertmanager
-                kind: Service
-                port: 9093
+    ingress:
+      app:
+        className: internal
+        hosts:
+          - host: alertmanager.altena.io
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
 
     persistence:
       config:
