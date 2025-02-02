@@ -36,7 +36,7 @@ spec:
           app:
             image:
               repository: ghcr.io/onedr0p/radarr-develop
-              tag: 5.18.1.9612@sha256:64364aa80c8e7bb1350c77a0400dcf7da298cf06c44c84081937955bbbd01e4c
+              tag: 5.18.3.9669@sha256:43cf06f2e27be4770ab1871f2bc8d423cf9427ee1e73b50932cbd2706d433a2e
             env:
               RADARR__INSTANCE_NAME: Radarr
               RADARR__PORT: &port 7878
