@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: selfhosted
 resources:
   - ./actual-finance/ks.yaml
+  - ./atuin/ks.yaml
 components:
   - ../../flux/components/alerts
   - ../../flux/components/namespace
