@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: observability
 resources:
   - ./alertmanager/ks.yaml
+  - ./blackbox-exporer/ks.yaml
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./node-exporter/ks.yaml
