@@ -13,7 +13,10 @@
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
   "rebaseWhen": "conflicted",
   "schedule": ["* 0-6 * * *"],
-  "ignorePaths": ["**/*.sops.*"],
+  "ignorePaths": [
+    "**/*.sops.*",
+    "**/clusterconfig/**"
+  ],
   "flux": {
     "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$"]
   },
