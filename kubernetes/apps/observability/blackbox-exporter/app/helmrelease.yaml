@@ -1,0 +1,91 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: blackbox-exporter
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: prometheus-blackbox-exporter
+      version: 9.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+      interval: 30m
+  values:
+    fullnameOverride: blackbox-exporter
+
+    image:
+      registry: quay.io
+
+    podSecurityContext:
+      sysctls:
+        - name: net.ipv4.ping_group_range
+          value: "0 2147483647"
+
+    config:
+      modules:
+        http_2xx:
+          prober: http
+          timeout: 5s
+          http:
+            valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+            follow_redirects: true
+            preferred_ip_protocol: "ip4"
+        icmp:
+          prober: icmp
+          timeout: 30s
+          icmp:
+            preferred_ip_protocol: "ip4"
+
+    ingress:
+      enabled: true
+      className: internal
+      annotations:
+        external-dns.alpha.kubernetes.io/target: internal.altena.io
+      hosts:
+        - host: blackbox-exporter.altena.io
+          paths:
+            - path: /
+              pathType: Prefix
+
+    pspEnabled: false
+
+    securityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        add: ["NET_RAW"]
+
+    serviceMonitor:
+      enabled: true
+      defaults:
+        labels:
+          release: prometheus
+        interval: 1m
+        scrapeTimeout: 30s
+      targets:
+
+        # Pihole server
+        - module: icmp
+          name: pihole-server
+          url: pihole.altena.io
+
+        # Proxmox server
+        - module: icmp
+          name: proxmox
+          url: proxmox.altena.io
+
+        # Other devices
+        - module: icmp
+          name: zigbee-controller-icmp
+          url: 192.168.2.113
+
+        # Check on the big man
+        - module: icmp
+          name: ping-cloudflare
+          url: 1.1.1.1
+          scrape_interval: 30s
