@@ -30,7 +30,7 @@ _... powered by Talos Linux and Kubernetes_
 </div>
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1fa87/512.gif" alt="🪇" width="20" height="20"> Kubernetes
----
+
 I'm running a [Talos](https://www.talos.dev)-powered Kubernetes environment on a single beefy Proxmox machine, which hosts all three control planes. The nodes manage the computational workloads, and currently, all configuration is stored on NFS until I can afford to buy some NUCs (like the cool kids do!). Once I get those NUCs, I plan to implement rook-ceph.
 
 For now, I maintain a dedicated 24 TB ZFS server that handles NFS/SMB sharing, large-scale file storage, and backup operations.
@@ -46,7 +46,7 @@ For now, I maintain a dedicated 24 TB ZFS server that handles NFS/SMB sharing, l
 - [volsync](https://github.com/backube/volsync): This is installed, next step is to configure it correctly. Choices on block storage, and _what_ I actually want to back-up still need to be made
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f38a/512.gif" alt="🏅" width="20" height="20"> Credits
----
+
 Credits are where credits due, when I started implementing Talos on my own, a lot of studying went in, bumping in the cluster-template made life so much easier on many fronts. If you're just like me and like to "FAFO" your way forward, this is a perfect place to start the Talos/Flux journey. You can check out the example setup at [onedr0p/cluster-template](https://github.com/onedr0p/cluster-template).
 
 Also make sure to hop-in at the [home-operations discord server](https://discord.gg/848uFeEv)
