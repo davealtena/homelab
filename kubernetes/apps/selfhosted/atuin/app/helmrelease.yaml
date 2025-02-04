@@ -75,7 +75,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: sh.devbu.io
+          - host: sh.altena.io
             paths:
               - path: /
                 service:
