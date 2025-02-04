@@ -30,9 +30,12 @@ spec:
             image:
               repository: ghcr.io/davealtena/fork-atuin-server
               tag: v18.3.0@sha256:42007fcfc0edcf67f01c7177739c2efcf0821352e730a68c9871e09789569787
+            args:
+              - server
+              - start
             env:
               ATUIN_PORT: &port 80
-              ATUIN_OPEN_REGISTRATION: "true"
+              # ATUIN_OPEN_REGISTRATION: "true"
               TZ: Europe/Amsterdam
             probes:
               liveness: &probes
