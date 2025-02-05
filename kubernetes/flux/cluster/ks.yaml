@@ -8,7 +8,7 @@ metadata:
 spec:
   targetNamespace: flux-system
   interval: 30m
-  path: ./kubernetes/flux/cluster-metadata
+  path: ./kubernetes/flux/metadata
   prune: true
   wait: false
   sourceRef:
