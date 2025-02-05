@@ -10,7 +10,7 @@ metadata:
   name: onepassword-secret
   namespace: security
 stringData:
-  1password-credentials.json: {{ ENV.ONEPASSWORD_CREDENTIALS | tojson }}
+  1password-credentials.json: {{ ENV.ONEPASSWORD_CREDENTIALS }}
   token: {{ ENV.ONEPASSWORD_CONNECT_TOKEN }}
 ---
 apiVersion: v1
