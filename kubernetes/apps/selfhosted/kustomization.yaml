@@ -7,6 +7,5 @@ resources:
   - ./actual-finance/ks.yaml
   - ./atuin/ks.yaml
 components:
-  - ../../flux/components/alerts
-  - ../../flux/components/namespace
-  - ../../flux/components/sops
+  - ../../components/flux/alerts
+  - ../../components/namespace
