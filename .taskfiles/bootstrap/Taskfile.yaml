@@ -35,8 +35,6 @@ tasks:
       - op run --env-file {{.BOOTSTRAP_DIR}}/apps/.secrets.env --no-masking -- minijinja-cli {{.BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2 | kubectl apply --server-side --filename -
       - helmfile --file {{.KUBERNETES_DIR}}/bootstrap/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
       - until kubectl wait --for=condition=Ready nodes --all --timeout=600s; do sleep 10; done
-    env:
-      VAULT: Homelab
     preconditions:
       - op user get --me
       - talosctl config info
