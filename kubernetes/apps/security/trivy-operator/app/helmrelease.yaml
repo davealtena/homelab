@@ -20,10 +20,12 @@ spec:
       scanJobsConcurrentLimit: 3
       vulnerabilityScannerScanOnlyCurrentRevisions: true
       configAuditScannerScanOnlyCurrentRevisions: true
+      infraAssessmentScannerEnabled: false # No node scanning available as Talos is Read-Only
     nodeCollector:
-      useNodeSelector: false
+      excludeNodes: "*"
     serviceMonitor:
       enabled: true
     trivy:
       ignoreUnfixed: true
+      interval: 10m0s
   interval: 10m0s
