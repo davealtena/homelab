@@ -230,4 +230,6 @@ spec:
     ingress:
       enabled: true
       ingressClassName: internal
+      annotations:
+        external-dns.alpha.kubernetes.io/target: internal.altena.io
       hosts: ["grafana.altena.io"]
