@@ -178,6 +178,11 @@ spec:
           revision: 1
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
+        trivy-operator:
+          # renovate: depName="Trivy Operator Dashboard"
+          gnetId: 17813
+          revision: 2
+          datasource: Prometheus
         unpackerr:
           # renovate: depName="Unpackerr"
           gnetId: 18817
