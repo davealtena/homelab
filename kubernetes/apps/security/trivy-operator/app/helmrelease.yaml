@@ -15,10 +15,6 @@ spec:
         kind: HelmRepository
         name: aqua
         namespace: flux-system
-  install:
-    crds: Skip
-  upgrade:
-    crds: Skip
   values:
     operator:
       scanJobsConcurrentLimit: 3
