@@ -66,6 +66,8 @@ spec:
 
     ingress:
       app:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.altena.io
         className: internal
         hosts:
           - host: alertmanager.altena.io

@@ -229,6 +229,8 @@ spec:
       enabled: false
     ingress:
       app:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.altena.io
         className: internal
         hosts:
           - host: grafana.altena.io
