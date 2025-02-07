@@ -55,9 +55,9 @@ spec:
     prometheus:
       ingress:
         enabled: true
-        ingressClassName: internal-nginx
+        ingressClassName: internal
         hosts:
-          - prometheus.bjw-s.dev
+          - prometheus.altena.io
         pathType: Prefix
 
       prometheusSpec:
