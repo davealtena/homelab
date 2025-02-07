@@ -20,7 +20,6 @@ spec:
   upgrade:
     crds: Skip
   values:
-    excludeNamespaces: "{{ .Release.Namespace }}"
     operator:
       scanJobsConcurrentLimit: 3
       vulnerabilityScannerScanOnlyCurrentRevisions: true
