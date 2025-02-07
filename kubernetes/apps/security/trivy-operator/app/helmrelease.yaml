@@ -20,6 +20,8 @@ spec:
       scanJobsConcurrentLimit: 3
       vulnerabilityScannerScanOnlyCurrentRevisions: true
       configAuditScannerScanOnlyCurrentRevisions: true
+      nodeCollector:
+        useNodeSelector: false
     serviceMonitor:
       enabled: true
     trivy:
