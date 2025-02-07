@@ -228,14 +228,6 @@ spec:
     testFramework:
       enabled: false
     ingress:
-      app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.altena.io
-        className: internal
-        hosts:
-          - host: grafana.altena.io
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+      enabled: true
+      ingressClassName: internal
+      hosts: ["grafana.altena.io"]
