@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: trivy-operator
+  namespace: security
+spec:
+  chart:
+    spec:
+      chart: trivy-operator
+      version: '0.25.0'
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: aqua
+        namespace: flux-system
+  install:
+    crds: Skip
+  upgrade:
+    crds: Skip
+  values:
+    excludeNamespaces: "{{ .Release.Namespace }}"
+    operator:
+      scanJobsConcurrentLimit: 3
+      vulnerabilityScannerScanOnlyCurrentRevisions: true
+      configAuditScannerScanOnlyCurrentRevisions: true
+    serviceMonitor:
+      enabled: true
+    trivy:
+      ignoreUnfixed: true
+  interval: 10m0s
