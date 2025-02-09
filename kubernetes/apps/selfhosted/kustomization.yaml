@@ -6,6 +6,7 @@ namespace: selfhosted
 resources:
   - ./actual-finance/ks.yaml
   - ./atuin/ks.yaml
+  - ./linkding/ks.yaml
 components:
   - ../../components/flux/alerts
   - ../../components/namespace
