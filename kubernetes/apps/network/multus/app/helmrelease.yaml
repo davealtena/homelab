@@ -17,199 +17,48 @@ spec:
         namespace: flux-system
 
   values:
-    configMaps:
-      daemon-config:
-        data:
-          daemon-config.json: |
-            {
-              "cniVersion": "0.3.1",
-              "logToStderr": true,
-              "logLevel": "error",
-              "binDir": "/opt/cni/bin",
-              "chrootDir": "/hostroot",
-              "cniConfigDir": "/host/etc/cni/net.d",
-              "confDir": "/host/etc/cni/net.d",
-              "multusAutoconfigDir": "/host/etc/cni/net.d",
-              "multusConfigFile": "auto",
-              "socketDir": "/host/run/multus/"
-            }
-
     controllers:
-      uninstall:
-        type: job
-
-        annotations:
-          # This is what defines this resource as a hook. Without this line, the
-          # job is considered part of the release.
-          helm.sh/hook: pre-delete, pre-upgrade
-          helm.sh/hook-weight: "-5"
-          helm.sh/hook-delete-policy: hook-succeeded
-
-        pod:
-          hostNetwork: true
-
-        containers:
-          uninstall:
-            image:
-              repository: docker.io/library/alpine
-              tag: "3.21"
-
-            command:
-              - /bin/sh
-              - -c
-
-            args:
-              - |
-                set -x
-                rm -rf /host/etc/cni/net.d/*multus*
-                rm -rf /host/opt/cni/bin/*multus*
-
       multus:
         type: daemonset
 
-        annotations:
-          reloader.stakater.com/auto: "true"
-
         pod:
           hostNetwork: true
-          hostPID: true
+
+        initContainers:
+          cni-plugins:
+            image:
+              repository: ghcr.io/buroa/cni-plugins
+              tag: 1.6.2
 
         containers:
-          multus-daemon:
-            image: &image
+          multus:
+            image:
               repository: ghcr.io/k8snetworkplumbingwg/multus-cni
-              tag: v4.1.4-thick
-            env:
-              MULTUS_NODE_NAME:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: spec.nodeName
+              tag: v4.1.4
+            command:
+              - /thin_entrypoint
+            args:
+              - --cleanup-config-on-exit=true
             resources:
               requests:
-                cpu: "5m"
-                memory: "96Mi"
+                cpu: "10m"
               limits:
                 memory: "512Mi"
             securityContext:
               privileged: true
 
-        initContainers:
-          cni-plugins-installer:
-            image:
-              repository: ghcr.io/angelnu/cni-plugins
-              tag: 1.6.2
-            resources:
-              requests:
-                cpu: "10m"
-                memory: "15Mi"
-            securityContext:
-              capabilities:
-                drop:
-                  - ALL
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: FallbackToLogsOnError
-
-          multus-shim-installer:
-            image: *image
-            command:
-              - /bin/sh
-              - -c
-            args: |
-              set -x
-              cp -f /usr/src/multus-cni/bin/multus-shim /host/opt/cni/bin/multus-shim
-            resources:
-              requests:
-                cpu: "10m"
-                memory: "15Mi"
-            securityContext:
-              capabilities:
-                drop:
-                  - ALL
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: FallbackToLogsOnError
-
     persistence:
-      cni:
+      etc-cni-net-d:
         type: hostPath
         hostPath: /etc/cni/net.d
-        advancedMounts:
-          uninstall:
-            uninstall:
-              - path: /host/etc/cni/net.d
-          multus:
-            multus-daemon:
-              - path: /host/etc/cni/net.d
-
-      cnibin:
+        globalMounts:
+          - path: /host/etc/cni/net.d
+      opt-cni-bin:
         type: hostPath
         hostPath: /opt/cni/bin
-        advancedMounts:
-          uninstall:
-            uninstall:
-              - path: /host/opt/cni/bin
-          multus:
-            cni-plugins-installer:
-              - path: /host/opt/cni/bin
-            multus-shim-installer:
-              - path: /host/opt/cni/bin
-            multus-daemon:
-              # multus-daemon expects that cnibin path must be identical between pod and container host.
-              # e.g. if the cni bin is in '/opt/cni/bin' on the container host side, then it should be
-              # mount to '/opt/cni/bin' in multus-daemon, not to any other directory, like '/opt/bin' or
-              # '/usr/bin'.
-              - path: /opt/cni/bin
-
-      config:
-        type: configMap
-        name: multus-daemon-config
-        advancedMounts:
-          multus:
-            multus-daemon:
-              - path: /etc/cni/net.d/multus.d
-      hostroot:
-        type: hostPath
-        hostPath: /
-        advancedMounts:
-          multus:
-            multus-daemon:
-              - path: /hostroot
-                mountPropagation: HostToContainer
-      host-run:
-        type: hostPath
-        hostPath: /run
-        advancedMounts:
-          multus:
-            multus-daemon:
-              - path: /host/run
-      host-var-lib-cni-multus:
-        type: hostPath
-        hostPath: /var/lib/cni/multus
-        advancedMounts:
-          multus:
-            multus-daemon:
-              - path: /var/lib/cni/multus
-      host-var-lib-kubelet:
-        type: hostPath
-        hostPath: /var/lib/kubelet
-        advancedMounts:
-          multus:
-            multus-daemon:
-              - path: /var/lib/kubelet
-      host-run-k8s-cni-cncf-io:
-        type: hostPath
-        hostPath: /run/k8s.cni.cncf.io
-        advancedMounts:
-          multus:
-            multus-daemon:
-              - path: /run/k8s.cni.cncf.io
-      host-run-netns:
-        type: hostPath
-        hostPath: /var/run/netns/
-        advancedMounts:
-          multus:
-            multus-daemon:
-              - path: /run/netns/
-                mountPropagation: HostToContainer
+        globalMounts:
+          - path: /host/opt/cni/bin
 
     serviceAccount:
       create: true
+      name: multus
