@@ -10,6 +10,7 @@ resources:
   - ./controlplaneio.yaml
   - ./coredns.yaml
   - ./csi-nfs-driver.yaml
+  - ./dependency-track.yaml
   - ./emqx.yaml
   - ./external-dns.yaml
   - ./external-secrets.yaml
