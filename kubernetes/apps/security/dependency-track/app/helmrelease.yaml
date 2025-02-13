@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -23,6 +22,24 @@ spec:
       strategy: rollback
       retries: 3
   values:
+    apiServer:
+      resources:
+        requests:
+          cpu: "500m"
+          memory: 4.5Gi
+        limits:
+          cpu: "2"
+          memory: 5Gi
+
+    frontend:
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "32Mi"
+        limits:
+          cpu: "200m"
+          memory: "64Mi"
+
     ingress:
       enabled: true
       hostname: depcheck.altena.io
