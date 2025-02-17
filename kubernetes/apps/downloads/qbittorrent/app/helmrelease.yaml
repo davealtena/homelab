@@ -40,9 +40,6 @@ spec:
               - 65542 # gladius:external-services
           terminationGracePeriodSeconds: 120
 
-          nodeSelector:
-            kubernetes.io/hostname: s01
-
         initContainers:
           dnsdist:
             image:
