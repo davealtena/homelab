@@ -67,9 +67,6 @@ spec:
             envFrom:
               - secretRef:
                   name: gluetun-secrets
-            resources:
-              limits:
-                squat.ai/tun: "1"
             restartPolicy: Always
             securityContext:
               capabilities:
