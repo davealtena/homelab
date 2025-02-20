@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: downloads
 resources:
   - ./bazarr/ks.yaml
+  - ./cross-seed/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
