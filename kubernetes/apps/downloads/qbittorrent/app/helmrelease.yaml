@@ -55,7 +55,7 @@ spec:
               tag: v3.40.0
             env:
               DOT: "off"
-              DNS_ADDRESS: "127.0.0.2"
+              DNS_ADDRESS: "10.2.0.1"
               VPN_SERVICE_PROVIDER: protonvpn
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
