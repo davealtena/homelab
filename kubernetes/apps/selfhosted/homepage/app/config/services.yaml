@@ -1,7 +1,7 @@
 ---
 - Home:
     - HomeAssistant:
-        href: https://hass.${DOMAIN}
+        href: https://hass.altena.io
         icon: home-assistant.png
         description: Home Assistant
         widget:
@@ -11,7 +11,7 @@
 - Media:
     - Jellyseerr:
         icon: jellyseerr.png
-        href: https://jellyseerr.${DOMAIN}
+        href: https://jellyseerr.altena.io
         description: Media Server
         widget:
             type: jellyseerr
@@ -19,7 +19,7 @@
             key: {{HOMEPAGE_VAR_JELLYFIN_TOKEN}}
             enableNowPlaying: true
     - Sonarr:
-        href: https://sonarr.${DOMAIN}
+        href: https://sonarr.altena.io
         icon: sonarr.png
         description: TV Shows
         widget:
@@ -27,7 +27,7 @@
             url: http://sonarr.downloads.svc.cluster.local.:8080
             key: {{HOMEPAGE_VAR_SONARR_TOKEN}}
     - Radarr:
-        href: https://radarr.${DOMAIN}
+        href: https://radarr.altena.io
         icon: radarr.png
         description: Movies
         widget:
@@ -36,7 +36,7 @@
             key: {{HOMEPAGE_VAR_RADARR_TOKEN}}
     - Bazarr:
         icon: bazarr.png
-        href: https://bazarr.${DOMAIN}
+        href: https://bazarr.altena.io
         description: Subtitles Management
         widget:
             type: bazarr

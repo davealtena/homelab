@@ -39,7 +39,7 @@ spec:
               repository: ghcr.io/gethomepage/homepage
               tag: v0.10.9@sha256:b6d732817572f9af99ec168b10641b8f7820f30cfa5a5cc5c68f1e291804bec8
             env:
-              TZ: ${TIMEZONE}
+              TZ: Europe/Amsterdam
             envFrom:
               - secretRef:
                   name: homepage-secret
@@ -70,7 +70,7 @@ spec:
         enabled: true
         className: internal
         hosts:
-          - host: "homepage.${DOMAIN}"
+          - host: "homepage.altena.io"
             paths:
               - path: /
                 service:
