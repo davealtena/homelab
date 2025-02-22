@@ -34,8 +34,3 @@ spec:
       name: sops-age
   dependsOn:
     - name: cluster-metadata
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: cluster-secrets
-        optional: false
