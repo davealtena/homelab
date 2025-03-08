@@ -20,6 +20,7 @@ resources:
   - ./k8s-gateway.yaml
   - ./metrics-server.yaml
   - ./ingress-nginx.yaml
+  - ./ollama.yaml
   - ./openebs.yaml
   - ./pireaus.yaml
   - ./prometheus-community.yaml
