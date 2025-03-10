@@ -16,6 +16,7 @@ resources:
   - ./external-dns.yaml
   - ./external-secrets.yaml
   - ./grafana.yaml
+  - ./intel.yaml
   - ./jetstack.yaml
   - ./k8s-gateway.yaml
   - ./metrics-server.yaml
