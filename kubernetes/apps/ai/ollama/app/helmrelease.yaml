@@ -29,7 +29,7 @@ spec:
       type: RollingUpdate
     image:
       repository: ollama/ollama
-      tag: 0.5.12
+      tag: 0.5.13
       pullPolicy: IfNotPresent
     ollama:
       gpu:
