@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -20,7 +19,6 @@ spec:
       plex:
         annotations:
           reloader.stakater.com/auto: "true"
-
         pod:
           securityContext:
             runAsUser: 2000
@@ -31,7 +29,6 @@ spec:
               - 44
               - 109
               - 65542
-
         containers:
           app:
             image:
@@ -41,6 +38,9 @@ spec:
               PLEX_PREFER_APP_HTTPS: "0"
               PLEX_ADVERTISE_URL: http://192.168.2.132:32400,https://plex.altena.io:443
               PLEX_NO_AUTH_NETWORKS: 10.69.0.0/16,192.168.2.0/24
+              PLEX_MEDIA_SERVER_USE_SHMEM_FOR_TRANSCODE: "1"
+              PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS: "4"
+              PLEX_MEDIA_SERVER_MAX_TRANSCODE_PROCS: "2"
             probes:
               liveness: &probes
                 enabled: true
@@ -67,10 +67,11 @@ spec:
                   - ALL
             resources:
               requests:
-                cpu: 100m
+                cpu: 2000m
+                memory: 4Gi
               limits:
-                memory: 2048M
-
+                cpu: 4000m
+                memory: 8Gi
     service:
       app:
         controller: plex
@@ -80,7 +81,6 @@ spec:
         ports:
           http:
             port: 32400
-
     ingress:
       app:
         annotations:
@@ -93,7 +93,6 @@ spec:
                 service:
                   identifier: app
                   port: http
-
     persistence:
       config:
         existingClaim: plex-config
@@ -117,9 +116,10 @@ spec:
         type: nfs
         server: 192.168.2.100
         path: /mnt/zfs/media
-
       transcode:
         type: emptyDir
+        medium: Memory
+        sizeLimit: 4Gi
         advancedMounts:
           plex:
             app:
