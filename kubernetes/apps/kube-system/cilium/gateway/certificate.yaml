@@ -5,7 +5,7 @@ kind: Certificate
 metadata:
   name: altena-io
 spec:
-  secretName: altena-io-key
+  secretName: altena-io
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
