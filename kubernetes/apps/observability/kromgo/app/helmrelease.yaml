@@ -83,16 +83,18 @@ spec:
             port: *port
           health:
             port: *hport
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: kromgo.altena.io
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - kromgo.altena.io
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: kromgo
+                port: *port
 
     persistence:
       config-file:

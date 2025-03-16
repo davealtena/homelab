@@ -42,8 +42,11 @@ spec:
       - --events
       - --ignore-ingress-tls-spec
       - --ingress-class=external
+      - --gateway-label-filter=gateway==external
     policy: sync
-    sources: ["crd", "ingress"]
+    sources:
+      - crd
+      - gateway-httproute
     txtOwnerId: default
     txtPrefix: k8s.
     domainFilters: ["altena.io"]
