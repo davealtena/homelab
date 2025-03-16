@@ -6,5 +6,4 @@ resources:
   - ./openwebui/ks.yaml
   - ./ollama/ks.yaml
 components:
-  - ../../components/flux/alerts
-  - ../../components/namespace
+  - ../../components/common

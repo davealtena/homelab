@@ -6,5 +6,4 @@ namespace: storage
 resources:
   - ./minio/ks.yaml
 components:
-  - ../../components/flux/alerts
-  - ../../components/namespace
+  - ../../components/common

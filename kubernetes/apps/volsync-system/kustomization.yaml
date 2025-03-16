@@ -7,5 +7,4 @@ resources:
   - ./snapshot-controller/ks.yaml
   - ./volsync/ks.yaml
 components:
-  - ../../components/flux/alerts
-  - ../../components/namespace
+  - ../../components/common

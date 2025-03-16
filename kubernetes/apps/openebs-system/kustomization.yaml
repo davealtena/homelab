@@ -5,5 +5,4 @@ namespace: openebs-system
 resources:
   - ./openebs/ks.yaml
 components:
-  - ../../components/flux/alerts
-  - ../../components/namespace
+  - ../../components/common

@@ -13,5 +13,4 @@ resources:
   - ./sabnzbd/ks.yaml
   - ./sonarr/ks.yaml
 components:
-  - ../../components/flux/alerts
-  - ../../components/namespace
+  - ../../components/common

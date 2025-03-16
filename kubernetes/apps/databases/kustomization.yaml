@@ -7,5 +7,4 @@ resources:
   - ./cnpg-operator/ks.yaml
   - ./emqx/ks.yaml
 components:
-  - ../../components/flux/alerts
-  - ../../components/namespace
+  - ../../components/common

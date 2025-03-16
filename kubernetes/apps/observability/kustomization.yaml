@@ -11,5 +11,4 @@ resources:
   - ./node-exporter/ks.yaml
   - ./prometheus-operator-crds/ks.yaml
 components:
-  - ../../components/flux/alerts
-  - ../../components/namespace
+  - ../../components/common

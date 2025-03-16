@@ -10,5 +10,4 @@ resources:
   - ./metrics-server/ks.yaml
   - ./reloader/ks.yaml
 components:
-  - ../../components/flux/alerts
-  - ../../components/namespace
+  - ../../components/common

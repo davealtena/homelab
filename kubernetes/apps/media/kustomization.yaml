@@ -8,5 +8,4 @@ resources:
   - ./plex/ks.yaml
   - ./tautulli/ks.yaml
 components:
-  - ../../components/flux/alerts
-  - ../../components/namespace
+  - ../../components/common
