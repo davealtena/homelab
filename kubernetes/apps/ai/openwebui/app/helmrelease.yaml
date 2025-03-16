@@ -56,19 +56,19 @@ spec:
         controller: openwebui
         ports:
           http:
-            port: 8080
-    ingress:
+            port: &port 8080
+    route:
       app:
-        className: internal
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "internal.altena.io"
-        hosts:
-          - host: &host "chat.altena.io"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - chat.altena.io
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: radarr
+                port: *port
     persistence:
       config:
         enabled: true
