@@ -58,7 +58,7 @@ spec:
         controller: tautulli
         ports:
           http:
-            port: 8181
+            port: &port 8181
 
     route:
       app:
