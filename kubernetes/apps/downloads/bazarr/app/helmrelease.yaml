@@ -37,10 +37,9 @@ spec:
               tag: 1.5.1@sha256:b8fa3c3c2a5b7fe045e8f8eb95feac3c50b37837478ecc11d49db8fa8ddff683
             env:
               TZ: Europe/Amsterdam
-            # TODO: Enable this secret ones Plex's installed
-            # envFrom:
-            #   - secretRef:
-            #       name: bazarr-secret
+            envFrom:
+              - secretRef:
+                  name: bazarr-secret
             probes:
               liveness: &probes
                 enabled: true
@@ -93,18 +92,20 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
+
+    route:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.altena.io
-        className: internal
-        hosts:
-          - host: bazarr.altena.io
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - bazarr.altena.io
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: bazarr
+                port: *port
+
     persistence:
       add-ons:
         type: emptyDir
