@@ -19,5 +19,4 @@ spec:
     - name: hubble-ui
       kind: Service
       group: ""
-      port:
-        name: http
+      port: 80
