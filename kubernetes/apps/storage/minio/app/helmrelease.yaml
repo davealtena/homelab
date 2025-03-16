@@ -82,9 +82,9 @@ spec:
         controller: minio
         ports:
           http:
-            port: 9001
+            port: &httpport 9001
           s3:
-            port: 9000
+            port: &s3port 9000
     serviceMonitor:
       app:
         serviceName: minio
@@ -94,24 +94,24 @@ spec:
             path: /minio/v2/metrics/cluster
             interval: 1m
             scrapeTimeout: 10s
-    ingress:
+
+    route:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.altena.io
-        className: internal
-        hosts:
-          - host: "{{ .Release.Name }}.altena.io"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-          - host: s3.altena.io
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: s3
+        hostnames:
+          - minio.altena.io
+          - s3.altena.io
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: http
+                port: *httpport
+          - backendRefs:
+              - name: s3
+                port: *s3port
+
     persistence:
       config:
         type: nfs

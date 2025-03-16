@@ -64,16 +64,18 @@ spec:
           http:
             port: *httpPort
 
-    ingress:
+    route:
       app:
-        className: "internal"
-        hosts:
-          - host: finance.altena.io
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - actual.altena.io
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: actual
+                port: *httpPort
 
     persistence:
       data:

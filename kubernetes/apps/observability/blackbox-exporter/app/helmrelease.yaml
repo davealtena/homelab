@@ -41,17 +41,6 @@ spec:
           icmp:
             preferred_ip_protocol: "ip4"
 
-    ingress:
-      enabled: true
-      className: internal
-      annotations:
-        external-dns.alpha.kubernetes.io/target: internal.altena.io
-      hosts:
-        - host: blackbox-exporter.altena.io
-          paths:
-            - path: /
-              pathType: Prefix
-
     pspEnabled: false
 
     securityContext:

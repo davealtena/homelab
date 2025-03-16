@@ -53,12 +53,15 @@ spec:
     kubeProxy:
       enabled: false
     prometheus:
-      ingress:
-        enabled: true
-        ingressClassName: internal
-        hosts:
-          - prometheus.altena.io
-        pathType: Prefix
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - prometheus.altena.io
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
 
       prometheusSpec:
         alertingEndpoints:
