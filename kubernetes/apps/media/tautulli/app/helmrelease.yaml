@@ -60,17 +60,18 @@ spec:
           http:
             port: 8181
 
-    ingress:
+    route:
       app:
-        className: internal
-        hosts:
-          - host: tautulli.altena.io
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - tautulli.altena.io
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: plex
+                port: *port
 
     persistence:
       config:

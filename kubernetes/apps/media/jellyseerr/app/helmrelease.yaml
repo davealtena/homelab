@@ -76,18 +76,18 @@ spec:
           http:
             port: *port
 
-    ingress:
+    route:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.altena.io
-        className: internal
-        hosts:
-          - host: jellyseerr.altena.io
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - requests.altena.io
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: plex
+                port: *port
 
     persistence:
       config:
