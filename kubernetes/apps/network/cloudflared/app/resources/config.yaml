@@ -4,7 +4,7 @@ originRequest:
 
 ingress:
   - hostname: altena.io
-    service: https://nginx-external-controller.network.svc.cluster.local:443
+    service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
   - hostname: "*.altena.io"
-    service: https://nginx-external-controller.network.svc.cluster.local:443
+    service: *svc
   - service: http_status:404
