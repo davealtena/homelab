@@ -53,10 +53,6 @@ spec:
           secretKeyRef:
             name: pihole-password
             key: *secret
-      - name: EXTERNAL_DNS_GATEWAY_LABEL_FILTER
-        value: gateway-label==internal-gateway
-      - name: EXTERNAL_DNS_LABEL_FILTER
-        value: route-label==external-dns-internal
     extraArgs:
       - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
       - --crd-source-kind=DNSEndpoint
