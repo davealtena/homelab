@@ -82,7 +82,7 @@ spec:
           - "{{ .Release.Name }}.altena.io"
           - requests.altena.io
         parentRefs:
-          - name: external
+          - name: internal
             namespace: kube-system
             sectionName: https
         rules:
