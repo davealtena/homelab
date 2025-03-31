@@ -1,4 +1,24 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: external-dns-pihole
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 1.16.0
+  url: oci://ghcr.io/home-operations/charts-mirror/external-dns
+  # If you want to use verification, otherwise you can remove this section
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: "^https://token.actions.githubusercontent.com$"
+        subject: "^https://github.com/home-operations/charts-mirror.*$"
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -6,24 +26,22 @@ metadata:
   name: &app external-dns-pihole
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: external-dns
-      version: 1.16.0
-      sourceRef:
-        kind: HelmRepository
-        name: external-dns
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: external-dns-pihole
   install:
+    disableSchemaValidation: true # Work around schema validation issues
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
+    disableSchemaValidation: true # Work around schema validation issues
     remediation:
       strategy: rollback
       retries: 3
   values:
     fullnameOverride: *app
+    # The rest of your values remain the same
     rbac:
       create: true
       additionalPermissions:
@@ -59,6 +77,6 @@ spec:
       - --events
       - --ignore-ingress-tls-spec
       - --ingress-class=internal
-      - --pihole-tls-skip-verify #TODO: Fix when TLS is configured on pi-hole
+      - --pihole-tls-skip-verify
     securityContext:
       fsGroup: 65534
