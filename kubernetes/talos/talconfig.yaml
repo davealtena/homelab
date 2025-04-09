@@ -24,11 +24,11 @@ nodes:
   - hostname: "odin"
     ipAddress: "192.168.2.102"
     installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/d3dc673627e9b94c6cd4122289aa52c2484cddb31017ae21b75309846e257d30
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:fd:a1:37"
+          hardwareAddr: "bc:24:11:36:e9:e2"
         dhcp: false
         addresses:
           - "192.168.2.102/24"
@@ -41,11 +41,11 @@ nodes:
   - hostname: "thor"
     ipAddress: "192.168.2.103"
     installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/d3dc673627e9b94c6cd4122289aa52c2484cddb31017ae21b75309846e257d30
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:af:e9:a4"
+          hardwareAddr: "bc:24:11:99:44:67"
         dhcp: false
         addresses:
           - "192.168.2.103/24"
@@ -58,11 +58,11 @@ nodes:
   - hostname: "frigg"
     ipAddress: "192.168.2.104"
     installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/d3dc673627e9b94c6cd4122289aa52c2484cddb31017ae21b75309846e257d30
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:15:57:6f"
+          hardwareAddr: "bc:24:11:be:a4:11"
         dhcp: false
         addresses:
           - "192.168.2.104/24"
@@ -75,32 +75,17 @@ nodes:
 
 # Global patches
 patches:
-  - # Force nameserver
-    |-
-    machine:
-      network:
-        nameservers:
-          - 192.168.2.111
-  - # Configure NTP
-    |-
-    machine:
-      time:
-        disabled: false
-        servers:
-          - time.cloudflare.com
-  - "@./patches/global/cluster-discovery.yaml"
-  - "@./patches/global/containerd.yaml"
-  - "@./patches/global/disable-search-domain.yaml"
-  - "@./patches/global/hostdns.yaml"
-  - "@./patches/global/kubelet.yaml"
-  - "@./patches/global/openebs-local.yaml"
-  - "@./patches/global/sysctl.yaml"
-  - "@./patches/global/intel-gpu.yaml"
+  - "@./patches/global/machine-files.yaml"
+  - "@./patches/global/machine-dns.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-openebs-local.yaml"
+  - "@./patches/global/machine-sysctl.yaml"
+  - "@./patches/global/machine-time.yaml"
 
 # Controller patches
 controlPlane:
   patches:
-    - "@./patches/controller/api-access.yaml"
     - "@./patches/controller/cluster.yaml"
     - "@./patches/controller/disable-admission-controller.yaml"
-    - "@./patches/controller/etcd.yaml"
+

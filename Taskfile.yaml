@@ -15,6 +15,7 @@ includes:
   talos: .taskfiles/talos/Taskfile.yaml
 
 vars:
+  BOOTSTRAP_DIR: "{{.ROOT_DIR}}/kubernetes/bootstrap"
   KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
   TALOSCONFIG: "{{.KUBERNETES_DIR}}/talos/clusterconfig/talosconfig"
   TALHELPER_CLUSTER_DIR: '{{.KUBERNETES_DIR}}/talos/clusterconfig'

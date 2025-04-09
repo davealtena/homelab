@@ -29,17 +29,14 @@ tasks:
         sh: test -f {{.SOPS_AGE_KEY_FILE}}
 
   apps:
-    dir: '{{.KUBERNETES_DIR}}/bootstrap/talos'
     cmds:
-      - until kubectl wait --for=condition=Ready=False nodes --all --timeout=600s; do sleep 10; done
+      # - until kubectl wait --for=condition=Ready=False nodes --all --timeout=600s; do sleep 10; done
       - op run --env-file {{.BOOTSTRAP_DIR}}/apps/.secrets.env --no-masking -- minijinja-cli {{.BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2 | kubectl apply --server-side --filename -
       - helmfile --file {{.KUBERNETES_DIR}}/bootstrap/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
       - until kubectl wait --for=condition=Ready nodes --all --timeout=600s; do sleep 10; done
     preconditions:
       - op user get --me
       - talosctl config info
-      - test -f {{.CLUSTER_DIR}}/talosconfig
       - test -f {{.BOOTSTRAP_DIR}}/apps/helmfile.yaml
       - test -f {{.BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2
-      - test -f {{.BOOTSTRAP_DIR}}/apps/templates/wipe-rook.yaml.gotmpl
-      - which curl jq helmfile kubectl op talosctl
+      - which curl jq helmfile kubectl op talosctl minijinja-cli
