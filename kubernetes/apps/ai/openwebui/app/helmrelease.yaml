@@ -33,7 +33,7 @@ spec:
           app:
             image:
               repository: ghcr.io/open-webui/open-webui
-              tag: 0.6@sha256:35d42fdf7d627389a50f453786ffa78050f93b515bd665643c492478cc99c773
+              tag: 0.6@sha256:fe7a6870ec6b2fd540c0f2007e6aa812dc4bf04a2d0a305bb344eeb10de0a7b7
             env:
               OLLAMA_BASE_URLS: "http://ollama.ai.svc.cluster.local:11434"
             securityContext:
