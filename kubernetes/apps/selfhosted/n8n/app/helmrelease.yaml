@@ -39,16 +39,6 @@ spec:
                   secretKeyRef:
                     name: n8n-db-superuser # This is the auto-generated secret name
                     key: password# PostgreSQL connection settings
-              DB_TYPE: postgresdb
-              DB_POSTGRESDB_HOST: n8n-db-rw
-              DB_POSTGRESDB_PORT: 5432
-              DB_POSTGRESDB_DATABASE: n8n
-              DB_POSTGRESDB_USER: postgres # cnpg uses 'postgres' as the default superuser
-              DB_POSTGRESDB_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: n8n-db-superuser # This is the auto-generated secret name
-                    key: password
               EXECUTIONS_DATA_PRUNE: true
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
