@@ -106,7 +106,7 @@ spec:
                 port: *port
       webhooks:
         hostnames:
-          - n8n-webhook.bjw-s.dev
+          - n8n-webhook.altena.io
         parentRefs:
           - name: external
             namespace: kube-system
