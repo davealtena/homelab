@@ -21,7 +21,7 @@ spec:
   wait: false
   dependsOn:
     - name: external-secrets-stores
-      namespace: external-secrets
+      namespace: security
   postBuild:
     substitute:
       APP: *appname
