@@ -52,7 +52,7 @@ spec:
               N8N_ENCRYPTION_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: n8n-secret
+                    name: n8n
                     key: N8N_ENCRYPTION_KEY
             resources:
               requests:
