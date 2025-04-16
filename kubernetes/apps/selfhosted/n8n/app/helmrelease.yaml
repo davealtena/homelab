@@ -10,11 +10,6 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-    - name: n8n-db  # Add dependency on the database
-      namespace: same-namespace-as-n8n
   values:
     controllers:
       n8n:
