@@ -1,0 +1,20 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: n8n
+spec:
+  instances: 1
+  primaryUpdateStrategy: unsupervised
+
+  storage:
+    size: 2Gi
+    storageClass: nfs-csi-sc
+
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: 128MB
+
+  bootstrap:
+    initdb:
+      database: n8n
