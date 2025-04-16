@@ -76,7 +76,7 @@ nodes:
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
-  - "@./patches/global/machine-dns.yaml"
+  - "@./patches/global/machine-features.yaml"
   - "@./patches/global/machine-network.yaml"
   - "@./patches/global/machine-kubelet.yaml"
   - "@./patches/global/machine-openebs-local.yaml"
