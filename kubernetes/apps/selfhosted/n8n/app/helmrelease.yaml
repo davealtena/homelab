@@ -1,0 +1,120 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: n8n
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: n8n-db  # Add dependency on the database
+      namespace: same-namespace-as-n8n
+  values:
+    controllers:
+      n8n:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: "OnRootMismatch"
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/n8n-io/n8n
+              tag: 1.89.1
+            env:
+              DB_TYPE: postgresdb
+              DB_POSTGRESDB_HOST: n8n-db-rw
+              DB_POSTGRESDB_PORT: 5432
+              DB_POSTGRESDB_DATABASE: n8n
+              DB_POSTGRESDB_USER: postgres # cnpg uses 'postgres' as the default superuser
+              DB_POSTGRESDB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: n8n-db-superuser # This is the auto-generated secret name
+                    key: password# PostgreSQL connection settings
+              DB_TYPE: postgresdb
+              DB_POSTGRESDB_HOST: n8n-db-rw
+              DB_POSTGRESDB_PORT: 5432
+              DB_POSTGRESDB_DATABASE: n8n
+              DB_POSTGRESDB_USER: postgres # cnpg uses 'postgres' as the default superuser
+              DB_POSTGRESDB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: n8n-db-superuser # This is the auto-generated secret name
+                    key: password
+              EXECUTIONS_DATA_PRUNE: true
+              EXECUTIONS_DATA_MAX_AGE: 7
+              EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
+              GENERIC_TIMEZONE: "Europe/Amsterdam"
+              N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
+              N8N_PROTOCOL: "https"
+              N8N_PORT: &port 8080
+              N8N_HOST: &hostName n8n.altena.io
+              N8N_LOG_LEVEL: info
+              N8N_LOG_OUTPUT: console
+              N8N_ENCRYPTION_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: n8n-secret
+                    key: N8N_ENCRYPTION_KEY
+            resources:
+              requests:
+                cpu: 5m
+                memory: 128Mi
+              limits:
+                memory: 2Gi
+
+    # Rest of your configuration remains the same
+    service:
+      app:
+        controller: n8n
+        ports:
+          http:
+            port: *port
+
+    persistence:
+      data:
+        existingClaim: n8n
+        advancedMounts:
+          n8n:
+            app:
+              - path: /home/node/.n8n
+
+    route:
+      app:
+        hostnames:
+          - *hostName
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: n8n
+                port: *port
+      webhooks:
+        hostnames:
+          - n8n-webhook.bjw-s.dev
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - matches:
+              - path:
+                  value: /webhook
+            backendRefs:
+              - name: n8n
+                port: *port
