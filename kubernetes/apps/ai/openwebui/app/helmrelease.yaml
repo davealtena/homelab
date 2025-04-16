@@ -67,7 +67,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: radarr
+              - name: openwebui
                 port: *port
     persistence:
       config:
