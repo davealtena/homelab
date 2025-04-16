@@ -67,7 +67,7 @@ spec:
     route:
       app:
         hostnames:
-          - alertmanager.altena
+          - alertmanager.altena.io
         parentRefs:
           - name: internal
             namespace: kube-system
