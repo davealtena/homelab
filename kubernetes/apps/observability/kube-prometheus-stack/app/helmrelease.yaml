@@ -45,8 +45,7 @@ spec:
         - 192.168.2.103
         - 192.168.2.104
     kubeEtcd:
-      enabled: true
-      endpoints: *cp
+      enabled: false
     kubeScheduler:
       enabled: true
       endpoints: *cp
