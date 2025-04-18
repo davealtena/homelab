@@ -47,11 +47,6 @@ spec:
     kubeEtcd:
       enabled: true
       endpoints: *cp
-      service:
-        port: 2381
-        targetPort: 2381
-      serviceMonitor:
-        scheme: http
     kubeScheduler:
       enabled: true
       endpoints: *cp
