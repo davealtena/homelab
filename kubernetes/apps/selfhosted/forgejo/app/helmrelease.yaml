@@ -6,6 +6,8 @@ metadata:
 spec:
   interval: 1h
   url: oci://code.forgejo.org/forgejo-helm/forgejo
+  ref:
+    tag: "12.3.0"
   provider: generic
   insecure: false
   timeout: 60s
@@ -20,11 +22,11 @@ spec:
   chart:
     spec:
       chart: forgejo
-      version: "12.0.0"
       sourceRef:
-        kind: HelmRepository
+        kind: OCIRepository
         name: forgejo
         namespace: flux-system
+      version: "0.0.0"
       interval: 5m
   values:
     ingress:
