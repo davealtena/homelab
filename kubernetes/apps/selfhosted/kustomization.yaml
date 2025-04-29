@@ -8,5 +8,6 @@ resources:
   - ./atuin/ks.yaml
   - ./forgejo/ks.yaml
   - ./n8n/ks.yaml
+  - ./wekan/ks.yaml
 components:
   - ../../components/common
