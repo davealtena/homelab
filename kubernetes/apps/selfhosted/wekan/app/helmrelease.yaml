@@ -30,9 +30,11 @@ spec:
               tag: v7.87
             env:
               ROOT_URL: https://kanban.altena.io
-            envFrom:
-              - secretRef:
-                  name: wekan-env
+              MONGO_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: wekan-env
+                    key: MONGO_URL
             resources:
               requests:
                 cpu: 5m
