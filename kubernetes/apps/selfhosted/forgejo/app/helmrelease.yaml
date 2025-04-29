@@ -23,8 +23,7 @@ spec:
     name: forgejo
     namespace: selfhosted
   values:
-    ingress:
-      enabled: false
+    clusterDomain: cluster.local
     persistence:
       enabled: true
       create: false
@@ -59,6 +58,8 @@ spec:
           ACCOUNT_LINKING: auto
         mailer:
           ENABLED: false
+        server:
+          ROOT_URL: "https://git.altena.io/"
   valuesFrom:
     - kind: Secret
       name: forgejo-postgres-app
