@@ -1,16 +1,19 @@
----
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
   name: forgejo
+  namespace: selfhosted
 spec:
   interval: 1h
   url: oci://code.forgejo.org/forgejo-helm/forgejo
   ref:
     tag: "12.3.0"
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
   provider: generic
-  insecure: false
-  timeout: 60s
+  verify:
+    provider: none
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
