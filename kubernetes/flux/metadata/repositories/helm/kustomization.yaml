@@ -15,7 +15,6 @@ resources:
   - ./emqx.yaml
   - ./external-dns.yaml
   - ./external-secrets.yaml
-  - ./forgejo.yaml
   - ./grafana.yaml
   - ./intel.yaml
   - ./jetstack.yaml

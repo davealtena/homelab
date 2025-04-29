@@ -16,13 +16,12 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: forgejo
-  namespace: selfhosted
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
     name: forgejo
-    namespace: flux-system
+    namespace: selfhosted
   values:
     ingress:
       enabled: false
