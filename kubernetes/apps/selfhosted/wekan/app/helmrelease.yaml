@@ -57,5 +57,4 @@ spec:
         rules:
           - backendRefs:
               - name: wekan
-                port: *port
-
+                port: 80
