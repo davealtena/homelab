@@ -30,12 +30,39 @@ spec:
               tag: v7.87
             env:
               ROOT_URL: https://kanban.altena.io
+            envFrom:
+              - secretRef:
+                  name: wekan-env
             resources:
               requests:
                 cpu: 5m
                 memory: 128Mi
               limits:
                 memory: 2Gi
+
+          mongodb:
+            image:
+              repository: bitnami/mongodb
+              tag: 7.0.5
+            env:
+              - name: MONGODB_ROOT_USER
+                value: wekan
+              - name: MONGODB_DATABASE
+                value: wekan
+              - name: MONGODB_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: wekan-env
+                    key: MONGODB_ROOT_PASSWORD
+
+            volumeMounts:
+              - name: mongo-data
+                mountPath: /bitnami/mongodb
+
+        volumes:
+          - name: mongo-data
+            persistentVolumeClaim:
+              claimName: wekan-mongodb
 
     service:
       app:
