@@ -40,7 +40,7 @@ spec:
         controller: wekan
         ports:
           http:
-            port: *port
+            port: 80
 
     persistence:
       data:
