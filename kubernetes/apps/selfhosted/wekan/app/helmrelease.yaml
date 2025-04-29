@@ -28,6 +28,8 @@ spec:
             image:
               repository: ghcr.io/wekan/wekan
               tag: v7.87
+            env:
+              ROOT_URL: https://kanban.altena.io
             resources:
               requests:
                 cpu: 5m
