@@ -18,16 +18,11 @@ metadata:
   name: forgejo
   namespace: selfhosted
 spec:
-  interval: 5m
-  chart:
-    spec:
-      chart: forgejo
-      sourceRef:
-        kind: OCIRepository
-        name: forgejo
-        namespace: flux-system
-      version: "0.0.0"
-      interval: 5m
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: forgejo
+    namespace: flux-system
   values:
     ingress:
       enabled: false
