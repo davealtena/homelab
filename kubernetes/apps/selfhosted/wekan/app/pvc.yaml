@@ -1,0 +1,12 @@
+---
+# Separate PVC manifest
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wekan
+spec:
+  accessModes: ["ReadWriteMany"]
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: nfs-csi-sc
