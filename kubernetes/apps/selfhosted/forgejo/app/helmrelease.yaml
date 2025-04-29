@@ -61,18 +61,18 @@ spec:
           ENABLED: false
   valuesFrom:
     - kind: Secret
-      name: forgejo-postgres-rw
+      name: forgejo-postgres-app
       valuesKey: host
       targetPath: gitea.config.database.HOST
     - kind: Secret
-      name: forgejo-postgres-rw
+      name: forgejo-postgres-app
       valuesKey: dbname
       targetPath: gitea.config.database.NAME
     - kind: Secret
-      name: forgejo-postgres-rw
+      name: forgejo-postgres-app
       valuesKey: user
       targetPath: gitea.config.database.USER
     - kind: Secret
-      name: forgejo-postgres-rw
+      name: forgejo-postgres-app
       valuesKey: password
       targetPath: gitea.config.database.PASSWD
