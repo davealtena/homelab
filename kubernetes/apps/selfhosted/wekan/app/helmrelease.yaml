@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wekan/wekan
-              tag: v7.87
+              tag: v7.88
             env:
               ROOT_URL: https://kanban.altena.io
               MONGO_URL:
