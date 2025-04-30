@@ -45,7 +45,7 @@ spec:
           mongodb:
             image:
               repository: bitnami/mongodb
-              tag: 7.0.5
+              tag: 7.0.15
             env:
               - name: MONGODB_ROOT_USER
                 value: wekan
