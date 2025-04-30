@@ -42,7 +42,7 @@ spec:
           mongodb:
             image:
               repository: docker.io/library/mongo
-              tag: 6
+              tag: 4.4
             env:
               - name: MONGO_INITDB_ROOT_USERNAME
                 valueFrom:
