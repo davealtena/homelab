@@ -22,6 +22,8 @@ spec:
               repository: ghcr.io/wekan/wekan
               tag: v7.87
             env:
+              - name: ROOT_URL
+                value: https://kanban.altena.io
               - name: MONGO_URL
                 valueFrom:
                   secretKeyRef:
