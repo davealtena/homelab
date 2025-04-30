@@ -70,14 +70,8 @@ spec:
           wekan:
             app:
               - path: /data
-      wekan-mongodb:
-        enabled: true
-        existingClaim: wekan-mongodb
-        advancedMounts:
-          wekan:
             mongodb:
               - path: /data/db
-
     service:
       app:
         controller: wekan
