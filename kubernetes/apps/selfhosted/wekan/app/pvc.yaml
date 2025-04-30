@@ -8,17 +8,5 @@ spec:
   accessModes: ["ReadWriteMany"]
   resources:
     requests:
-      storage: 10Gi
-  storageClassName: nfs-csi-sc
----
-# Separate PVC manifest
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: wekan-mongodb
-spec:
-  accessModes: ["ReadWriteMany"]
-  resources:
-    requests:
-      storage: 10Gi
+      storage: 20Gi
   storageClassName: nfs-csi-sc

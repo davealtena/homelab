@@ -1,70 +1,82 @@
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: wekan
+  namespace: selfhosted
 spec:
   interval: 30m
-  chartRef:
-    kind: OCIRepository
-    name: app-template
-    namespace: flux-system
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
   values:
     controllers:
       wekan:
-        annotations:
-          reloader.stakater.com/auto: "true"
-
-        pod:
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: "OnRootMismatch"
-
         containers:
           app:
             image:
               repository: ghcr.io/wekan/wekan
               tag: v7.87
             env:
-              ROOT_URL: https://kanban.altena.io
-              MONGO_URL:
+              - name: MONGO_URL
                 valueFrom:
                   secretKeyRef:
                     name: wekan-env
                     key: MONGO_URL
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
             resources:
               requests:
                 cpu: 5m
                 memory: 128Mi
               limits:
                 memory: 2Gi
-
           mongodb:
             image:
-              repository: bitnami/mongodb
-              tag: 7.0.5
+              repository: docker.io/library/mongo
+              tag: 6
             env:
-              - name: MONGODB_ROOT_USER
-                value: wekan
-              - name: MONGODB_DATABASE
-                value: wekan
-              - name: MONGODB_ROOT_PASSWORD
+              - name: MONGO_INITDB_ROOT_USERNAME
                 valueFrom:
                   secretKeyRef:
                     name: wekan-env
-                    key: MONGODB_ROOT_PASSWORD
+                    key: MONGO_INITDB_ROOT_USERNAME
+              - name: MONGO_INITDB_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: wekan-env
+                    key: MONGO_INITDB_ROOT_PASSWORD
+              - name: MONGO_INITDB_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: wekan-env
+                    key: MONGO_INITDB_DATABASE
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
 
-            volumeMounts:
-              - name: mongo-data
-                mountPath: /bitnami/mongodb
-
-        volumes:
-          - name: mongo-data
-            persistentVolumeClaim:
-              claimName: wekan-mongodb
+    persistence:
+      wekan:
+        enabled: true
+        existingClaim: wekan
+        advancedMounts:
+          wekan:
+            app:
+              - path: /data
+      wekan-mongodb:
+        enabled: true
+        existingClaim: wekan-mongodb
+        advancedMounts:
+          wekan:
+            mongodb:
+              - path: /data/db
 
     service:
       app:
@@ -72,10 +84,6 @@ spec:
         ports:
           http:
             port: 80
-
-    persistence:
-      data:
-        existingClaim: wekan
 
     route:
       app:
