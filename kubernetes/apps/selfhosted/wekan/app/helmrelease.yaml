@@ -24,6 +24,8 @@ spec:
             env:
               - name: ROOT_URL
                 value: https://kanban.altena.io
+              - name: PORT
+                value: "3001"
               - name: MONGO_URL
                 valueFrom:
                   secretKeyRef:
