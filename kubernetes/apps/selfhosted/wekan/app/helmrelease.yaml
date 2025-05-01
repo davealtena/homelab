@@ -79,7 +79,7 @@ spec:
         controller: wekan
         ports:
           http:
-            port: 80
+            port: 3001
 
     route:
       app:
@@ -92,4 +92,4 @@ spec:
         rules:
           - backendRefs:
               - name: wekan
-                port: 80
+                port: 3001
