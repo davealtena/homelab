@@ -27,68 +27,54 @@ spec:
       retries: 3
   valuesFrom:
     - kind: Secret
-      name: postgres-harbor
-      valuesKey: INIT_POSTGRES_PASS
-      targetPath: database.external.password
-      optional: false
+      name: harbor-postgres-app
+      valuesKey: host
+      targetPath: database.external.host
     - kind: Secret
-      name: postgres-harbor
-      valuesKey: INIT_POSTGRES_USER
+      name: harbor-postgres-app
+      valuesKey: username
       targetPath: database.external.username
-      optional: false
     - kind: Secret
-      name: harbor
-      valuesKey: token
-      targetPath: trivy.githubToken
-      optional: false
+      name: harbor-postgres-app
+      valuesKey: password
+      targetPath: database.external.password
+    - kind: Secret
+      name: harbor-postgres-app
+      valuesKey: dbname
+      targetPath: database.external.coreDatabase
   values:
     updateStrategy:
       type: Recreate
     expose:
-      type: ingress
-      tls:
-        enabled: true
-        certSource: secret
-        secret:
-          secretName: wildcard-cert-tls
-      ingress:
-        hosts:
-          core: &external harbor-ingress.garb.dev
-    externalURL: https://harbor-ingress.garb.dev
-    registry:
-      initContainers:
-        - name: init-db
-          image: ghcr.io/home-operations/postgres-init:17.4
-          envFrom:
-            - secretRef:
-                name: postgres-harbor
+      type: clusterIP
+    externalURL: https://harbor.altena.io
     redis:
       type: external
       external:
-        addr: dragonfly.database.svc:6379
+        addr: dragonfly.databases.svc.cluster.local:6379
     database:
       type: external
       external:
-        host: postgres-lb.database.svc.cluster.local
+        host: harbor-rw.selfhosted.svc.cluster.local:5432
     trivy:
       enabled: true
     persistence:
       enabled: true
       persistentVolumeClaim:
         registry:
-          existingClaim: harbor-registry-0
+          existingClaim: harbor-registry
         jobservice:
           jobLog:
-            storageClass: ceph-block
+            storageClass: nfs-csi-sc
             size: 1Gi
         database:
-          storageClass: ceph-block
+          storageClass: nfs-csi-sc
           size: 1Gi
         redis:
-          storageClass: ceph-block
+          storageClass: nfs-csi-sc
           size: 1Gi
         trivy:
-          storageClass: ceph-block
+          storageClass: nfs-csi-sc
           size: 5Gi
     cache:
       enabled: true
