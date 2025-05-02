@@ -7,6 +7,7 @@ resources:
   - ./actual-finance/ks.yaml
   - ./atuin/ks.yaml
   - ./forgejo/ks.yaml
+  - ./harbor/ks.yaml
   - ./n8n/ks.yaml
   - ./wekan/ks.yaml
 components:
