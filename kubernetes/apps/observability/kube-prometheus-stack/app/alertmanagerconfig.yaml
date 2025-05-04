@@ -73,6 +73,6 @@ spec:
             name: pushover_api_token
             key: ALERTMANAGER_TOKEN
           userKey:
-            name: ushover_api_userkey
+            name: pushover_api_userkey
             key: PUSHOVER_USER_KEY
           urlTitle: View in Alertmanager
