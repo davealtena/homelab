@@ -29,7 +29,7 @@ tasks:
       OPERATION: "{{index .MATCH 0}}"
       OPERATION_ARGS: |-
         {{if eq .OPERATION "apply"}} --server-side --field-manager=kustomize-controller{{end}}
-      KS_DIR: "{{.K8S_DIR}}/apps/{{.DIR}}"
+      KS_DIR: "{{.KUBERNETES_DIR}}/apps/{{.DIR}}"
     requires:
       vars:
         - DIR

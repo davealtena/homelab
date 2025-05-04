@@ -54,8 +54,6 @@ spec:
         addr: dragonfly.databases.svc.cluster.local:6379
     database:
       type: external
-      external:
-        host: harbor-rw.selfhosted.svc.cluster.local:5432
     trivy:
       enabled: true
     persistence:

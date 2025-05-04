@@ -1,3 +1,4 @@
+---
 resources:
-- ./http-redirect.yaml
-- ./internal-gateway.yaml
+  - ./http-redirect.yaml
+  - ./internal-gateway.yaml

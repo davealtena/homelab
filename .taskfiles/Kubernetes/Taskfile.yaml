@@ -5,17 +5,17 @@ version: '3'
 tasks:
 
   cleanup-pods:
-      desc: Clean up pods with a Failed/Pending/Succeeded phase
-      preconditions:
-        - which kubectl
-      cmds:
-        - for:
-            matrix:
-              PHASE:
-                - Failed
-                - Pending
-                - Succeeded
-          cmd: kubectl delete pods --field-selector status.phase={{.ITEM.PHASE}} -A --ignore-not-found=true
+    desc: Clean up pods with a Failed/Pending/Succeeded phase
+    preconditions:
+      - which kubectl
+    cmds:
+      - for:
+          matrix:
+            PHASE:
+              - Failed
+              - Pending
+              - Succeeded
+        cmd: kubectl delete pods --field-selector status.phase={{.ITEM.PHASE}} -A --ignore-not-found=true
 
   sync-externalsecrets:
     desc: Force sync all ExternalSecret resources

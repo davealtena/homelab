@@ -1,3 +1,4 @@
+---
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -7,28 +8,28 @@ metadata:
     release: prometheus
 spec:
   groups:
-  - name: blackbox-alerts
-    rules:
-    - alert: BlackboxSslCertificateWillExpireSoon
-      expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 3
-      for: 15m
-      labels:
-        severity: critical
-      annotations:
-        summary: The SSL certificate for {{ $labels.target }} will expire in less than 3 days
+    - name: blackbox-alerts
+      rules:
+        - alert: BlackboxSslCertificateWillExpireSoon
+          expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 3
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: The SSL certificate for {{ $labels.target }} will expire in less than 3 days
 
-    - alert: BlackboxSslCertificateExpired
-      expr: probe_ssl_earliest_cert_expiry - time() <= 0
-      for: 15m
-      labels:
-        severity: critical
-      annotations:
-        summary: The SSL certificate for {{ $labels.target }} has expired
+        - alert: BlackboxSslCertificateExpired
+          expr: probe_ssl_earliest_cert_expiry - time() <= 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: The SSL certificate for {{ $labels.target }} has expired
 
-    - alert: BlackboxProbeFailed
-      expr: probe_success == 0
-      for: 15m
-      labels:
-        severity: critical
-      annotations:
-        summary: The host {{ $labels.instance }} is currently unreachable
+        - alert: BlackboxProbeFailed
+          expr: probe_success == 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: The host {{ $labels.instance }} is currently unreachable

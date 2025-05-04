@@ -1,3 +1,4 @@
+---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
@@ -5,18 +6,18 @@ metadata:
   namespace: kube-system
 spec:
   parentRefs:
-  - name: internal
-    kind: Gateway
-    group: gateway.networking.k8s.io
+    - name: internal
+      kind: Gateway
+      group: gateway.networking.k8s.io
   hostnames:
-  - "hubble.altena.io"
+    - "hubble.altena.io"
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: hubble-ui
-      kind: Service
-      group: ""
-      port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: hubble-ui
+          kind: Service
+          group: ""
+          port: 80
