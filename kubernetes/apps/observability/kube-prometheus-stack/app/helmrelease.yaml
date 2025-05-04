@@ -85,7 +85,7 @@ spec:
       prometheusSpec:
         alertingEndpoints:
           - namespace: observability
-            name: alertmanager
+            name: alertmanager-operated
             port: 9093
             apiVersion: v2
         scrapeInterval: 1m # Must match interval in Grafana Helm chart
