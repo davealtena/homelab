@@ -33,7 +33,27 @@ spec:
       enabled: false
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
-      enabled: false
+      route:
+        main:
+          enabled: true
+          hostnames: ["alertmanager.altena.io"]
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
+      alertmanagerSpec:
+        alertmanagerConfiguration:
+          name: alertmanager
+          global:
+            resolveTimeout: 5m
+        externalUrl: https://alertmanager.altena.io
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: nfs-csi-sc
+              resources:
+                requests:
+                  storage: 1Gi
     kubelet:
       enabled: true
     kubeApiServer:

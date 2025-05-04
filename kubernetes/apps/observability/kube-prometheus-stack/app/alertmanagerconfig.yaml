@@ -1,0 +1,67 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: AlertmanagerConfig
+metadata:
+  name: example-alertmanager-config
+  namespace: monitoring
+spec:
+  receivers:
+    - name: "null"
+    - name: "pushover"
+      pushoverConfigs:
+        - html: true
+          tokenFile: /etc/secrets/pushover_api_token
+          userKeyFile: /etc/secrets/pushover_api_userkey
+          sendResolved: true
+          priority: |
+            {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
+          urlTitle: View in Prometheus
+          title: |-
+            [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+          message: |-
+            {{- range .Alerts }}
+              {{- if ne .Labels.severity "" }}
+                <b>Severity:</b> <i>{{ .Labels.severity }}</i>
+              {{- else }}
+                <b>Severity:</b> <i>N/A</i>
+              {{- end }}
+              {{- if ne .Annotations.description "" }}
+                <b>Description:</b> <i>{{ .Annotations.description }}</i>
+              {{- else if ne .Annotations.summary "" }}
+                <b>Summary:</b> <i>{{ .Annotations.summary }}</i>
+              {{- else if ne .Annotations.message "" }}
+                <b>Message:</b> <i>{{ .Annotations.message }}</i>
+              {{- else }}
+                <b>Description:</b> <i>N/A</i>
+              {{- end }}
+              {{- if gt (len .Labels.SortedPairs) 0 }}
+                <b>Details:</b>
+                {{- range .Labels.SortedPairs }}
+                  • <b>{{ .Name }}:</b> <i>{{ .Value }}</i>
+                {{- end }}
+              {{- end }}
+            {{- end }}
+
+  route:
+    groupBy: ["alertname", "job"]
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 6h
+    receiver: "pushover"
+    routes:
+      - receiver: "null"
+        matchers:
+          - alertname =~ "InfoInhibitor|Watchdog"
+      - receiver: "pushover"
+        matchers:
+          - severity = critical
+        continue: true
+
+  inhibitRules:
+    - sourceMatchers:
+        - severity = "critical"
+      targetMatchers:
+        - severity = "warning"
+      equal:
+        - "alertname"
+        - "namespace"
