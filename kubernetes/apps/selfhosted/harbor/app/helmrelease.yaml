@@ -47,6 +47,8 @@ spec:
       type: Recreate
     expose:
       type: clusterIP
+      tls:
+        enabled: false
     externalURL: https://harbor.altena.io
     redis:
       type: external
