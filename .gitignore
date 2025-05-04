@@ -1,5 +1,6 @@
 # Trash
 .DS_Store
+.venv
 Thumbs.db
 # k8s
 kubeconfig

@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: databases
 resources:
   - ./cnpg-operator/ks.yaml
-  - ./dragonfly/ks.yaml
   - ./emqx/ks.yaml
 components:
   - ../../components/common

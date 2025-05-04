@@ -50,10 +50,6 @@ spec:
       tls:
         enabled: false
     externalURL: https://harbor.altena.io
-    redis:
-      type: external
-      external:
-        addr: dragonfly.databases.svc.cluster.local:6379
     database:
       type: external
     trivy:
