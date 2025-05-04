@@ -1,3 +1,4 @@
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/alertmanagerconfig_v1alpha1.json
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
@@ -69,9 +70,9 @@ spec:
             {{ .CommonLabels.alertname }}
           ttl: 86400s
           token:
-            name: *secret
-            key: ALERTMANAGER_PUSHOVER_TOKEN
+            name: pushover_api_token
+            key: ALERTMANAGER_TOKEN
           userKey:
-            name: *secret
+            name: ushover_api_userkey
             key: PUSHOVER_USER_KEY
           urlTitle: View in Alertmanager
