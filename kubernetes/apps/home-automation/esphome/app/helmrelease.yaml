@@ -138,12 +138,3 @@ spec:
           esphome:
             app:
               - path: /cache
-      # deploy-key:
-      #   type: secret
-      #   name: esphome-deploykey
-      #   defaultMode: 256
-      #   advancedMounts:
-      #     esphome:
-      #       code-server:
-      #         - path: /home/coder/.ssh/id_ed25519
-      #           subPath: id_ed25519

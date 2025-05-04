@@ -2,13 +2,13 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: n8n
+  name: harbor-postgres
 spec:
   instances: 1
   primaryUpdateStrategy: unsupervised
 
   storage:
-    size: 2Gi
+    size: 15Gi
     storageClass: nfs-csi-sc
 
   postgresql:
@@ -18,4 +18,4 @@ spec:
 
   bootstrap:
     initdb:
-      database: n8n
+      database: harbor

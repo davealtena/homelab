@@ -1,3 +1,4 @@
+---
 machine:
   sysctls:
     fs.inotify.max_queued_events: "65536"
