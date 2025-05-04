@@ -27,7 +27,7 @@ spec:
             value: /c/
       backendRefs:
         - name: harbor-core
-          namespace: development
+          namespace: selfhosted
           port: 80
     - matches:
         - path:
@@ -35,5 +35,5 @@ spec:
             value: /
       backendRefs:
         - name: harbor-portal
-          namespace: development
+          namespace: selfhosted
           port: 80
