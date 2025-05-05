@@ -83,6 +83,7 @@ spec:
               sectionName: https
 
       prometheusSpec:
+        externalUrl: https://prometheus.altena.io
         alertingEndpoints:
           - namespace: observability
             name: alertmanager-operated
