@@ -24,7 +24,7 @@ spec:
       containers:
       - name: prlx-agent
         image: harbor.altena.io/prlx-eu/agent:latest
-        imagePullPolicy: IfNotExists
+        imagePullPolicy: IfNotPresent
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
