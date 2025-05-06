@@ -24,7 +24,7 @@ spec:
       containers:
       - name: prlx-agent
         image: harbor.altena.io/prlx-eu/agent:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotExists
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
@@ -65,7 +65,7 @@ spec:
           failureThreshold: 30
         volumeMounts:
         - name: reports
-          mountPath: /var/run/security-agent/reports
+          mountPath: /var/run/agent/reports
           readOnly: false
         - name: tmp
           mountPath: /tmp
