@@ -7,6 +7,6 @@ data:
   config.json: |
     {
       "scan_interval": "5m",
-      "output_path": "/var/run/prlx-agent/reports",
+      "output_path": "/var/run/agent/reports",
       "retention_days": 7
     }
