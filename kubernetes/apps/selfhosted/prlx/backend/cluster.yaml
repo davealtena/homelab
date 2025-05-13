@@ -9,7 +9,7 @@ spec:
     apiGroup: postgresql.cnpg.io
     kind: ImageCatalog
     name: official-timescaledb-image
-    major: 16
+    major: 14
   imagePullPolicy: IfNotPresent
   postgresUID: 70
   postgresGID: 70
