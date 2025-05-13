@@ -11,8 +11,6 @@ spec:
     name: official-timescaledb-image
     major: 14
   imagePullPolicy: IfNotPresent
-  postgresUID: 70
-  postgresGID: 70
 
   resources:
     requests:
