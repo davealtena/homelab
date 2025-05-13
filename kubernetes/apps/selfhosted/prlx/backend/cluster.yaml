@@ -57,5 +57,5 @@ metadata:
   name: official-timescaledb-image
 spec:
   images:
-    - major: 16
-      image: timescale/timescaledb-ha:latest-pg16
+    - major: 14
+      image: timescale/timescaledb-ha:pg14.18-ts2.19.3-oss
