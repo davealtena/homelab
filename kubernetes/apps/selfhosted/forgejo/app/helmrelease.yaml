@@ -24,6 +24,8 @@ spec:
     name: forgejo
     namespace: selfhosted
   values:
+    strategy:
+      type: Recreate
     clusterDomain: cluster.local
     persistence:
       enabled: true
