@@ -1,0 +1,83 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prlx-backend
+  labels:
+    app: prlx-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prlx-backend
+  template:
+    metadata:
+      labels:
+        app: prlx-backend
+    spec:
+      containers:
+        - name: prlx-backend
+          image: harbor.altena.io/prlx-eu/backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: prlx-db-app
+                  key: host
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: prlx-db-app
+                  key: port
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: prlx-db-app
+                  key: user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: prlx-db-app
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: prlx-db-app
+                  key: dbname
+            - name: DB_SSLMODE
+              value: require
+            - name: DB_MAX_CONNS
+              value: "25"
+          volumeMounts:
+            - name: jwt-secret
+              mountPath: "/etc/parallax/secrets"
+              readOnly: true
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      volumes:
+        - name: jwt-secret
+          secret:
+            secretName: prlx-backend
+            items:
+              - key: jwt-secret
+                path: jwt-secret
