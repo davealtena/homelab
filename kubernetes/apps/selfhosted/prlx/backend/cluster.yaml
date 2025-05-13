@@ -24,7 +24,7 @@ spec:
 
   storage:
     size: 10Gi
-    storageClass: standard
+    storageClass: nfs-csi-sc
 
   postgresql:
     parameters:
