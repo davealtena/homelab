@@ -48,6 +48,7 @@ spec:
     enablePodMonitor: true
 
   walStorage:
+    storageClass: nfs-csi-sc
     size: 5Gi
 ---
 apiVersion: postgresql.cnpg.io/v1
