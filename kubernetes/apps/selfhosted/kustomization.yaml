@@ -9,7 +9,7 @@ resources:
   - ./forgejo/ks.yaml
   - ./harbor/ks.yaml
   - ./n8n/ks.yaml
-  - ./prlx-agent/ks.yaml
+  - ./prlx/ks.yaml
   - ./wekan/ks.yaml
 components:
   - ../../components/common
