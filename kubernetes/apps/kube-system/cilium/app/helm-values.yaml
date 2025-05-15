@@ -17,6 +17,9 @@ endpointRoutes:
   enabled: true
 hubble:
   enabled: true
+  export:
+    dynamic:
+      enabled: true
   metrics:
     enabled:
       - dns:query;ignoreAAAA
