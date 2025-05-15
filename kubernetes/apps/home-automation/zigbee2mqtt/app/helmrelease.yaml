@@ -161,7 +161,7 @@ spec:
                 port: 12321
           - backendRefs:
               - name: zigbee2mqtt
-                port: 8123
+                port: 8080
 
     persistence:
       data:
