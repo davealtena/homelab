@@ -34,7 +34,7 @@ spec:
                     name: nocodb-app
                     key: uri
               NC_PUBLIC_URL: "https://nocodb.altena.io"
-              NC_REDIS_URL: redis://nnocodb-dragonfly.selfhosted.svc.cluster.local:6379/9
+              NC_REDIS_URL: redis://nocodb-dragonfly.selfhosted.svc.cluster.local:6379/9
               NC_DISABLE_TELE: "true"
             envFrom:
               - secretRef:
