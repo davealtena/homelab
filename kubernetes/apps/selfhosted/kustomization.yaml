@@ -9,6 +9,7 @@ resources:
   - ./forgejo/ks.yaml
   - ./harbor/ks.yaml
   - ./n8n/ks.yaml
+  - ./nocodb/ks.yaml
   - ./prlx/ks.yaml
   - ./wekan/ks.yaml
 components:

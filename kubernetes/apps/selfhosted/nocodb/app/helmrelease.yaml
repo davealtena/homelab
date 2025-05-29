@@ -1,0 +1,89 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app nocodb
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      nocodb:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: docker.io/nocodb/nocodb
+              tag: 0.263.4
+            env:
+              PORT: &port "8080"
+              NC_JWT_EXPIRES_IN: 72h
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: nocodb-app
+                    key: uri
+              NC_PUBLIC_URL: "https://nocodb.altena.io"
+              NC_REDIS_URL: redis://nocodb-dragonfly.default.svc.cluster.local:6379/9
+              NC_DISABLE_TELE: "true"
+            envFrom:
+              - secretRef:
+                  name: *app
+            resources:
+              requests:
+                cpu: 5m
+                memory: 128M
+              limits:
+                memory: 2G
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 564
+        runAsGroup: 564
+        fsGroup: 564
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 65568
+    service:
+      app:
+        controller: nocodb
+        ports:
+          http:
+            port: *port
+
+    persistence:
+      data:
+        existingClaim: nocodb
+        advancedMounts:
+          nocodb:
+            app:
+              - path: /usr/app/data
+    route:
+      main:
+        enabled: true
+        kind: HTTPRoute
+        parentRefs:
+          - kind: Gateway
+            name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - nocodb.altena.io
+        rules:
+          - backendRefs:
+              - name: nocodb
+                port: *port
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /
