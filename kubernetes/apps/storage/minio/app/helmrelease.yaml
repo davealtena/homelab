@@ -105,20 +105,20 @@ spec:
             namespace: kube-system
             sectionName: https
         rules:
-          - backendRefs:
-            - name: minio  # niet "http"
+          - matches:
+            - headers:
+              - name: ":authority"
+                value: minio.altena.io
+            backendRefs:
+            - name: minio
               port: 9001
-            matches:
-            - path:
-                type: PathPrefix
-                value: /
-          - backendRefs:
-            - name: minio  # niet "s3"
+          - matches:
+            - headers:
+              - name: ":authority"
+                value: s3.altena.io
+            backendRefs:
+            - name: minio
               port: 9000
-            matches:
-            - path:
-                type: PathPrefix
-                value: /
 
     persistence:
       config:
