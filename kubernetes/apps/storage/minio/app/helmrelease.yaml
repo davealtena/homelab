@@ -106,11 +106,19 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: http
-                port: *httpport
+            - name: minio  # niet "http"
+              port: 9001
+            matches:
+            - path:
+                type: PathPrefix
+                value: /
           - backendRefs:
-              - name: s3
-                port: *s3port
+            - name: minio  # niet "s3"
+              port: 9000
+            matches:
+            - path:
+                type: PathPrefix
+                value: /
 
     persistence:
       config:
