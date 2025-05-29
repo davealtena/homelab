@@ -5,7 +5,9 @@ metadata:
 spec:
   instances: 1
   storage:
-    size: 25Gi
+    size: 15Gi
+    storageClass: nfs-csi-sc
+
   imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.3
 
   postgresql:
