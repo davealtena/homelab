@@ -5,7 +5,6 @@ kind: OCIRepository
 metadata:
   name: trivy-operator
 spec:
-  interval: 5m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
