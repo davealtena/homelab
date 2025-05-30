@@ -36,4 +36,3 @@ spec:
     trivy:
       ignoreUnfixed: true
       interval: 10m0s
-  interval: 10m0s
