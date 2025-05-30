@@ -4,6 +4,7 @@ kind: HelmRelease
 metadata:
   name: openebs
 spec:
+  # OCI not available, yet: https://github.com/home-operations/charts-mirror/issues/8
   interval: 30m
   chart:
     spec:

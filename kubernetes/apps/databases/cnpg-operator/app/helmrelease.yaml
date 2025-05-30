@@ -8,6 +8,7 @@ spec:
   driftDetection:
     mode: enabled
   chart:
+    # No OCI repo available, yet.
     spec:
       chart: cloudnative-pg
       version: 0.23.0
