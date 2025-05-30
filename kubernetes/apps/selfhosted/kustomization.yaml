@@ -9,6 +9,5 @@ resources:
   - ./n8n/ks.yaml
   - ./nocodb/ks.yaml
   - ./prlx/ks.yaml
-  - ./wekan/ks.yaml
 components:
   - ../../components/common
