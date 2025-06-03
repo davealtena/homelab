@@ -27,7 +27,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: security-operator
-  namespace: prlx-eu
+  namespace: selfhosted
 roleRef:
   kind: ClusterRole
   name: security-operator
