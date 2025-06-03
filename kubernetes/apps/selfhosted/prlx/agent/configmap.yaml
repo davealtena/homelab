@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: prlx-agent-config
+  name: security-operator-config
+  namespace: prlx-eu
 data:
   config.json: |
     {
-      "scan_interval": "5m",
-      "output_path": "/var/run/agent/reports",
-      "retention_days": 7
+      "metrics_port": 8080,
+      "health_port": 8081
     }

@@ -6,3 +6,4 @@ bases:
   - ./deployment.yaml
   - ./rbac.yaml
   - ./sa.yaml
+  - ./service.yaml

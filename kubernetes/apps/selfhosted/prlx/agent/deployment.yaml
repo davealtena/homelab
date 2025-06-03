@@ -2,18 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prlx-agent
+  name: security-operator
+  namespace: prlx-eu
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: prlx-agent
+      app: security-operator
   template:
     metadata:
       labels:
-        app: prlx-agent
+        app: security-operator
     spec:
-      serviceAccountName: prlx-agent
+      serviceAccountName: security-operator
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534  # nobody
@@ -22,60 +23,47 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: prlx-agent
-          image: harbor.altena.io/prlx-eu/agent:latest
-          imagePullPolicy: Always
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities:
-              drop:
-                - ALL
-            privileged: false
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "200m"
-              memory: "256Mi"
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
-          startupProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 30
-          volumeMounts:
-            - name: reports
-              mountPath: /var/run/agent/reports
-              readOnly: false
-            - name: tmp
-              mountPath: /tmp
-          envFrom:
-            - configMapRef:
-                name: prlx-agent-config
-      volumes:
-        - name: reports
-          emptyDir:
-            sizeLimit: 100Mi
-        - name: tmp
-          emptyDir:
-            sizeLimit: 50Mi
+      - name: agent
+        image: harbor.altena.io/prlx-eu/agent:latest
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        envFrom:
+        - configMapRef:
+            name: security-operator-config

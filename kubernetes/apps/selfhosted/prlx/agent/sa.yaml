@@ -2,4 +2,4 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: prlx-agent
+  name: security-operator

@@ -2,26 +2,33 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: prlx-agent
+  name: security-operator
 rules:
-  - apiGroups: [""]
-    resources: ["pods", "namespaces"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["networking.k8s.io"]
-    resources: ["networkpolicies"]
-    verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods", "namespaces"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["security.prlx.eu"]
+  resources: ["rbacfindings", "networkfindings"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["security.prlx.eu"]
+  resources: ["rbacfindings/status", "networkfindings/status"]
+  verbs: ["get", "update", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: prlx-agent
+  name: security-operator
 subjects:
-  - kind: ServiceAccount
-    name: prlx-agent
+- kind: ServiceAccount
+  name: security-operator
+  namespace: prlx-eu
 roleRef:
   kind: ClusterRole
-  name: prlx-agent
+  name: security-operator
   apiGroup: rbac.authorization.k8s.io
