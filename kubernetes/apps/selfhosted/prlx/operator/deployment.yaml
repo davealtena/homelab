@@ -1,0 +1,149 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: security-operator
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: security-operator
+rules:
+- apiGroups: [""]
+  resources: ["pods", "namespaces"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets", "daemonsets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["cronjobs", "jobs"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["security.prlx.eu"]
+  resources: ["securityassessments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["security.prlx.eu"]
+  resources: ["securityassessments/status"]
+  verbs: ["get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: security-operator
+subjects:
+- kind: ServiceAccount
+  name: security-operator
+  namespace: ${NAMESPACE}
+roleRef:
+  kind: ClusterRole
+  name: security-operator
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: security-operator-config
+data:
+  config.json: |
+    {
+      "metrics_port": 8080,
+      "health_port": 8081
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: security-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: security-operator
+  template:
+    metadata:
+      labels:
+        app: security-operator
+    spec:
+      serviceAccountName: security-operator
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534  # nobody
+        runAsGroup: 65534 # nogroup
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: agent
+        image: harbor.altena.io/prlx-eu/agent:latest
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        envFrom:
+        - configMapRef:
+            name: security-operator-config
+        # Note: These environment variables are only required for Pro plan features
+        # Comment out or remove if not using Pro plan
+        #env:
+        #- name: BACKEND_URL
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: security-operator-secrets
+        #      key: backend-url
+        #- name: JWT_SECRET
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: security-operator-secrets
+        #      key: jwt-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: security-operator-metrics
+spec:
+  ports:
+  - name: metrics
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: security-operator
