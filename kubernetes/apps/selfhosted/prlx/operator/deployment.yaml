@@ -15,7 +15,7 @@ spec:
       serviceAccountName: security-operator
       containers:
       - name: operator
-        image: security-operator:latest
+        image: harbor.altena.io/prlx-eu/agent:latest
         imagePullPolicy: Always
         args:
         - --scan-interval=5m
