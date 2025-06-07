@@ -1,8 +1,94 @@
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: security-operator
   namespace: security-operator
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: security-operator
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  - deployments
+  - statefulsets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - batch
+  resources:
+  - cronjobs
+  - jobs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - networkpolicies
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  - clusterroles
+  - rolebindings
+  - roles
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - security.prlx.eu
+  resources:
+  - networkfindings
+  - rbacfindings
+  - securitycontextfindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - security.prlx.eu
+  resources:
+  - networkfindings/finalizers
+  - rbacfindings/finalizers
+  - securitycontextfindings/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - security.prlx.eu
+  resources:
+  - networkfindings/status
+  - rbacfindings/status
+  - securitycontextfindings/status
+  verbs:
+  - get
+  - patch
+  - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
