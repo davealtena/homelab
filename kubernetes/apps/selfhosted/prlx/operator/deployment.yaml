@@ -49,7 +49,7 @@ subjects:
 - kind: ServiceAccount
   name: prlx-agent-controller-manager
   namespace: ${NAMESPACE}
-
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
