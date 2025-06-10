@@ -70,7 +70,7 @@ spec:
       - name: manager
         args:
         - --leader-elect
-        image: harbor.altena.io/prlx-eu/agent:v0.2.0
+        image: harbor.altena.io/prlx-eu/agent:e9076f3289ff33c828b478f324fcbfdbac5f3d81
         imagePullPolicy: IfNotPresent
         resources:
           limits:
