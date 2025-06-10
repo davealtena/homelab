@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: prlx-agent-controller-manager
+  name: prlx-controller-manager
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: prlx-agent-controller-role
+  name: prlx-controller-role
 rules:
   - apiGroups: [""]
     resources: ["namespaces"]
@@ -37,20 +37,20 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: prlx-agent-controller-rolebinding
+  name: prlx-controller-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: prlx-agent-controller-role
+  name: prlx-controller-role
 subjects:
 - kind: ServiceAccount
-  name: prlx-agent-controller-manager
+  name: prlx-controller-manager
   namespace: ${NAMESPACE}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prlx-agent-controller-manager
+  name: prlx-controller-manager
   labels:
     control-plane: controller-manager
 spec:
@@ -63,7 +63,9 @@ spec:
       labels:
         control-plane: controller-manager
     spec:
-      serviceAccountName: prlx-agent-controller-manager
+      serviceAccountName: prlx-controller-manager
+      securityContext:
+        runAsNonRoot: true
       containers:
       - name: manager
         args:
