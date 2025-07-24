@@ -6,6 +6,7 @@ metadata:
   name: nocodb-dragonfly
 spec:
   image: ghcr.io/dragonflydb/dragonfly:v1.31.2
+  # renovate: datasource=docker depName=ghcr.io/dragonflydb/dragonfly
   replicas: 1 # set to the number of nodes in the cluster
   env:
     - name: MAX_MEMORY

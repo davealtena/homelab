@@ -1,5 +1,6 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
+# renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
 metadata:
   name: nocodb
 spec:
@@ -9,6 +10,7 @@ spec:
     storageClass: nfs-csi-sc
 
   imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.3
+# renovate: datasource=docker depName=ghcr.io/tensorchord/cloudnative-pgvecto.rs
 
   postgresql:
     shared_preload_libraries:

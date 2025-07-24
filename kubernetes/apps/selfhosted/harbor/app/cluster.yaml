@@ -1,6 +1,6 @@
----
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
+# renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
 metadata:
   name: harbor-postgres
 spec:
