@@ -27,7 +27,7 @@ spec:
     remediation:
       retries: -1
   values:
-    fullnameOverride: &name externaldns-unifi
+    fullnameOverride: &name external-dns-unifi
     logLevel: &logLevel info
     domainFilters:
       - altena.io
