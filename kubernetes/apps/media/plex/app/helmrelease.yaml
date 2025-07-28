@@ -31,8 +31,8 @@ spec:
               tag: 1.41.3.9314-a0bfb8370@sha256:cbefe5f2f44d0519fd72985ed4005b7b55a7eb9dcbdcc3b4d6bb7055730db565
             env:
               PLEX_PREFER_APP_HTTPS: "0"
-              PLEX_ADVERTISE_URL: http://192.168.2.132:32400,https://plex.altena.io:443
-              PLEX_NO_AUTH_NETWORKS: 10.69.0.0/16,192.168.2.0/24
+              PLEX_ADVERTISE_URL: http://192.168.1.132:32400,https://plex.altena.io:443
+              PLEX_NO_AUTH_NETWORKS: 10.69.0.0/16,192.168.1.0/24
               PLEX_MEDIA_SERVER_USE_SHMEM_FOR_TRANSCODE: "1"
               PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS: "4"
               PLEX_MEDIA_SERVER_MAX_TRANSCODE_PROCS: "2"
@@ -72,7 +72,7 @@ spec:
         controller: plex
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 192.168.2.132
+          lbipam.cilium.io/ips: 192.168.1.132
         ports:
           http:
             port: &port 32400
@@ -109,7 +109,7 @@ spec:
               - path: /config/Library/Application Support/Plex Media Server/Logs
       nfs-nas-media:
         type: nfs
-        server: 192.168.2.100
+        server: 192.168.1.100
         path: /mnt/zfs/media
       transcode:
         type: emptyDir

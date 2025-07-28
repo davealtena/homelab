@@ -69,9 +69,9 @@ spec:
     kubeControllerManager:
       enabled: true
       endpoints: &cp
-        - 192.168.2.102
-        - 192.168.2.103
-        - 192.168.2.104
+        - 192.168.1.102
+        - 192.168.1.103
+        - 192.168.1.104
     kubeEtcd:
       enabled: false
     kubeScheduler:

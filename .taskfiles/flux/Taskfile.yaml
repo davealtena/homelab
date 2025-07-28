@@ -8,13 +8,13 @@ tasks:
     dir: '{{.KUBERNETES_DIR}}/bootstrap/talos'
     cmds:
       - until kubectl wait --for=condition=Ready=False nodes --all --timeout=600s; do sleep 10; done
-      - helmfile --file {{.KUBERNETES_DIR}}/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff
+      - helmfile --file {{.KUBERNETES_DIR}}/bootstrap/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
       - until kubectl wait --for=condition=Ready nodes --all --timeout=600s; do sleep 10; done
     preconditions:
       - msg: Missing kubeconfig
         sh: test -f {{.KUBECONFIG}}
       - msg: Missing helmfile
-        sh: test -f {{.KUBERNETES_DIR}}/bootstrap/helmfile.yaml
+        sh: test -f {{.KUBERNETES_DIR}}/bootstrap/apps/helmfile.yaml
 
   "reconcile":
     desc: Force update Flux to pull in changes from your Git repository

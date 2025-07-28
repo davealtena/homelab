@@ -63,7 +63,7 @@ spec:
       - gateway-httproute
     env:
       - name: EXTERNAL_DNS_PIHOLE_SERVER
-        value: http://192.168.2.111
+        value: http://192.168.1.111
       - name: &secret EXTERNAL_DNS_PIHOLE_PASSWORD
         valueFrom:
           secretKeyRef:

@@ -94,7 +94,7 @@ spec:
         type: emptyDir
       media:
         type: nfs
-        server: 192.168.2.100
+        server: 192.168.1.100
         path: /mnt/zfs/media
         globalMounts:
           - path: /media

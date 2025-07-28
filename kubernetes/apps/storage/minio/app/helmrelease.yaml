@@ -118,7 +118,7 @@ spec:
     persistence:
       config:
         type: nfs
-        server: 192.168.2.100
+        server: 192.168.1.100
         path: /mnt/zfs/minio
         globalMounts:
           - path: /data

@@ -57,6 +57,6 @@ spec:
     metadata:
       annotations:
         external-dns.alpha.kubernetes.io/hostname: "mqtt.altena.io."
-        lbipam.cilium.io/ips: 192.168.2.114
+        lbipam.cilium.io/ips: 192.168.1.114
     spec:
       type: LoadBalancer

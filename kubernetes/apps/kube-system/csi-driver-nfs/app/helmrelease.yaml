@@ -36,7 +36,7 @@ spec:
       annotations:
         storageclass.kubernetes.io/is-default-class: "false"
       parameters:
-        server: 192.168.2.100
+        server: 192.168.1.100
         share: /mnt/zfs/pvc
         subDir: "${pvc.metadata.namespace}/${pvc.metadata.name}"
       reclaimPolicy: Retain
