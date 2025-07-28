@@ -6,18 +6,6 @@ env:
   TALOSCONFIG: '{{.TALHELPER_CLUSTER_DIR}}/talosconfig'
 
 tasks:
-  generate-clusterconfig:
-    desc: Generate clusterconfig for Talos
-    preconditions:
-      - test -f {{.KUBERNETES_DIR}}/talos/talsecret.sops.yaml
-      - test -f {{.KUBERNETES_DIR}}/talos/talconfig.yaml
-    cmds:
-      - |
-        export SOPS_AGE_KEY=$(op read "op://Homelab/sops/SOPS_PRIVATE_KEY")
-        talhelper genconfig \
-          --secret-file {{.KUBERNETES_DIR}}/talos/talsecret.sops.yaml \
-          --config-file {{.KUBERNETES_DIR}}/talos/talconfig.yaml \
-          --out-dir {{.KUBERNETES_DIR}}/talos/clusterconfig
 
   apply-clusterconfig:
     desc: Apply clusterconfig for a Talos cluster

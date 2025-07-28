@@ -3,10 +3,10 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app external-dns-external
-  namespace: flux-system
+  name: &app external-dns-cloudflare
+  namespace: &namespace network
 spec:
-  targetNamespace: network
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -28,17 +28,17 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app external-dns-internal
-  namespace: flux-system
+  name: &app external-dns-unifi
+  namespace: &namespace network
 spec:
-  targetNamespace: network
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
       namespace: security
-  path: ./kubernetes/apps/network/external-dns/pihole
+  path: ./kubernetes/apps/network/external-dns/unifi
   prune: true
   sourceRef:
     kind: GitRepository
