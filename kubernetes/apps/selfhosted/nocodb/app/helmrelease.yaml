@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: docker.io/nocodb/nocodb
-              tag: 0.264.1
+              tag: 0.264.2
             env:
               PORT: &port "8080"
               NC_JWT_EXPIRES_IN: 72h
