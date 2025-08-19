@@ -68,5 +68,9 @@ spec:
 
         # Unifi UCG Fiber
         - module: icmp
-          name: Unifi
+          name: unifi
           url: 192.168.1.1
+
+        - module: icmp
+          name: proxmox
+          url: 192.168.1.100
