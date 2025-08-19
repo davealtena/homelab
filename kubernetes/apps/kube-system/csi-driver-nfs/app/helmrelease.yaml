@@ -34,7 +34,7 @@ spec:
       create: true
       name: nfs-csi-sc
       annotations:
-        storageclass.kubernetes.io/is-default-class: "false"
+        storageclass.kubernetes.io/is-default-class: "true"
       parameters:
         server: 192.168.1.100
         share: /mnt/zfs/pvc
