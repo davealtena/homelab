@@ -69,8 +69,8 @@ spec:
           app:
             nameOverride: qbittorrent
             image:
-              repository: ghcr.io/onedr0p/qbittorrent
-              tag: 5.0.4@sha256:17e3e5f1c7e7fe81434f9d1f5f2e00da9a67f6dbfda1c988c0619932cb856047
+              repository: ghcr.io/home-operations/qbittorrent
+              tag: 5.1.2@sha256:9dd0164cc23e9c937e0af27fd7c3f627d1df30c182cf62ed34d3f129c55dc0e8
             env:
               UMASK: "022"
               QBT_WEBUI_PORT: &port 8080

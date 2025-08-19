@@ -6,6 +6,5 @@ namespace: media
 resources:
   - ./jellyseerr/ks.yaml
   - ./plex/ks.yaml
-  - ./tautulli/ks.yaml
 components:
   - ../../components/common

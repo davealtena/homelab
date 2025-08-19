@@ -6,7 +6,7 @@ metadata:
   name: github
 spec:
   type: github
-  address: https://github.com/onedr0p/home-ops
+  address: https://github.com/davealtena/homelab
   secretRef:
     name: github-token-secret
 ---
