@@ -62,6 +62,7 @@ spec:
         apiVersion: 1
         deleteDatasources:
           - { name: Alertmanager, orgId: 1 }
+          - { name: Loki, orgId: 1 }
           - { name: Prometheus, orgId: 1 }
         datasources:
           - name: Prometheus
@@ -79,6 +80,13 @@ spec:
             url: http://alertmanager-operated.observability.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
+          - name: Loki
+            type: loki
+            uid: loki
+            access: proxy
+            url: http://loki-headless.observability.svc.cluster.local:3100
+            jsonData:
+              maxLines: 250
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -190,13 +198,6 @@ spec:
           revision: 1
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
-        volsync:
-          # renovate: depName="VolSync Dashboard"
-          gnetId: 21356
-          revision: 3
-          datasource:
-            - { name: DS_PROMETHEUS, value: Prometheus }
-            - { name: VAR_REPLICATIONDESTNAME, value: .*-dst }
         zfs:
           # renovate: depName="ZFS"
           gnetId: 7845
