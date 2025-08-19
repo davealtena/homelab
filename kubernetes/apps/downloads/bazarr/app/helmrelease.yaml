@@ -17,9 +17,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: volsync
-      namespace: volsync-system
   values:
     controllers:
       bazarr:
