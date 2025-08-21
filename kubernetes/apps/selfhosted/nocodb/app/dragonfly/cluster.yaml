@@ -5,7 +5,7 @@ kind: Dragonfly
 metadata:
   name: nocodb-dragonfly
 spec:
-  image: ghcr.io/dragonflydb/dragonfly:v1.32.0
+  image: ghcr.io/dragonflydb/dragonfly:v1.33.1
   # renovate: datasource=docker depName=ghcr.io/dragonflydb/dragonfly
   replicas: 1 # set to the number of nodes in the cluster
   env:
