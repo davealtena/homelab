@@ -9,7 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
   interval: 1h
   path: ./kubernetes/apps/selfhosted/nextcloud/app
   postBuild:
