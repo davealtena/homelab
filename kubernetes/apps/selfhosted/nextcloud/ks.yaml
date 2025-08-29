@@ -11,7 +11,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
   interval: 1h
-  path: ./kubernetes/main/apps/selfhosted/nextcloud/app
+  path: ./kubernetes/apps/selfhosted/nextcloud/app
   postBuild:
     substitute:
       APP: *app
