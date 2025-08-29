@@ -1,0 +1,114 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: nextcloud
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 7.0.2
+  url: oci://ghcr.io/nextcloud/helm/nextcloud
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nextcloud
+spec:
+  timeout: 15m
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: nextcloud
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    image:
+      flavor: fpm-alpine
+    nginx:
+      enabled: true
+    nextcloud:
+      extraInitContainers:
+        - name: init-db
+          image: ghcr.io/haraldkoch/postgres-init:17.6@sha256:51a01657a7a562353d0229ff3824e659d4006f7a34f43ab79cfb79de22879a1a
+          envFrom:
+            - secretRef:
+                name: nextcloud-secret
+      datadir: /var/www/data
+      extraEnv:
+        - name: REDIS_HOST
+          value: nextcloud-dragonfly.selfhosted.svc.cluster.local.
+        - name: REDIS_HOST_PORT
+          value: "6379"
+      existingSecret:
+        enabled: true
+        secretName: nextcloud-secret
+      host: &host cloud.altena.io
+      mail:
+        enabled: true
+        fromAddress: admin
+        domain: altena.io
+        smtp:
+          host: smtp.altena.io
+          port: 25
+          authtype: NONE
+          name: ""
+          password: ""
+      securityContext:
+        runAsUser: 1022
+        runAsGroup: 1022
+        runAsNonRoot: true
+      configs:
+        proxy.config.php: |-
+          <?php
+          $CONFIG = array (
+            'trusted_proxies' => array(
+              0 => '127.0.0.1',
+              1 => '${NETWORK_K8S_POD_CIDR}',
+              2 => '${NETWORK_K8S_POD_CIDR_V6}',
+            ),
+            'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
+          ); ?>
+        misc.config.php: |-
+          <?php
+          $CONFIG = array (
+            'default_phone_region' => 'CA',
+            'maintenance_window_start' => 2,
+          ); ?>
+    internalDatabase:
+      enabled: false
+    externalDatabase:
+      enabled: true
+      type: postgresql
+      host: nextcloud-1.selfhosted.svc.cluster.local.
+      database: nextcloud
+      existingSecret:
+        enabled: true
+        secretName: nextcloud-secret
+        usernameKey: INIT_POSTGRES_USER
+        passwordKey: INIT_POSTGRES_PASS
+    ingress:
+      enabled: false
+    persistence:
+      enabled: true
+      nextcloudData:
+        enabled: true
+        existingClaim: nextcloud
+        accessMode: ReadWriteMany
+    # this seems to be required for nextcloud initialization which takes a long time
+    startupProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 30
+      successThreshold: 1

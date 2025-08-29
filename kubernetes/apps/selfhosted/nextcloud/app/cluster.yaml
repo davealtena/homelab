@@ -1,0 +1,21 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+# renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
+metadata:
+  name: nextcloud
+spec:
+  instances: 1
+  primaryUpdateStrategy: unsupervised
+
+  storage:
+    size: 20Gi
+    storageClass: nfs-csi-sc
+
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: 128MB
+
+  bootstrap:
+    initdb:
+      database: nextcloud
