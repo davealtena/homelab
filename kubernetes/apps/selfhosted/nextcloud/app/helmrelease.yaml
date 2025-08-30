@@ -54,6 +54,12 @@ spec:
       flavor: fpm-alpine
     nginx:
       enabled: true
+    # Pod-level security context for volume permissions
+    podSecurityContext:
+      runAsUser: 33
+      runAsGroup: 33
+      fsGroup: 33
+      fsGroupChangePolicy: "OnRootMismatch"
     nextcloud:
       datadir: /var/www/data
       extraEnv:
@@ -76,9 +82,10 @@ spec:
           name: ""
           password: ""
       securityContext:
-        runAsUser: 33
-        runAsGroup: 33
+        runAsUser: 33  # www-data user
+        runAsGroup: 33  # www-data group
         runAsNonRoot: true
+        fsGroup: 33
       configs:
         proxy.config.php: |-
           <?php
@@ -101,9 +108,6 @@ spec:
     externalDatabase:
       enabled: true
       type: postgresql
-      # Remove these hardcoded values since they'll be injected via valuesFrom
-      # host: nextcloud-rw.selfhosted.svc.cluster.local.
-      # database: nextcloud
       existingSecret:
         enabled: true
         secretName: nextcloud-app
@@ -117,7 +121,6 @@ spec:
         enabled: true
         existingClaim: nextcloud
         accessMode: ReadWriteMany
-    # this seems to be required for nextcloud initialization which takes a long time
     startupProbe:
       enabled: true
       initialDelaySeconds: 10
