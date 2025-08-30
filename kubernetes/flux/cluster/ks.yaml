@@ -37,10 +37,10 @@ spec:
             secretRef:
               name: sops-age
           postBuild:
-            substituteFrom:
-              - name: cluster-settings
-                kind: ConfigMap
-                optional: false
+            # substituteFrom:
+            #   - name: cluster-settings
+            #     kind: ConfigMap
+            #     optional: false
               - name: cluster-secrets
                 kind: Secret
                 optional: false
