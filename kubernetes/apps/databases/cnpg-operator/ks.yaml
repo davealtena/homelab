@@ -34,7 +34,7 @@ spec:
       app.kubernetes.io/name: *name
   path: ./kubernetes/apps/databases/cnpg-operator/cluster
   dependsOn:
-    - name: cloudnative-pg
+    - name: cnpg-operator
       namespace: *namespace
   healthCheckExprs:
     - apiVersion: postgresql.cnpg.io/v1
