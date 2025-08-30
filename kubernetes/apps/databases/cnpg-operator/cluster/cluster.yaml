@@ -1,0 +1,89 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/postgresql.cnpg.io/cluster_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: homelab
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.9-22
+  instances: 3
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 10Gi
+    storageClass: openebs-hostpath
+  superuserSecret:
+    name: cloudnative-pg-secret
+  enableSuperuserAccess: true
+  postgresql:
+    synchronous:
+      method: any
+      number: 1
+    parameters:
+      max_connections: "400"
+      shared_buffers: 256MB
+  nodeMaintenanceWindow:
+    inProgress: false
+    reusePVC: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      memory: 640Mi
+  monitoring:
+    enablePodMonitor: true
+    # Ref: https://github.com/cloudnative-pg/cloudnative-pg/issues/2501
+    podMonitorMetricRelabelings:
+      - { sourceLabels: ["cluster"], targetLabel: cnpg_cluster, action: replace }
+      - { regex: cluster, action: labeldrop }
+  # backup:
+  #   retentionPolicy: 30d
+  #   barmanObjectStore: &barmanObjectStore
+  #     data:
+  #       compression: bzip2
+  #     wal:
+  #       compression: bzip2
+  #       maxParallel: 8
+  #     destinationPath: s3://cnpg/postgres-backup
+  #     endpointURL: http://${SECRET_BACKUP_SERVER}:9000
+  #     # Note: serverName version needs to be incremented
+  #     # when recovering from an existing cnpg cluster
+  #     serverName: &currentCluster kochhaus-v2
+  #     s3Credentials:
+  #       accessKeyId:
+  #         name: cloudnative-pg-secret
+  #         key: aws-access-key-id
+  #       secretAccessKey:
+  #         name: cloudnative-pg-secret
+  #         key: aws-secret-access-key
+  # Note: previousCluster needs to be set to the name of the previous
+  # cluster when recovering from an existing cnpg cluster
+  bootstrap:
+    recovery:
+      source: &previousCluster homelab-v1
+    # upgrade or recover from another running instance
+    # initdb:
+    #   import:
+    #     type: monolith
+    #     databases:
+    #       - "*"
+    #     roles:
+    #       - "*"
+    #     source:
+    #       externalCluster: kochhaus-v16
+
+  # Note: externalClusters is needed when recovering from an existing cnpg cluster
+  externalClusters:
+    - name: *previousCluster
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *previousCluster
+    # - name: kochhaus-v16
+    #   connectionParameters:
+    #     host: kochhaus-v16-ro.dbms
+    #     user: postgres
+    #     dbname: postgres
+    #     sslmode: require
+    #   password:
+    #     name: cloudnative-pg-secret
+    #     key: password

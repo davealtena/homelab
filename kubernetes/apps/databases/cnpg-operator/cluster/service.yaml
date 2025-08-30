@@ -1,0 +1,67 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-lb
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: postgres.altena.io
+    # lbipam.cilium.io/ips: "${POSTGRES_IPV4},${POSTGRES_IPV6}" #TODO: need to create a pool for this first
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ipFamilies: [IPv4, IPv6]
+  ipFamilyPolicy: PreferDualStack
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    cnpg.io/cluster: homelab
+    role: primary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-r
+spec:
+  type: ClusterIP
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    cnpg.io/cluster: homelab
+    cnpg.io/podRole: instance
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-ro
+spec:
+  type: ClusterIP
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    cnpg.io/cluster: homelab
+    role: replica
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-rw
+spec:
+  type: ClusterIP
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    cnpg.io/cluster: homelab
+    role: primary
+  sessionAffinity: None

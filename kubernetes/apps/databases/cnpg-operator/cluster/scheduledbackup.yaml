@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/postgresql.cnpg.io/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: daily-backup
+spec:
+  schedule: "@daily"
+  immediate: true
+  backupOwnerReference: self
+  cluster:
+    name: homelab
