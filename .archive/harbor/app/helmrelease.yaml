@@ -24,23 +24,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  valuesFrom:
-    - kind: Secret
-      name: harbor-postgres-app
-      valuesKey: host
-      targetPath: database.external.host
-    - kind: Secret
-      name: harbor-postgres-app
-      valuesKey: username
-      targetPath: database.external.username
-    - kind: Secret
-      name: harbor-postgres-app
-      valuesKey: password
-      targetPath: database.external.password
-    - kind: Secret
-      name: harbor-postgres-app
-      valuesKey: dbname
-      targetPath: database.external.coreDatabase
   values:
     updateStrategy:
       type: Recreate
