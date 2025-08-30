@@ -17,10 +17,10 @@ includes:
 vars:
   BOOTSTRAP_DIR: "{{.ROOT_DIR}}/kubernetes/bootstrap"
   KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
-  TALOSCONFIG: "{{.KUBERNETES_DIR}}/talos/clusterconfig/talosconfig"
-  TALHELPER_CLUSTER_DIR: '{{.KUBERNETES_DIR}}/talos/clusterconfig'
-  TALHELPER_SECRET_FILE: '{{.KUBERNETES_DIR}}/talos/talsecret.sops.yaml'
-  TALHELPER_CONFIG_FILE: '{{.KUBERNETES_DIR}}/talos/talconfig.yaml'
+  TALOSCONFIG: "talos/clusterconfig/talosconfig"
+  TALHELPER_CLUSTER_DIR: 'talos/clusterconfig'
+  TALHELPER_SECRET_FILE: 'talos/talsecret.sops.yaml'
+  TALHELPER_CONFIG_FILE: 'talos/talconfig.yaml'
 
 env:
   KUBECONFIG: "{{.KUBECONFIG}}"

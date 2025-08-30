@@ -1,0 +1,14 @@
+---
+machine:
+  features:
+    hostDNS:
+      enabled: true
+      resolveMemberNames: true
+      forwardKubeDNSToHost: true # Requires Cilium `bpf.masquerade: false`
+    kubernetesTalosAPIAccess:
+      enabled: true
+      allowedRoles:
+        - os:admin
+      allowedKubernetesNamespaces:
+        - actions-runner-system
+        - system-upgrade
