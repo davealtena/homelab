@@ -5,5 +5,5 @@ kind: Kustomization
 resources:
   - ./cluster.yaml
   # - ./scheduledbackup.yaml #TODO: First setup db
-  - ./prometheusrule.yaml
+  # - ./prometheusrule.yaml
   - ./service.yaml
