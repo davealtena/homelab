@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: postgres-lb
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: postgres.altena.io
+    external-dns.alpha.kubernetes.io/hostname: postgres.${CLUSTER_DOMAIN}
     # lbipam.cilium.io/ips: "${POSTGRES_IPV4},${POSTGRES_IPV6}" #TODO: need to create a pool for this first
 spec:
   type: LoadBalancer
