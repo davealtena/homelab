@@ -58,9 +58,9 @@ spec:
   #         key: aws-secret-access-key
   # Note: previousCluster needs to be set to the name of the previous
   # cluster when recovering from an existing cnpg cluster
-  bootstrap:
-    recovery:
-      source: &previousCluster homelab-v1
+  # bootstrap:
+  #   recovery:
+  #     source: &previousCluster homelab-v1
     # upgrade or recover from another running instance
     # initdb:
     #   import:
