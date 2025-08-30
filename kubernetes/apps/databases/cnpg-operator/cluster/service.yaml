@@ -9,8 +9,8 @@ metadata:
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Local
-  ipFamilies: [IPv4, IPv6]
-  ipFamilyPolicy: PreferDualStack
+  # ipFamilies: [IPv4, IPv6]
+  # ipFamilyPolicy: PreferDualStack
   ports:
     - name: postgres
       port: 5432
