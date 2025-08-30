@@ -31,6 +31,24 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
+  # Add the valuesFrom section to inject CNPG database credentials
+  valuesFrom:
+    - kind: Secret
+      name: nextcloud-app
+      valuesKey: host
+      targetPath: externalDatabase.host
+    - kind: Secret
+      name: nextcloud-app
+      valuesKey: username
+      targetPath: externalDatabase.user
+    - kind: Secret
+      name: nextcloud-app
+      valuesKey: password
+      targetPath: externalDatabase.password
+    - kind: Secret
+      name: nextcloud-app
+      valuesKey: dbname
+      targetPath: externalDatabase.database
   values:
     image:
       flavor: fpm-alpine
@@ -42,7 +60,7 @@ spec:
           image: ghcr.io/haraldkoch/postgres-init:17.6@sha256:51a01657a7a562353d0229ff3824e659d4006f7a34f43ab79cfb79de22879a1a
           envFrom:
             - secretRef:
-                name: nextcloud-secret
+                name: nextcloud-app  # Changed from nextcloud-secret to nextcloud-app
       datadir: /var/www/data
       extraEnv:
         - name: REDIS_HOST
@@ -89,13 +107,14 @@ spec:
     externalDatabase:
       enabled: true
       type: postgresql
-      host: nextcloud-rw.selfhosted.svc.cluster.local.
-      database: nextcloud
+      # Remove these hardcoded values since they'll be injected via valuesFrom
+      # host: nextcloud-rw.selfhosted.svc.cluster.local.
+      # database: nextcloud
       existingSecret:
         enabled: true
-        secretName: nextcloud-secret
-        usernameKey: INIT_POSTGRES_USER
-        passwordKey: INIT_POSTGRES_PASS
+        secretName: nextcloud-app
+        usernameKey: username
+        passwordKey: password
     ingress:
       enabled: false
     persistence:
