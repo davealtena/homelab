@@ -48,7 +48,7 @@ spec:
   #     endpointURL: http://${SECRET_BACKUP_SERVER}:9000
   #     # Note: serverName version needs to be incremented
   #     # when recovering from an existing cnpg cluster
-  #     serverName: &currentCluster kochhaus-v2
+  #     serverName: &currentCluster homelab-v2
   #     s3Credentials:
   #       accessKeyId:
   #         name: cloudnative-pg-secret
@@ -70,20 +70,20 @@ spec:
     #     roles:
     #       - "*"
     #     source:
-    #       externalCluster: kochhaus-v16
+    #       externalCluster: homelab-v16
 
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
-    # - name: kochhaus-v16
-    #   connectionParameters:
-    #     host: kochhaus-v16-ro.dbms
-    #     user: postgres
-    #     dbname: postgres
-    #     sslmode: require
-    #   password:
-    #     name: cloudnative-pg-secret
-    #     key: password
+  # externalClusters:
+  #   - name: *previousCluster
+  #     barmanObjectStore:
+  #       <<: *barmanObjectStore
+  #       serverName: *previousCluster
+  #   # - name: kochhaus-v16
+  #   #   connectionParameters:
+  #   #     host: kochhaus-v16-ro.dbms
+  #   #     user: postgres
+  #   #     dbname: postgres
+  #   #     sslmode: require
+  #   #   password:
+  #   #     name: cloudnative-pg-secret
+  #   #     key: password
