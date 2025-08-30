@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./pvc.yaml
   - ./dragonfly/
-  - ./cluster.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./route.yaml

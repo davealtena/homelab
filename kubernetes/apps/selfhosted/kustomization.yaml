@@ -6,7 +6,7 @@ namespace: selfhosted
 resources:
   - ./harbor/ks.yaml
   - ./n8n/ks.yaml
-  - ./nextcloud/ks.yaml
+  # - ./nextcloud/ks.yaml
   - ./nocodb/ks.yaml
 components:
   - ../../components/common
