@@ -7,8 +7,3 @@ components:
   - ../../components/common
 resources:
   - ./system-upgrade-controller/ks.yaml
-configMapGenerator:
-  - name: system-upgrade-plan-versions
-    env: ./.env
-generatorOptions:
-  disableNameSuffixHash: true
