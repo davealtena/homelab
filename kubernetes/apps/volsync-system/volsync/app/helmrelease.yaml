@@ -22,11 +22,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: minio
-      namespace: storage
-    - name: snapshot-controller
-      namespace: volsync-system
   values:
     manageCRDs: true
     metrics:
