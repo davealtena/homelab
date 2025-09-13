@@ -43,15 +43,18 @@ spec:
                     name: radarr-secret
                     key: api_key
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
+                custom: true
                 spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
             resources:
               requests:
                 cpu: 20m
@@ -67,7 +70,6 @@ spec:
 
     service:
       app:
-        controller: radarr
         ports:
           http:
             port: *port

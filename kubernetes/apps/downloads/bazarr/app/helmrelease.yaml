@@ -77,7 +77,6 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: bazarr
         ports:
           http:
             port: *port

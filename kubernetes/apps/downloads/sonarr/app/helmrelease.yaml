@@ -31,7 +31,6 @@ spec:
               repository: ghcr.io/home-operations/sonarr
               tag: 4.0.15.2940@sha256:ca6c735014bdfb04ce043bf1323a068ab1d1228eea5bab8305ca0722df7baf78
             env:
-              COMPlus_EnableDiagnostics: "0"
               SONARR__APP__INSTANCENAME: Sonarr
               SONARR__AUTH__APIKEY:
                 valueFrom:
@@ -45,15 +44,18 @@ spec:
               SONARR__UPDATE__BRANCH: develop
               TZ: Europe/Amsterdam
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
+                custom: true
                 spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
             resources:
               requests:
                 cpu: 20m
@@ -69,7 +71,6 @@ spec:
 
     service:
       app:
-        controller: sonarr
         ports:
           http:
             port: *port

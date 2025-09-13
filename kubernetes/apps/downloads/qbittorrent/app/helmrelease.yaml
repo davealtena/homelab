@@ -124,7 +124,8 @@ spec:
                   - ALL
     service:
       app:
-        controller: qbittorrent
+        forceRename: qbittorrent
+        primary: true
         ports:
           http:
             port: *port
