@@ -38,6 +38,7 @@ spec:
       parameters:
         server: ${NFS_SERVER_ADDRESS}
         share: ${NFS_SERVER_PATH}
+        subDir: "$${pvc.metadata.namespace}/$${pvc.metadata.name}"
       reclaimPolicy: Retain
       volumeBindingMode: Immediate
       mountOptions:
