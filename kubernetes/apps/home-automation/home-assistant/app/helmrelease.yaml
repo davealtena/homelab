@@ -28,7 +28,7 @@ spec:
               [{
                 "name": "multus-iot",
                 "namespace": "network",
-                "ips": ["192.168.1.140/24"],
+                "ips": ["192.168.20.140/24"],
                 "mac": "3e:59:e4:f7:43:08"
               }]
         containers:
@@ -38,7 +38,7 @@ spec:
               tag: 2025.9.1@sha256:fe188478864988a04274743529685ad2f15dd3bb0041096a79dbe5a7b5ebc770
             env:
               TZ: Europe/Amsterdam
-              HASS_HTTP_TRUSTED_PROXY_1: 192.168.1.0/24
+              HASS_HTTP_TRUSTED_PROXY_1: 192.168.20.0/24
               HASS_HTTP_TRUSTED_PROXY_2: 10.69.0.0/16
             # envFrom:
             #   - secretRef:
