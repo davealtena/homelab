@@ -69,7 +69,6 @@ spec:
                 memory: 8Gi
     service:
       app:
-        controller: plex
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 192.168.1.132

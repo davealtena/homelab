@@ -61,10 +61,8 @@ spec:
               limits:
                 memory: 2Gi
 
-    # Rest of your configuration remains the same
     service:
       app:
-        controller: n8n
         ports:
           http:
             port: *port
