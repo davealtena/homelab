@@ -41,17 +41,15 @@ spec:
                     name: prowlarr-secret
                     key: api_key
             probes:
-              liveness: &probes
+              liveness:
                 enabled: true
-                custom: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
                 spec:
-                  httpGet:
-                    path: /ping
-                    port: *port
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
+                  failureThreshold: 30
+                  periodSeconds: 5
             resources:
               requests:
                 cpu: 18m
