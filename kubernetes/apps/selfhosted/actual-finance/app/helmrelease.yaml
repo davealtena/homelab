@@ -1,21 +1,15 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: actual
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-
+  timeout: 15m
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: actual
   values:
     controllers:
       actual:
@@ -67,7 +61,7 @@ spec:
     route:
       app:
         hostnames:
-          - actual.altena.io
+          - finance.altena.io
         parentRefs:
           - name: internal
             namespace: kube-system

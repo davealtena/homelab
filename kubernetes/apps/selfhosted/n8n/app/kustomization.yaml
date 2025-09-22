@@ -5,4 +5,5 @@ bases:
   - ./cluster.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ./ocirepository.yaml
   - ./pvc.yaml
