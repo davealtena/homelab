@@ -11,7 +11,7 @@ spec:
     name: sabnzbd
   dependsOn:
     - name: openebs
-      namespace: openebs
+      namespace: openebs-system
   values:
     controllers:
       sabnzbd:
