@@ -1,24 +1,23 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: cnpg
 spec:
   interval: 1h
-  driftDetection:
-    mode: enabled
-  chart:
-    # No OCI repo available, yet.
-    spec:
-      chart: cloudnative-pg
-      version: 0.23.0
-      sourceRef:
-        kind: HelmRepository
-        namespace: flux-system
-        name: cnpg
-      interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: cnpg
   install:
-    crds: Create
+    remediation:
+      retries: -1
   upgrade:
-    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      retries: 3
   values:
+    monitoring:
+      podMonitorEnabled: true
+      grafanaDashboard:
+        create: true
