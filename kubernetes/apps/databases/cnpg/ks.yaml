@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
-  path: ./kubernetes/apps/databases/cnpg-operator/app
+  path: ./kubernetes/apps/databases/cnpg/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -32,7 +32,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
-  path: ./kubernetes/apps/databases/cnpg-operator/cluster
+  path: ./kubernetes/apps/databases/cnpg/cluster
   dependsOn:
     - name: cnpg-operator
       namespace: *namespace
