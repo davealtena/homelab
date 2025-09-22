@@ -42,7 +42,7 @@ spec:
                 sabnzbd.downloads.svc,
                 sabnzbd.downloads.svc.cluster,
                 sabnzbd.downloads.svc.cluster.local,
-                sabnzbd.bjw-s.dev
+                sab.${CLUSTER_DOMAIN}
             envFrom:
               - secretRef:
                   name: sabnzbd-secret
