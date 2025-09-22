@@ -43,5 +43,5 @@ spec:
 
     ingress:
       enabled: true
-      hostname: depcheck.altena.io
+      hostname: depcheck.${CLUSTER_DOMAIN}
       ingressClassName: internal

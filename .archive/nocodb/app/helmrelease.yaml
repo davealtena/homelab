@@ -27,7 +27,7 @@ spec:
                   secretKeyRef:
                     name: nocodb-app
                     key: uri
-              NC_PUBLIC_URL: "https://nocodb.altena.io"
+              NC_PUBLIC_URL: "https://nocodb.${CLUSTER_DOMAIN}"
               NC_REDIS_URL: redis://nocodb-dragonfly.selfhosted.svc.cluster.local:6379/9
               NC_DISABLE_TELE: "true"
             envFrom:
@@ -72,7 +72,7 @@ spec:
             namespace: kube-system
             sectionName: https
         hostnames:
-          - nocodb.altena.io
+          - nocodb.${CLUSTER_DOMAIN}
         rules:
           - backendRefs:
               - name: nocodb

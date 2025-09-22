@@ -84,7 +84,7 @@ spec:
     route:
       app:
         hostnames:
-          - bazarr.altena.io
+          - bazarr.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network

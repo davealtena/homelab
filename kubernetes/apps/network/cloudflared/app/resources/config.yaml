@@ -1,10 +1,10 @@
 ---
 originRequest:
-  originServerName: external.altena.io
+  originServerName: external.
 
 ingress:
-  - hostname: altena.io
+  - hostname: ${CLUSTER_DOMAIN}
     service: &svc https://envoy-external.network.svc.cluster.local
-  - hostname: "*.altena.io"
+  - hostname: "*.${CLUSTER_DOMAIN}"
     service: *svc
   - service: http_status:404

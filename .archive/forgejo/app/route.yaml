@@ -6,7 +6,7 @@ metadata:
   namespace: selfhosted
 spec:
   hostnames:
-    - git.altena.io
+    - git.${CLUSTER_DOMAIN}
   parentRefs:
     - name: internal
       namespace: kube-system

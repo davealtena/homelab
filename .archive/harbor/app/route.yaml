@@ -10,7 +10,7 @@ spec:
       namespace: kube-system
       sectionName: https
   hostnames:
-    - harbor.altena.io
+    - harbor.${CLUSTER_DOMAIN}
   rules:
     - matches:
         - path:

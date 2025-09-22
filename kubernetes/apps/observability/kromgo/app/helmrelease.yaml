@@ -79,7 +79,7 @@ spec:
     route:
       app:
         hostnames:
-          - kromgo.altena.io
+          - kromgo.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-external
             namespace: network

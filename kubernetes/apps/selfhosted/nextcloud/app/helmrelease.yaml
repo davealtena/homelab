@@ -70,13 +70,13 @@ spec:
       existingSecret:
         enabled: true
         secretName: nextcloud-secret
-      host: &host cloud.altena.io
+      host: &host cloud.${CLUSTER_DOMAIN}
       mail:
         enabled: true
         fromAddress: admin
-        domain: altena.io
+        domain: ${CLUSTER_DOMAIN}
         smtp:
-          host: smtp.altena.io
+          host: smtp.${CLUSTER_DOMAIN}
           port: 25
           authtype: NONE
           name: ""

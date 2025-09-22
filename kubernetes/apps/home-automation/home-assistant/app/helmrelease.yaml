@@ -89,7 +89,7 @@ spec:
     route:
       app:
         hostnames:
-          - hass.altena.io
+          - hass.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network

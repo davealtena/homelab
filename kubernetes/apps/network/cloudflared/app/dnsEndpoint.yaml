@@ -5,6 +5,6 @@ metadata:
   name: cloudflared-tunnel
 spec:
   endpoints:
-    - dnsName: ingress-ext.altena.io
+    - dnsName: ingress-ext.${CLUSTER_DOMAIN}
       recordType: CNAME
       targets: ["eba50d97-d1c7-4981-87ef-93c4fe1d49f4.cfargotunnel.com"]

@@ -133,7 +133,7 @@ spec:
     route:
       app:
         hostnames:
-          - qb.altena.io
+          - qb.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network

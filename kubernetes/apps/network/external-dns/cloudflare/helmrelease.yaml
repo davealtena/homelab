@@ -46,7 +46,7 @@ spec:
       - gateway-httproute
     txtOwnerId: main
     txtPrefix: k8s.
-    domainFilters: ["altena.io"]
+    domainFilters: ["${CLUSTER_DOMAIN}"]
     serviceMonitor:
       enabled: true
 

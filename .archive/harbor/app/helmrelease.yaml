@@ -31,7 +31,7 @@ spec:
       type: clusterIP
       tls:
         enabled: false
-    externalURL: https://harbor.altena.io
+    externalURL: https://harbor.${CLUSTER_DOMAIN}
     database:
       type: external
     trivy:

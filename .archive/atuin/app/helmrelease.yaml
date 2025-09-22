@@ -77,7 +77,7 @@ spec:
     route:
       app:
         hostnames:
-          - atuin.altena.io
+          - atuin.${CLUSTER_DOMAIN}
         parentRefs:
           - name: internal
             namespace: kube-system

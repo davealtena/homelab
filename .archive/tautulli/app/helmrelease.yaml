@@ -57,7 +57,7 @@ spec:
     route:
       app:
         hostnames:
-          - tautulli.altena.io
+          - tautulli.${CLUSTER_DOMAIN}
         parentRefs:
           - name: internal
             namespace: kube-system

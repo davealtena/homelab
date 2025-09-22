@@ -11,7 +11,7 @@ spec:
       kind: Gateway
       group: gateway.networking.k8s.io
   hostnames:
-    - "hubble.altena.io"
+    - "hubble.${CLUSTER_DOMAIN}"
   rules:
     - matches:
         - path:

@@ -87,7 +87,7 @@ spec:
     route:
       app:
         hostnames:
-          - esphome.altena.io
+          - esphome.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network

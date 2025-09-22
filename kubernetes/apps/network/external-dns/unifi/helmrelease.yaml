@@ -16,7 +16,7 @@ spec:
     fullnameOverride: &name external-dns-unifi
     logLevel: &logLevel info
     domainFilters:
-      - altena.io
+      - ${CLUSTER_DOMAIN}
     podAnnotations:
       secret.reloader.stakater.com/reload: externaldns-unifi-secret
     policy: sync

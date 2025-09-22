@@ -61,7 +61,7 @@ spec:
     route:
       app:
         hostnames:
-          - finance.altena.io
+          - finance.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network

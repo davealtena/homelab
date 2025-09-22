@@ -10,7 +10,7 @@ spec:
       namespace: network
       sectionName: https
   hostnames:
-    - cloud.altena.io
+    - cloud.${CLUSTER_DOMAIN}
   rules:
     - backendRefs: &backendRef
         - name: nextcloud

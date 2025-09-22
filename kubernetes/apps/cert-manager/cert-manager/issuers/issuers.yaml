@@ -7,18 +7,18 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: dave@altena.io
+    email: dave@${CLUSTER_DOMAIN}
     privateKeySecretRef:
       name: letsencrypt-production
     solvers:
       - dns01:
           cloudflare:
-            email: dave@altena.io
+            email: dave@${CLUSTER_DOMAIN}
             apiTokenSecretRef:
               name: cloudflare-secret
               key: CLOUDFLARE_API_TOKEN
         selector:
-          dnsZones: ["altena.io"]
+          dnsZones: ["${CLUSTER_DOMAIN}"]
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/clusterissuer_v1.json
 apiVersion: cert-manager.io/v1
@@ -28,15 +28,15 @@ metadata:
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: dave@altena.io
+    email: dave@${CLUSTER_DOMAIN}
     privateKeySecretRef:
       name: letsencrypt-staging
     solvers:
       - dns01:
           cloudflare:
-            email: dave@altena.io
+            email: dave@a${CLUSTER_DOMAIN}
             apiTokenSecretRef:
               name: cloudflare-secret
               key: CLOUDFLARE_API_TOKEN
         selector:
-          dnsZones: ["altena.io"]
+          dnsZones: ["${CLUSTER_DOMAIN}"]

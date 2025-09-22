@@ -9,7 +9,7 @@ spec:
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: altena.io
+  commonName: ${CLUSTER_DOMAIN}
   dnsNames:
-    - altena.io
-    - "*.altena.io"
+    - ${CLUSTER_DOMAIN}
+    - "*.${CLUSTER_DOMAIN}"

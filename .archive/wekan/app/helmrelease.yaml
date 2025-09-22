@@ -24,7 +24,7 @@ spec:
               tag: v7.91
             env:
               - name: ROOT_URL
-                value: https://kanban.altena.io
+                value: https://kanban.${CLUSTER_DOMAIN}
               - name: PORT
                 value: "3001"
               - name: MONGO_URL
@@ -87,7 +87,7 @@ spec:
     route:
       app:
         hostnames:
-          - kanban.altena.io
+          - kanban.${CLUSTER_DOMAIN}
         parentRefs:
           - name: internal
             namespace: kube-system

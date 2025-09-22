@@ -31,7 +31,7 @@ spec:
               tag: 1.42.1.10060@sha256:04563be281364ba2462285aacb2ca13d7ef7e1d0b19e1203f4c19b4a56840c5c
             env:
               PLEX_PREFER_APP_HTTPS: "0"
-              PLEX_ADVERTISE_URL: http://192.168.1.132:32400,https://plex.altena.io:443
+              PLEX_ADVERTISE_URL: http://192.168.1.132:32400,https://plex.${CLUSTER_DOMAIN}:443
               PLEX_NO_AUTH_NETWORKS: 10.69.0.0/16,192.168.1.0/24
               PLEX_MEDIA_SERVER_USE_SHMEM_FOR_TRANSCODE: "1"
               PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS: "4"
@@ -78,7 +78,7 @@ spec:
     route:
       app:
         hostnames:
-          - plex.altena.io
+          - plex.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network

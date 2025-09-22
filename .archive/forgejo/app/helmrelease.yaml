@@ -40,7 +40,7 @@ spec:
     gitea:
       admin:
         username: forgejo-admin
-        email: forgejo@altena.io
+        email: forgejo@${CLUSTER_DOMAIN}
       config:
         APP_NAME: "forgejo"
         security:
@@ -62,7 +62,7 @@ spec:
         mailer:
           ENABLED: false
         server:
-          ROOT_URL: "https://git.altena.io/"
+          ROOT_URL: "https://git.${CLUSTER_DOMAIN}/"
   valuesFrom:
     - kind: Secret
       name: forgejo-postgres-app

@@ -80,7 +80,7 @@ spec:
     route:
       app:
         hostnames:
-          - echo-server.altena.io
+          - echo-server.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-external
             namespace: network

@@ -35,7 +35,7 @@ spec:
               RADARR__PORT: &port 7878
               RADARR__AUTHENTICATION_METHOD: External
               RADARR__AUTHENTICATION_REQUIRED: DisabledForLocalAddresses
-              RADARR__APPLICATION_URL: "https://radarr.altena.io"
+              RADARR__APPLICATION_URL: "https://radarr.${CLUSTER_DOMAIN}"
               RADARR__LOG_LEVEL: info
               RADARR__API_KEY:
                 valueFrom:
@@ -74,7 +74,7 @@ spec:
     route:
       app:
         hostnames:
-          - radarr.altena.io
+          - radarr.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network

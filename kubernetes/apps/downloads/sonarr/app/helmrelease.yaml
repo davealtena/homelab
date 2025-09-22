@@ -75,7 +75,7 @@ spec:
     route:
       app:
         hostnames:
-          - sonarr.altena.io
+          - sonarr.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network
