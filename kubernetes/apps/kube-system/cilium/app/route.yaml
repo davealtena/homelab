@@ -6,7 +6,8 @@ metadata:
   namespace: kube-system
 spec:
   parentRefs:
-    - name: internal
+    - name: envoy-internal
+      namespace: network
       kind: Gateway
       group: gateway.networking.k8s.io
   hostnames:

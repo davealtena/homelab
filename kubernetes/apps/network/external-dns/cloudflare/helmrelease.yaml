@@ -64,7 +64,7 @@ spec:
     sources:
       - crd
       - gateway-httproute
-    txtOwnerId: default
+    txtOwnerId: main
     txtPrefix: k8s.
     domainFilters: ["altena.io"]
     serviceMonitor:
