@@ -77,8 +77,8 @@ spec:
           - "{{ .Release.Name }}.altena.io"
           - requests.altena.io
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-internal
+            namespace: network
             sectionName: https
         rules:
           - backendRefs:

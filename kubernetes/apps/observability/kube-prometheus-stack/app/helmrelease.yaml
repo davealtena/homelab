@@ -46,8 +46,8 @@ spec:
           enabled: true
           hostnames: ["alertmanager.altena.io"]
           parentRefs:
-            - name: internal
-              namespace: kube-system
+            - name: envoy-internal
+              namespace: network
               sectionName: https
       alertmanagerSpec:
         alertmanagerConfiguration:
@@ -86,8 +86,8 @@ spec:
           hostnames:
             - prometheus.altena.io
           parentRefs:
-            - name: internal
-              namespace: kube-system
+            - name: envoy-internal
+              namespace: network
               sectionName: https
 
       prometheusSpec:

@@ -96,8 +96,8 @@ spec:
           - minio.altena.io
           - s3.altena.io
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-internal
+            namespace: network
             sectionName: https
         rules:
           - matches:
