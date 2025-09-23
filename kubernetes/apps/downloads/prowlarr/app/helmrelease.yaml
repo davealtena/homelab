@@ -30,11 +30,11 @@ spec:
               tag: 2.1.0.5180@sha256:5915438f7226ab8390503cc9f7288412b4584fc80e444faa224ccf2055d5f812
             env:
               COMPlus_EnableDiagnostics: "0"
-              PROWLARR__INSTANCE_NAME: Prowlarr
-              PROWLARR__PORT: &port 9696
-              PROWLARR__LOG_LEVEL: info
-              PROWLARR__ANALYTICS_ENABLED: "False"
-              PROWLARR__AUTHENTICATION_METHOD: External
+              PROWLARR__APP__INSTANCENAME: Prowlarr
+              PROWLARR__AUTH__METHOD: External
+              PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              PROWLARR__LOG__LEVEL: info
+              PROWLARR__SERVER__PORT: &port 80
               PROWLARR__API_KEY:
                 valueFrom:
                   secretKeyRef:
@@ -85,3 +85,5 @@ spec:
     persistence:
       config:
         existingClaim: prowlarr
+      tmp:
+        type: emptyDir
