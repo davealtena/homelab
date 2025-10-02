@@ -34,10 +34,6 @@ _... powered by Talos Linux and Kubernetes_
 ### Hardware
 My entire Kubernetes cluster runs as VMs on a single beefy Proxmox machine. Yeah, not the most HA setup, but it gets the job done! The cluster consists of three control plane nodes that handle both the control plane and worker duties.
 
-**Cluster Nodes:**
-- **Odin** (192.168.1.102) - Control Plane + Worker
-- **Thor** (192.168.1.103) - Control Plane + Worker  
-- **Frigg** (192.168.1.104) - Control Plane + Worker
 
 All nodes use a Virtual IP (VIP) at `192.168.1.101` for high availability access to the Kubernetes API.
 
