@@ -3,7 +3,7 @@
   <img src="./docs/assets/kubernetes.png" alt="Kubernetes logo" width="150" height="150">
 </div>
 
-<div align=center>
+<div align="center">
 
 ### My Home-ops Repository <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4a5/512.gif" alt="⚡" width="16" height="16">
 
@@ -13,38 +13,37 @@ _... powered by Talos Linux and Kubernetes_
 
 <div align="center">
 
-[![Talos](https://kromgo.altena.io/talos_version?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
-[![Kubernetes](https://kromgo.altena.io/kubernetes_version?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
-[![Flux](https://kromgo.altena.io/flux_version?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
-![GitHub Pull Requests](https://img.shields.io/github/issues-pr/davealtena/homelab?logo=github&color=f2cdcd&logoColor=fff&style=for-the-badge&labelColor=302d41)
+<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/talos_version?format=badge" alt="Talos"></a>&nbsp;
+<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/kubernetes_version?format=badge" alt="Kubernetes"></a>&nbsp;
+<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/flux_version?format=badge" alt="Flux"></a>&nbsp;
+<img src="https://img.shields.io/github/issues-pr/davealtena/homelab?logo=github&color=f2cdcd&logoColor=fff&style=for-the-badge&labelColor=302d41" alt="Open Pull Requests">
+
 </div>
 
 <div align="center">
 
-[![Age](https://kromgo.altena.io/cluster_age_days?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
-[![Uptime](https://kromgo.altena.io/cluster_uptime_days?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
-[![Node-Count](https://kromgo.altena.io/cluster_node_count?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
-[![Pod-Count](https://kromgo.altena.io/cluster_pod_count?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
-[![CPU-Usage](https://kromgo.altena.io/cluster_cpu_usage?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
-[![Memory-Usage](https://kromgo.altena.io/cluster_memory_usage?format=badge)](https://github.com/kashalls/kromgo/)
+<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_age_days?format=badge" alt="Age"></a>&nbsp;
+<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_uptime_days?format=badge" alt="Uptime"></a>&nbsp;
+<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_node_count?format=badge" alt="Node-Count"></a>&nbsp;
+<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_pod_count?format=badge" alt="Pod-Count"></a>&nbsp;
+<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_cpu_usage?format=badge" alt="CPU-Usage"></a>&nbsp;
+<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_memory_usage?format=badge" alt="Memory-Usage"></a>
 
+</div>
 
 ---
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f3d7_fe0f/512.gif" alt="🏗️" width="20" height="20"> Infrastructure
 
 ### Hardware
-My entire Kubernetes cluster runs as VMs on a single beefy Proxmox machine. Yeah, not the most HA setup, but it gets the job done! The cluster consists of three control plane nodes that handle both the control plane and worker duties.
+My entire Kubernetes cluster runs as VMs on a single beefy Proxmox machine. Yeah, not the most HA setup, but it gets the job done! The cluster consists of three control plane nodes (Odin, Thor, and Frigg) that handle both control plane and worker duties.
+
+All nodes use a Virtual IP at `192.168.1.101` for high availability access to the Kubernetes API.
 
 ### Storage
 Currently running everything on NFS until I can afford to buy some proper NUCs (like the cool kids do!). Once I get those NUCs, the plan is to implement rook-ceph for distributed storage.
 
-For now, I maintain a dedicated 24 TB ZFS server that handles:
-- NFS/SMB file sharing
-- Large-scale media storage
-- Backup operations
-
-The cluster uses OpenEBS for local storage provisioning on the nodes.
+For now, I maintain a dedicated 24 TB ZFS server that handles NFS/SMB file sharing, large-scale media storage, and backup operations.
 
 ---
 
@@ -54,73 +53,25 @@ This is a [Talos Linux](https://www.talos.dev)-powered Kubernetes cluster manage
 
 ### Core Components
 
-#### Networking & Ingress
-- [cilium](https://github.com/cilium/cilium): eBPF-based Container Network Interface providing networking, load balancing, and security
-- [ingress-nginx](https://github.com/kubernetes/ingress-nginx): Kubernetes ingress controller using NGINX as a reverse proxy and load balancer
-- [external-dns](https://github.com/kubernetes-sigs/external-dns): Automatically syncs ingress DNS records to Cloudflare
-- [cloudflared](https://github.com/cloudflare/cloudflared): Enables Cloudflare Tunnel for secure access to select services
+**Networking**: Cilium provides eBPF-based networking and security, with ingress handled by NGINX. External DNS automatically manages Cloudflare records, and Cloudflare Tunnel enables secure external access.
 
-#### Security & Secrets
-- [cert-manager](https://github.com/cert-manager/cert-manager): Automatic SSL/TLS certificate provisioning via Let's Encrypt
-- [external-secrets](https://github.com/external-secrets/external-secrets): Syncs secrets from 1Password Connect to Kubernetes
-- [sops](https://github.com/getsops/sops): Encrypts secrets for safe storage in Git (both Kubernetes and Terraform)
+**Security**: Certificates are automatically provisioned via cert-manager and Let's Encrypt. Secrets are managed through 1Password Connect (via external-secrets) and SOPS for Git-stored secrets.
 
-#### Storage & Backup
-- [openebs](https://openebs.io/): Provides local persistent volumes for stateful applications
-- [volsync](https://github.com/backube/volsync): Installed and ready for configuration - next step is setting up backups once I finalize block storage strategy
+**Storage**: OpenEBS provides local persistent volumes. Volsync is installed for backups (configuration in progress).
 
-#### Observability
-- [kube-prometheus-stack](https://github.com/prometheus-operator/kube-prometheus-stack): Complete monitoring stack with Prometheus, Alertmanager, and Grafana
-- [grafana](https://grafana.com/): Dashboards and visualization for all metrics
-- [loki](https://grafana.com/oss/loki/): Log aggregation system
-- [kromgo](https://github.com/kashalls/kromgo): Powers those nice status badges you see at the top of this README
-- [node-exporter](https://github.com/prometheus/node_exporter): Hardware and OS metrics
-- [blackbox-exporter](https://github.com/prometheus/blackbox_exporter): Endpoint monitoring and alerting
+**Observability**: Complete monitoring stack with Prometheus, Grafana, and Loki. Kromgo powers the cluster metrics badges at the top of this README.
 
 ---
 
-## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4fa/512.gif" alt="📺" width="20" height="20"> Applications
+## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4fa/512.gif" alt="📺" width="20" height="20"> What's Running
 
-### Media Stack
-The full *arr stack for automated media management:
-- [plex](https://www.plex.tv/): Media server for streaming movies and TV shows
-- [jellyseerr](https://github.com/Fallenbagel/jellyseerr): Request management for Plex media
-- [sonarr](https://sonarr.tv/): TV show management and automation
-- [radarr](https://radarr.video/): Movie management and automation
-- [prowlarr](https://prowlarr.com/): Indexer manager for Sonarr and Radarr
-- [bazarr](https://www.bazarr.media/): Subtitle management for movies and TV shows
-- [recyclarr](https://recyclarr.dev/): Automatically syncs TRaSH guides to Sonarr/Radarr for optimal quality profiles
-- [qbittorrent](https://www.qbittorrent.org/): BitTorrent client with VPN integration
-- [sabnzbd](https://sabnzbd.org/): Usenet download client
-- [cross-seed](https://github.com/cross-seed/cross-seed): Automatically finds and adds cross-seeds for existing torrents
+**Media Automation**: Complete media management setup with Plex as the streaming platform, automated downloads via the *arr stack (Sonarr, Radarr, Prowlarr, Bazarr), and both torrent and usenet support.
 
-### Home Automation
-- [home-assistant](https://www.home-assistant.io/): Central hub for all smart home devices and automations
-- [zigbee2mqtt](https://www.zigbee2mqtt.io/): Zigbee to MQTT bridge for Zigbee devices
-- [emqx](https://www.emqx.io/): MQTT broker for IoT device communication
+**Home Automation**: Home Assistant handles all smart home devices and automations, with Zigbee devices connected via Zigbee2MQTT and EMQX as the MQTT broker.
 
-### Self-Hosted Services
-- [nextcloud](https://nextcloud.com/): Self-hosted file sync and share platform with office suite
-- [actual-finance](https://actualbudget.org/): Privacy-focused budgeting and personal finance management
-- [n8n](https://n8n.io/): Workflow automation platform (self-hosted alternative to Zapier)
+**Productivity**: Nextcloud for file sync and collaboration, Actual Budget for personal finance tracking, and n8n for workflow automation.
 
-### Databases
-- [cloudnative-pg](https://cloudnative-pg.io/): PostgreSQL operator for Kubernetes, providing HA PostgreSQL clusters
-
----
-
-## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6e0_fe0f/512.gif" alt="🛠️" width="20" height="20"> Tools & Automation
-
-### GitOps
-Everything is managed through Git using FluxCD. When I push changes to this repository, Flux automatically applies them to the cluster. Configuration is organized by namespace and application.
-
-### Secret Management
-Secrets are handled in two ways:
-- Sensitive configuration files are encrypted with SOPS and can be safely committed to Git
-- Application secrets are stored in 1Password and synced to the cluster via External Secrets Operator
-
-### Task Automation
-Using [Taskfile](https://taskfile.dev/) for common cluster operations. Check out the `Taskfile.yaml` and `.taskfiles/` directory for available commands.
+**Infrastructure**: PostgreSQL clusters managed by CloudNative-PG for application databases.
 
 ---
 
