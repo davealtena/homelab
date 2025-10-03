@@ -12,20 +12,22 @@ _... powered by Talos Linux and Kubernetes_
 </div>
 
 <div align="center">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Ftalos_version&style=for-the-badge&logo=talos&logoColor=fff&label=Talos&labelColor=302d41&color=cba6f7" alt="Talos version">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fkubernetes_version&style=for-the-badge&logo=kubernetes&logoColor=fff&label=Kubernetes&labelColor=302d41&color=cba6f7" alt="Kubernetes version">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fflux_version&style=for-the-badge&logo=flux&logoColor=fff&label=Fluxcd&labelColor=302d41&color=cba6f7" alt="Fluxcd version">
-  <img src="https://img.shields.io/github/issues-pr/davealtena/homelab?logo=github&color=f2cdcd&logoColor=fff&style=for-the-badge&labelColor=302d41" alt="Open Pull Requests">
+
+[![Talos](https://kromgo.altena.io/talos_version?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
+[![Kubernetes](https://kromgo.altena.io/kubernetes_version?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
+[![Flux](https://kromgo.altena.io/flux_version?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/davealtena/homelab?logo=github&color=f2cdcd&logoColor=fff&style=for-the-badge&labelColor=302d41)
 </div>
 
 <div align="center">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_age_days&style=for-the-badge&label=Age&labelColor=302d41" alt="Cluster Age">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_uptime_days&style=for-the-badge&label=Up&labelColor=302d41" alt="Cluster Up Time">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_node_count&style=for-the-badge&label=Nodes&labelColor=302d41" alt="Cluster Nodes">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_pod_count&style=for-the-badge&label=Pods&labelColor=302d41" alt="Cluster Pods">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_cpu_usage&style=for-the-badge&label=Cpu&labelColor=302d41" alt="Cluster CPU">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_memory_usage&style=for-the-badge&label=Memory&labelColor=302d41" alt="Cluster Memory">
-</div>
+
+[![Age](https://kromgo.altena.io/cluster_age_days?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
+[![Uptime](https://kromgo.altena.io/cluster_uptime_days?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
+[![Node-Count](https://kromgo.altena.io/cluster_node_count?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
+[![Pod-Count](https://kromgo.altena.io/cluster_pod_count?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
+[![CPU-Usage](https://kromgo.altena.io/cluster_cpu_usage?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;&nbsp;
+[![Memory-Usage](https://kromgo.altena.io/cluster_memory_usage?format=badge)](https://github.com/kashalls/kromgo/)
+
 
 ---
 
@@ -33,9 +35,6 @@ _... powered by Talos Linux and Kubernetes_
 
 ### Hardware
 My entire Kubernetes cluster runs as VMs on a single beefy Proxmox machine. Yeah, not the most HA setup, but it gets the job done! The cluster consists of three control plane nodes that handle both the control plane and worker duties.
-
-
-All nodes use a Virtual IP (VIP) at `192.168.1.101` for high availability access to the Kubernetes API.
 
 ### Storage
 Currently running everything on NFS until I can afford to buy some proper NUCs (like the cool kids do!). Once I get those NUCs, the plan is to implement rook-ceph for distributed storage.
