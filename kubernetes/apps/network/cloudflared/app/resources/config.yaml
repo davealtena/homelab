@@ -1,6 +1,6 @@
 ---
 originRequest:
-  originServerName: external.
+  originServerName: ${CLUSTER_DOMAIN}
 
 ingress:
   - hostname: ${CLUSTER_DOMAIN}

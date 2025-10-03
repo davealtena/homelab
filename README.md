@@ -38,8 +38,6 @@ _... powered by Talos Linux and Kubernetes_
 ### Hardware
 My entire Kubernetes cluster runs as VMs on a single beefy Proxmox machine. Yeah, not the most HA setup, but it gets the job done! The cluster consists of three control plane nodes (Odin, Thor, and Frigg) that handle both control plane and worker duties.
 
-All nodes use a Virtual IP at `192.168.1.101` for high availability access to the Kubernetes API.
-
 ### Storage
 Currently running everything on NFS until I can afford to buy some proper NUCs (like the cool kids do!). Once I get those NUCs, the plan is to implement rook-ceph for distributed storage.
 
