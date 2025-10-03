@@ -13,21 +13,21 @@ _... powered by Talos Linux and Kubernetes_
 
 <div align="center">
 
-<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/talos_version?format=badge" alt="Talos"></a>&nbsp;
-<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/kubernetes_version?format=badge" alt="Kubernetes"></a>&nbsp;
-<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/flux_version?format=badge" alt="Flux"></a>&nbsp;
-<img src="https://img.shields.io/github/issues-pr/davealtena/homelab?logo=github&color=f2cdcd&logoColor=fff&style=for-the-badge&labelColor=302d41" alt="Open Pull Requests">
+[![Talos](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Ftalos_version&style=for-the-badge&logo=talos&logoColor=white&color=blue&label=%20)](https://talos.dev)&nbsp;
+[![Kubernetes](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fkubernetes_version&style=for-the-badge&logo=kubernetes&logoColor=white&color=blue&label=%20)](https://kubernetes.io)&nbsp;
+[![Flux](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fflux_version&style=for-the-badge&logo=flux&logoColor=white&color=blue&label=%20)](https://fluxcd.io)&nbsp;
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/davealtena/homelab?logo=github&color=blue&logoColor=white&style=for-the-badge&label=%20)](https://github.com/davealtena/homelab/pulls)
 
 </div>
 
 <div align="center">
 
-<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_age_days?format=badge" alt="Age"></a>&nbsp;
-<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_uptime_days?format=badge" alt="Uptime"></a>&nbsp;
-<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_node_count?format=badge" alt="Node-Count"></a>&nbsp;
-<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_pod_count?format=badge" alt="Pod-Count"></a>&nbsp;
-<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_cpu_usage?format=badge" alt="CPU-Usage"></a>&nbsp;
-<a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.altena.io/cluster_memory_usage?format=badge" alt="Memory-Usage"></a>
+[![Age-Days](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_age_days&style=flat-square&label=Age)](https://github.com/kashalls/kromgo)&nbsp;
+[![Uptime-Days](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_uptime_days&style=flat-square&label=Uptime)](https://github.com/kashalls/kromgo)&nbsp;
+[![Node-Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_node_count&style=flat-square&label=Nodes)](https://github.com/kashalls/kromgo)&nbsp;
+[![Pod-Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_pod_count&style=flat-square&label=Pods)](https://github.com/kashalls/kromgo)&nbsp;
+[![CPU-Usage](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_cpu_usage&style=flat-square&label=CPU)](https://github.com/kashalls/kromgo)&nbsp;
+[![Memory-Usage](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fcluster_memory_usage&style=flat-square&label=Memory)](https://github.com/kashalls/kromgo)
 
 </div>
 
