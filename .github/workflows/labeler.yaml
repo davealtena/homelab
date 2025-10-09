@@ -16,6 +16,6 @@ jobs:
       pull-requests: write
     steps:
       - name: Labeler
-        uses: actions/labeler@v6
+        uses: actions/labeler@634933edcd8ababfe52f92936142cc22ac488b1b # v6
         with:
           configuration-path: .github/labeler.yaml
