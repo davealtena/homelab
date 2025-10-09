@@ -11,9 +11,11 @@
   },
   "customManagers": [
     {
-      "description": ["Process Grafana dashboards"],
+      "description": "Process Grafana dashboards",
       "customType": "regex",
-      "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
+      "fileMatch": [
+        "(^|/)kubernetes/.+\\.ya?ml$"
+      ],
       "matchStrings": [
         "depName=\"(?<depName>.*)\"\\n(?<indentation>\\s+)gnetId: (?<packageName>\\d+)\\n.+revision: (?<currentValue>\\d+)"
       ],
@@ -24,15 +26,21 @@
   ],
   "packageRules": [
     {
-      "description": ["Auto-merge Grafana dashboard updates"],
-      "addLabels": ["renovate/grafana-dashboard"],
+      "description": "Auto-merge Grafana dashboard updates",
+      "addLabels": [
+        "renovate/grafana-dashboard"
+      ],
       "automerge": true,
       "automergeType": "branch",
       "commitMessageExtra": "({{currentVersion}} ➔ {{newVersion}})",
       "commitMessageTopic": "dashboard {{depName}}",
       "ignoreTests": true,
-      "matchDatasources": ["custom.grafana-dashboards"],
-      "matchUpdateTypes": ["major"],
+      "matchDatasources": [
+        "custom.grafana-dashboards"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "semanticCommitScope": "grafana-dashboards",
       "semanticCommitType": "chore"
     }
