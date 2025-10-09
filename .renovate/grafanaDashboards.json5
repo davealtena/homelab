@@ -4,7 +4,9 @@
     "grafana-dashboards": {
       "defaultRegistryUrlTemplate": "https://grafana.com/api/dashboards/{{packageName}}",
       "format": "json",
-      "transformTemplates": ["{\\"releases\\":[{\\"version\\": $string(revision)}]}"]
+      "transformTemplates": [
+        "{\"releases\":[{\"version\": $string(revision)}]}"
+      ]
     }
   },
   "customManagers": [
@@ -13,9 +15,9 @@
       "customType": "regex",
       "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
       "matchStrings": [
-        "depName=\\"(?<depName>.*)\\\"\\n(?<indentation>\\s+)gnetId: (?<packageName>\\d+)\\n.+revision: (?<currentValue>\\d+)"
+        "depName=\"(?<depName>.*)\"\\n(?<indentation>\\s+)gnetId: (?<packageName>\\d+)\\n.+revision: (?<currentValue>\\d+)"
       ],
-      "autoReplaceStringTemplate": "depName=\\"{{{depName}}}\\\"\\n{{{indentation}}}gnetId: {{{packageName}}}\\n{{{indentation}}}revision: {{{newValue}}}",
+      "autoReplaceStringTemplate": "depName=\"{{{depName}}}\"\\n{{{indentation}}}gnetId: {{{packageName}}}\\n{{{indentation}}}revision: {{{newValue}}}",
       "datasourceTemplate": "custom.grafana-dashboards",
       "versioningTemplate": "regex:^(?<major>\\d+)$"
     }
