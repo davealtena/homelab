@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": ["Override Helmfile Dependency Name"],
+      "matchDatasources": ["docker"],
+      "matchManagers": ["helmfile"],
+      "packageNameTemplate": "{{packageName}}"
+    },
+    {
+      "description": ["Override Talos Installer Package Name"],
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": ["/factory\\.talos\\.dev/"],
+      "packageNameTemplate": "ghcr.io/siderolabs/installer"
+    }
+  ]
+}

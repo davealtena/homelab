@@ -18,9 +18,9 @@ vars:
   BOOTSTRAP_DIR: "{{.ROOT_DIR}}/kubernetes/bootstrap"
   KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
   TALOSCONFIG: "talos/clusterconfig/talosconfig"
-  TALHELPER_CLUSTER_DIR: 'talos/clusterconfig'
-  TALHELPER_SECRET_FILE: 'talos/talsecret.sops.yaml'
-  TALHELPER_CONFIG_FILE: 'talos/talconfig.yaml'
+  TALHELPER_CLUSTER_DIR: "talos/clusterconfig"
+  TALHELPER_SECRET_FILE: "talos/talsecret.sops.yaml"
+  TALHELPER_CONFIG_FILE: "talos/talconfig.yaml"
 
 env:
   KUBECONFIG: "{{.KUBECONFIG}}"

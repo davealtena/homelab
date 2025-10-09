@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": ["Changelog URL for 1Password Connect"],
+      "matchPackagePatterns": ["/1password/"],
+      "changelogUrl": "https://github.com/1Password/connect/blob/main/CHANGELOG.md"
+    },
+    {
+      "description": ["Changelog URL for Cloudflared"],
+      "matchPackageNames": ["cloudflared"],
+      "changelogUrl": "https://github.com/cloudflare/cloudflared/blob/master/RELEASE_NOTES"
+    },
+    {
+      "description": ["Changelog URL for Spegel"],
+      "matchPackagePatterns": ["/spegel/"],
+      "changelogUrl": "https://github.com/spegel-org/spegel/blob/main/CHANGELOG.md"
+    },
+    {
+      "description": ["Changelog URL for External Secrets"],
+      "matchPackagePatterns": ["/external-secrets/"],
+      "changelogUrl": "https://github.com/external-secrets/external-secrets/releases"
+    },
+    {
+      "description": ["Changelog URL for Cert Manager"],
+      "matchPackagePatterns": ["/cert-manager/"],
+      "changelogUrl": "https://github.com/cert-manager/cert-manager/releases"
+    },
+    {
+      "description": ["Changelog URL for Cilium"],
+      "matchPackagePatterns": ["/cilium/"],
+      "changelogUrl": "https://github.com/cilium/cilium/blob/main/CHANGELOG.md"
+    }
+  ]
+}
