@@ -61,8 +61,8 @@ spec:
           storage:
             type: local
             local:
-              directory: /rules
-          rule_path: /rules/fake
+              directory: /var/loki/rules
+          rule_path: /var/loki/rules/fake
     singleBinary:
       replicas: 1
       persistence:
