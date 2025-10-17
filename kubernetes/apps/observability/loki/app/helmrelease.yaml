@@ -92,4 +92,4 @@ spec:
       enableUniqueFilenames: true
       rules:
         searchNamespace: ALL
-        folder: /rules/fake
+        folder: /rules
