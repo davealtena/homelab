@@ -26,6 +26,7 @@ spec:
         reporting_enabled: false
       commonConfig:
         replication_factor: 1
+        path_prefix: /var/loki
       compactor:
         working_directory: /var/loki/compactor/retention
         delete_request_store: filesystem
@@ -40,6 +41,9 @@ spec:
         log_level: info
       storage:
         type: filesystem
+        filesystem:
+          chunks_directory: /var/loki/chunks
+          rules_directory: /var/loki/rules
       schemaConfig:
         configs:
           - from: "2024-04-01" # quote
