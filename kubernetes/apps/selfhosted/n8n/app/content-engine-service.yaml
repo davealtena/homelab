@@ -1,0 +1,34 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-content-engine-ro
+  labels:
+    app: k8s-content-engine
+spec:
+  type: ClusterIP
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    cnpg.io/cluster: k8s-content-engine
+    role: replica
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-content-engine-rw
+  labels:
+    app: k8s-content-engine
+spec:
+  type: ClusterIP
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    cnpg.io/cluster: k8s-content-engine
+    role: primary
