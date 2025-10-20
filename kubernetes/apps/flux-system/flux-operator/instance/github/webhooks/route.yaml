@@ -5,7 +5,8 @@ metadata:
   name: webhook-receiver
 spec:
   parentRefs:
-    - name: external
+    - name: envoy-external
+      namespace: network
       kind: Gateway
   hostnames:
     - "flux-webhook.${CLUSTER_DOMAIN}"
