@@ -4,10 +4,7 @@ kind: Kustomization
 bases:
   - ./cluster.yaml
   - ./content-engine-cluster.yaml
-  - ./content-engine-service.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./pvc.yaml
-
-
