@@ -6,7 +6,6 @@ namespace: selfhosted
 resources:
   - ./actual-finance/ks.yaml
   - ./n8n/ks.yaml
-  - ./wordpress/ks.yaml
   # - ./nextcloud/ks.yaml
 components:
   - ../../components/common
