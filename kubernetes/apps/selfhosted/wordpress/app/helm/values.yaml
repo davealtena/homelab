@@ -1,0 +1,28 @@
+wordpressSkipInstall: false
+wordpressUsername: admin
+wordpressPassword: "changeme123!"
+wordpressEmail: admin@example.com
+wordpressFirstName: Admin
+wordpressLastName: User
+wordpressBlogName: "My WordPress Site"
+
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: "super-secret-root"
+    password: "wordpress-db-password"
+    database: wordpress
+    username: wordpress
+
+service:
+  type: ClusterIP  # Of LoadBalancer als je directe toegang wilt
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: ""  # Gebruik je default storage class
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
