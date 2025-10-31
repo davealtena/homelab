@@ -9,6 +9,7 @@ spec:
     level:
       default: info
   provider:
+    type: Kubernetes
     kubernetes:
       envoyDeployment:
         replicas: 2
