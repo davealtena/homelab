@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -22,6 +22,8 @@ spec:
       dragonfly-operator:
         replicas: 1
         strategy: RollingUpdate
+        serviceAccount:
+          identifier: dragonfly-operator
         containers:
           app:
             image:
@@ -77,18 +79,18 @@ spec:
                   app.kubernetes.io/name: *app
     service:
       app:
-        controller: *app
+        controller: dragonfly-operator
         ports:
           http:
             port: *port
           metrics:
             port: 8080
-    serviceAccount:
-      create: true
-      name: *app
+    serviceAccounts:
+      dragonfly-operator:
+        name: dragonfly-operator
     serviceMonitor:
       app:
-        serviceName: *app
+        serviceName: dragonfly-operator
         endpoints:
           - port: metrics
             scheme: http
