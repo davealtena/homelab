@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./github
   - ./helmrelease.yaml
+  - ./podmonitor.yaml
   - ./prometheusrule.yaml
 configMapGenerator:
   - name: flux-instance-helm-values
