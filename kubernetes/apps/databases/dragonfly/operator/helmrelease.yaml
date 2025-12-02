@@ -21,9 +21,9 @@ spec:
     controllers:
       dragonfly-operator:
         replicas: 1
-        strategy: RollingUpdate
         serviceAccount:
-          identifier: dragonfly-operator
+          identifier: *app
+        strategy: RollingUpdate
         containers:
           app:
             image:
@@ -79,18 +79,17 @@ spec:
                   app.kubernetes.io/name: *app
     service:
       app:
-        controller: dragonfly-operator
+        controller: *app
         ports:
           http:
             port: *port
           metrics:
             port: 8080
-    serviceAccounts:
-      dragonfly-operator:
-        name: dragonfly-operator
+    serviceAccount:
+      dragonfly-operator: {}
     serviceMonitor:
       app:
-        serviceName: dragonfly-operator
+        serviceName: *app
         endpoints:
           - port: metrics
             scheme: http
