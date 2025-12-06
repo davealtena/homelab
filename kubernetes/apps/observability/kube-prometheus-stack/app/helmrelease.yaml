@@ -18,6 +18,10 @@ spec:
     crds:
       enabled: true
     cleanPrometheusOperatorObjectNames: true
+    defaultRules:
+      rules:
+        kubeApiserverBurnrate: false
+        kubeApiserverSlos: false
     alertmanager:
       route:
         main:
