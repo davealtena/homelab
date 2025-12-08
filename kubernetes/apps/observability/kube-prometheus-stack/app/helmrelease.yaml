@@ -106,7 +106,7 @@ spec:
                 requests:
                   storage: 75Gi
     nodeExporter:
-      enabled: false
+      enabled: true
     kubeStateMetrics:
       enabled: true
     kube-state-metrics:
