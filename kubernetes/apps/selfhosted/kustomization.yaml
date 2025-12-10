@@ -7,5 +7,6 @@ resources:
   - ./actual-finance/ks.yaml
   - ./n8n/ks.yaml
   # - ./nextcloud/ks.yaml
+  - ./paperless/ks.yaml
 components:
   - ../../components/common
