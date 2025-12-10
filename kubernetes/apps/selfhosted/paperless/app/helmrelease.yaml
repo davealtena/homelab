@@ -46,7 +46,7 @@ spec:
               PAPERLESS_OCR_LANGUAGES: nld
               PAPERLESS_OCR_LANGUAGE: nld
               # Configure redis integration
-              PAPERLESS_REDIS: redis://dragonfly.databases.svc.cluster.local:6379
+              PAPERLESS_REDIS: redis://paperless-redis.selfhosted.svc.cluster.local:6379
               # Configure user permissions
               USERMAP_GID: "100"
               # Configure admin user
@@ -77,6 +77,19 @@ spec:
               limits:
                 memory: 6Gi
 
+      redis:
+        containers:
+          redis:
+            image:
+              repository: ghcr.io/valkey-io/valkey
+              tag: 8.1.1
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+
     service:
       app:
         forceRename: paperless
@@ -85,6 +98,11 @@ spec:
         ports:
           http:
             port: &port 8000
+      redis:
+        controller: redis
+        ports:
+          http:
+            port: 6379
 
     persistence:
       data:
