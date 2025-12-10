@@ -8,6 +8,9 @@ cgroup:
   hostRoot: /sys/fs/cgroup
 cluster:
   id: 1
+# Disable Gateway API CRDs - managed by Envoy Gateway
+gatewayAPI:
+  enabled: false
   name: "olympus"
 cni:
   exclusive: false
