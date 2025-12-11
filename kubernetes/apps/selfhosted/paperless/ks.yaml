@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: paperless
   components:
-    - ../../../components/volsync
+    - ../../../../components/volsync
   dependsOn:
     - name: volsync
       namespace: volsync-system
