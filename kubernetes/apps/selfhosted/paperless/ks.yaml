@@ -8,13 +8,20 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: paperless
+  components:
+    - ../../../components/volsync
+  dependsOn:
+    - name: volsync
+      namespace: volsync-system
   interval: 1h
   path: "./kubernetes/apps/selfhosted/paperless/app"
   postBuild:
     substitute:
       APP: paperless
       APP_UID: "1000"
-      APP_GID: "65542"
+      APP_GID: "100"
+      VOLSYNC_CLAIM: paperless-data
+      VOLSYNC_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository

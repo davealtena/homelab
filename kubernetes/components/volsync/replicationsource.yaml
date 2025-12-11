@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: ${APP}
+spec:
+  sourcePVC: "${VOLSYNC_CLAIM:=${APP}}"
+  trigger:
+    schedule: "0 * * * *"
+  kopia:
+    accessModes:
+      - "${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"
+    cacheAccessModes:
+      - "${VOLSYNC_CACHE_ACCESSMODES:=ReadWriteOnce}"
+    cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:=5Gi}"
+    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:=openebs-hostpath}"
+    compression: zstd-fastest
+    copyMethod: Direct
+    moverSecurityContext:
+      runAsUser: ${APP_UID:=1000}
+      runAsGroup: ${APP_GID:=1000}
+      fsGroup: ${APP_GID:=1000}
+    parallelism: 2
+    repository: "${APP}-volsync-secret"
+    retain:
+      hourly: 24
+      daily: 7
+    storageClassName: "${VOLSYNC_STORAGECLASS:=nfs-csi-sc}"
