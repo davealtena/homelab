@@ -24,21 +24,14 @@ spec:
             image:
               repository: ghcr.io/home-operations/kopia
               tag: 0.22.3@sha256:eeebd12fd4b3a9c25b9f711fff32454f62e2d5e2d431ab6806ad21c52f414807
-            args:
-              - server
-              - start
-              - --address=0.0.0.0:8080
-              - --server-control-username=admin
-              - --server-control-password=$(KOPIA_SERVER_PASSWORD)
-              - --insecure
-              - --without-password
+            command:
+              - /bin/sh
+              - -c
+              - |
+                kopia repository connect filesystem --path=/repository --password="$KOPIA_PASSWORD"
+                kopia server start --address=0.0.0.0:8080 --insecure --without-password
             env:
               KOPIA_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: kopia-secret
-                    key: KOPIA_PASSWORD
-              KOPIA_SERVER_PASSWORD:
                 valueFrom:
                   secretKeyRef:
                     name: kopia-secret
