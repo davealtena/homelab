@@ -41,11 +41,11 @@ spec:
               repository: ghcr.io/home-operations/kopia
               tag: 0.22.3@sha256:eeebd12fd4b3a9c25b9f711fff32454f62e2d5e2d431ab6806ad21c52f414807
             env:
-              KOPIA_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: kopia-secret
-                    key: KOPIA_PASSWORD
+              KOPIA_WEB_ENABLED: "true"
+              KOPIA_WEB_PORT: &port 8080
+            envFrom:
+              - secretRef:
+                  name: kopia-secret
             args:
               - --without-password
             probes:
@@ -55,10 +55,10 @@ spec:
                 spec:
                   httpGet:
                     path: /
-                    port: &port 8080
-                  initialDelaySeconds: 30
+                    port: *port
+                  initialDelaySeconds: 0
                   periodSeconds: 30
-                  timeoutSeconds: 10
+                  timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
             resources:
