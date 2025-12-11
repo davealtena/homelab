@@ -21,6 +21,11 @@ spec:
       runAsGroup: ${APP_GID:=1000}
       fsGroup: ${APP_GID:=1000}
     repository: "${APP}-volsync-secret"
+    repositoryMounts:
+      repository:
+        nfs:
+          server: 192.168.1.100
+          path: /mnt/zfs/pvc/VolsyncKopia
     retain:
       hourly: 24
       daily: 7
