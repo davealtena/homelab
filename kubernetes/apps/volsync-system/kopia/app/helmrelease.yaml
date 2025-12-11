@@ -10,22 +10,6 @@ spec:
     name: kopia
   interval: 30m
   values:
-    configMaps:
-      config:
-        data:
-          repository.config: |-
-            {
-              "storage": {
-                "type": "filesystem",
-                "config": {
-                  "path": "/repository"
-                }
-              },
-              "hostname": "volsync.{{ .Release.Namespace }}.svc.cluster.local",
-              "username": "volsync",
-              "description": "volsync",
-              "enableActions": false
-            }
     controllers:
       kopia:
         pod:
@@ -35,39 +19,30 @@ spec:
             runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
-        initContainers:
-          init-repo:
-            image:
-              repository: ghcr.io/home-operations/kopia
-              tag: 0.22.3@sha256:eeebd12fd4b3a9c25b9f711fff32454f62e2d5e2d431ab6806ad21c52f414807
-            env:
-              KOPIA_PASSWORD: ""
-            command:
-              - /bin/sh
-              - -c
-              - |
-                if [ ! -f /repository/kopia.repository.f ]; then
-                  kopia repository create filesystem --path=/repository --password=""
-                fi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
         containers:
           app:
             image:
               repository: ghcr.io/home-operations/kopia
               tag: 0.22.3@sha256:eeebd12fd4b3a9c25b9f711fff32454f62e2d5e2d431ab6806ad21c52f414807
-            env:
-              KOPIA_WEB_ENABLED: true
-              KOPIA_WEB_PORT: &port 8080
-            envFrom:
-              - secretRef:
-                  name: kopia-secret
             args:
+              - server
+              - start
+              - --address=0.0.0.0:8080
+              - --server-control-username=admin
+              - --server-control-password=$(KOPIA_SERVER_PASSWORD)
+              - --insecure
               - --without-password
+            env:
+              KOPIA_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: kopia-secret
+                    key: KOPIA_PASSWORD
+              KOPIA_SERVER_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: kopia-secret
+                    key: KOPIA_PASSWORD
             probes:
               liveness: &probes
                 enabled: true
@@ -75,10 +50,10 @@ spec:
                 spec:
                   httpGet:
                     path: /
-                    port: *port
-                  initialDelaySeconds: 0
+                    port: &port 8080
+                  initialDelaySeconds: 30
                   periodSeconds: 30
-                  timeoutSeconds: 1
+                  timeoutSeconds: 10
                   failureThreshold: 3
               readiness: *probes
             resources:
@@ -98,36 +73,20 @@ spec:
           http:
             port: *port
     persistence:
-      config-file:
-        type: configMap
-        identifier: config
+      config:
+        type: emptyDir
         globalMounts:
-          - path: /config/repository.config
-            subPath: repository.config
+          - path: /config
       repository:
         type: nfs
         path: /mnt/zfs/pvc/VolsyncKopia
         server: 192.168.1.100
         globalMounts:
           - path: /repository
-      tmpfs:
+      tmp:
         type: emptyDir
-        advancedMounts:
-          kopia:
-            app:
-              - path: /config/cache
-                subPath: cache
-              - path: /config/logs
-                subPath: logs
-              - path: /tmp
-                subPath: tmp
-            init-repo:
-              - path: /config/cache
-                subPath: cache
-              - path: /config/logs
-                subPath: logs
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: /tmp
     route:
       app:
         hostnames:
