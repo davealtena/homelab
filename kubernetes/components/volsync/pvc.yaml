@@ -3,6 +3,8 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: "${VOLSYNC_CLAIM:-${APP}}"
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
 spec:
   accessModes:
     - "${VOLSYNC_ACCESSMODES:-ReadWriteOnce}"
