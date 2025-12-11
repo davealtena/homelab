@@ -47,10 +47,6 @@ spec:
                     name: kopia-secret
                     key: KOPIA_PASSWORD
             args:
-              - server
-              - start
-              - --address=0.0.0.0:8080
-              - --insecure
               - --without-password
             probes:
               liveness: &probes
