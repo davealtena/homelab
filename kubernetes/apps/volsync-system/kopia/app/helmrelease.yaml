@@ -47,7 +47,7 @@ spec:
               - -c
               - |
                 if [ ! -f /repository/kopia.repository.f ]; then
-                  kopia repository create filesystem --path=/repository
+                  kopia repository create filesystem --path=/repository --password=""
                 fi
             securityContext:
               allowPrivilegeEscalation: false
