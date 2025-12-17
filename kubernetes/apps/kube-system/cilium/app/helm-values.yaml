@@ -19,24 +19,7 @@ cni:
 endpointRoutes:
   enabled: true
 hubble:
-  enabled: true
-  export:
-    dynamic:
-      enabled: true
-  metrics:
-    enabled:
-      - dns:query;ignoreAAAA
-      - drop
-      - tcp
-      - flow
-      - port-distribution
-      - icmp
-      - http
-  relay:
-    enabled: true
-    rollOutPods: true
-  ui:
-    enabled: true
+  enabled: false
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: "10.69.0.0/16"
