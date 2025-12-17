@@ -8,10 +8,10 @@ cgroup:
   hostRoot: /sys/fs/cgroup
 cluster:
   id: 1
+  name: "valhalla"
 # Disable Gateway API CRDs - managed by Envoy Gateway
 gatewayAPI:
   enabled: false
-  name: "olympus"
 cni:
   exclusive: false
 # NOTE: devices might need to be set if you have more than one active NIC on your hosts
