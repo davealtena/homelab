@@ -3,11 +3,20 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: booklore
-  labels:
-    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:
       storage: 1Gi
+  storageClassName: nfs-csi-sc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: booklore-mariadb
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 2Gi
   storageClassName: nfs-csi-sc
