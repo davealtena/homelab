@@ -12,14 +12,21 @@ spec:
     name: trivy-operator
   values:
     operator:
-      scanJobsConcurrentLimit: 3
+      scanJobsConcurrentLimit: 1
       vulnerabilityScannerScanOnlyCurrentRevisions: true
       configAuditScannerScanOnlyCurrentRevisions: true
-      infraAssessmentScannerEnabled: false # No node scanning available as Talos is Read-Only
+      infraAssessmentScannerEnabled: false
     nodeCollector:
       excludeNodes: "*"
     serviceMonitor:
       enabled: true
     trivy:
       ignoreUnfixed: true
-      interval: 10m0s
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+      slow: true
