@@ -11,17 +11,9 @@ spec:
       app.kubernetes.io/name: *app
   interval: 1h
   path: kubernetes/apps/media/booklore/app
-  components:
-    - ../../../../components/volsync
   dependsOn:
-    - name: volsync
-      namespace: volsync-system
     - name: cnpg-cluster
       namespace: databases
-  postBuild:
-    substitute:
-      VOLSYNC_CAPACITY: 1Gi
-      APP: *app
   prune: true
   retryInterval: 2m
   sourceRef:
