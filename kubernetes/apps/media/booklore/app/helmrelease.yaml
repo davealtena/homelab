@@ -109,4 +109,10 @@ spec:
               - path: /books
 
       bookdrop:
-        type: emptyDir
+        type: nfs
+        server: ${NFS_SERVER_ADDRESS}
+        path: /mnt/zfs/media/Books/incoming
+        advancedMounts:
+          booklore:
+            app:
+              - path: /bookdrop
