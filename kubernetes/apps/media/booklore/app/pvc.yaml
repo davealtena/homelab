@@ -7,7 +7,7 @@ spec:
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:
-      storage: 1Gi
+      storage: 50Gi
   storageClassName: nfs-csi-sc
 ---
 apiVersion: v1
@@ -18,5 +18,5 @@ spec:
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:
-      storage: 2Gi
+      storage: 10Gi
   storageClassName: nfs-csi-sc
