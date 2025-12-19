@@ -2,10 +2,8 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: media
 resources:
-  - ./booklore/ks.yaml
-  - ./jellyseerr/ks.yaml
-  - ./plex/ks.yaml
-components:
-  - ../../components/common
+  - ./externalsecret.yaml
+  - ./helmrelease.yaml
+  - ./ocirepository.yaml
+  - ./pvc.yaml
