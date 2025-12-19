@@ -19,9 +19,12 @@ spec:
       retries: 3
   values:
     controllers:
-      *app :
+      booklore:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/booklore-app/booklore
               tag: v1.14.1
@@ -30,13 +33,13 @@ spec:
               TZ: ${TIMEZONE}
               PUID: 1000
               PGID: 100
-              DATABASE_URL: "jdbc:mariadb://localhost:3306/booklore"
+              DATABASE_URL: "jdbc:postgresql://homelab-rw.databases.svc.cluster.local:5432/booklore"
               DATABASE_USERNAME: booklore
               DATABASE_PASSWORD:
                 valueFrom:
                   secretKeyRef:
                     name: booklore-secret
-                    key: DATABASE_PASSWORD
+                    key: DB_PASSWORD
               SWAGGER_ENABLED: "false"
 
             probes:
@@ -56,35 +59,15 @@ spec:
                 custom: true
                 spec:
                   tcpSocket:
-                    port: 3306
-                  initialDelaySeconds: 0
+                    port: *port
+                  initialDelaySeconds: 10
                   periodSeconds: 5
                   timeoutSeconds: 3
                   failureThreshold: 30
 
-          mariadb:
-            image:
-              repository: lscr.io/linuxserver/mariadb
-              tag: 11.4.8
-
-            env:
-              TZ: ${TIMEZONE}
-              MYSQL_USER: booklore
-              MYSQL_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: booklore-secret
-                    key: DATABASE_PASSWORD
-              MYSQL_DATABASE: booklore
-              MYSQL_ROOT_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: booklore-secret
-                    key: DATABASE_ROOT_PASSWORD
-
     service:
       app:
-        controller: *app
+        controller: booklore
         ports:
           http:
             port: *port
@@ -112,24 +95,17 @@ spec:
       data:
         existingClaim: *app
         advancedMounts:
-          *app :
-            *app :
+          booklore:
+            app:
               - path: /app/data
-
-      config:
-        existingClaim: mariadb
-        advancedMounts:
-          *app :
-            mariadb:
-              - path: /config
 
       books:
         type: nfs
         server: ${NFS_SERVER_ADDRESS}
         path: /mnt/zfs/media/Books
         advancedMounts:
-          *app :
-            *app :
+          booklore:
+            app:
               - path: /books
 
       bookdrop:
