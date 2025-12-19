@@ -17,7 +17,7 @@ spec:
     - name: volsync
       namespace: volsync-system
     - name: cnpg-cluster
-      namespace: database
+      namespace: databases
   postBuild:
     substitute:
       VOLSYNC_CAPACITY: 1Gi
