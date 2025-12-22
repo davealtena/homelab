@@ -86,6 +86,6 @@ spec:
     persistence:
       data:
         enabled: true
-        existingClaim: mealie-pvc
+        existingClaim: mealie
         globalMounts:
           - path: /app/data
