@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: selfhosted
 resources:
   - ./actual-finance/ks.yaml
+  - ./mealie/ks.yaml
   - ./n8n/ks.yaml
   - ./paperless/ks.yaml
 components:
