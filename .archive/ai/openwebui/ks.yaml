@@ -4,9 +4,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app openwebui
-  namespace: &namespace ai
 spec:
-  targetNamespace: *namespace
+  targetNamespace: ai
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

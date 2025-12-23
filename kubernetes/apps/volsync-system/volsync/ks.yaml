@@ -4,9 +4,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app volsync
-  namespace: &namespace volsync-system
 spec:
-  targetNamespace: *namespace
+  targetNamespace: volsync-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -21,7 +20,7 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: *app
-      namespace: *namespace
+      namespace: volsync-system
   sourceRef:
     kind: GitRepository
     name: flux-system

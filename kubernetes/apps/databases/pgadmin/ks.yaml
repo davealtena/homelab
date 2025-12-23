@@ -4,16 +4,15 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &name pgadmin
-  namespace: &namespace databases
 spec:
-  targetNamespace: *namespace
+  targetNamespace: databases
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
   path: ./kubernetes/apps/databases/pgadmin/app
   dependsOn:
     - name: cnpg-cluster
-      namespace: *namespace
+      namespace: databases
   prune: true
   sourceRef:
     kind: GitRepository

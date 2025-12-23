@@ -4,9 +4,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname dragonfly-operator
-  namespace: &namespace databases
 spec:
-  targetNamespace: *namespace
+  targetNamespace: databases
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -28,9 +27,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname dragonfly-cluster
-  namespace: &namespace databases
 spec:
-  targetNamespace: *namespace
+  targetNamespace: databases
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname

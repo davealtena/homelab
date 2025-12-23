@@ -4,9 +4,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app external-dns-cloudflare
-  namespace: &namespace network
 spec:
-  targetNamespace: *namespace
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -29,9 +28,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app external-dns-unifi
-  namespace: &namespace network
 spec:
-  targetNamespace: *namespace
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
