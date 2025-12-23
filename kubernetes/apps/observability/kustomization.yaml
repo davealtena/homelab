@@ -8,5 +8,3 @@ resources:
   - ./kube-prometheus-stack/ks.yaml
   - ./kromgo/ks.yaml
   - ./loki/ks.yaml
-components:
-  - ../../components/common

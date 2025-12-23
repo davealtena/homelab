@@ -7,5 +7,3 @@ resources:
   - ./booklore/ks.yaml
   - ./jellyseerr/ks.yaml
   - ./plex/ks.yaml
-components:
-  - ../../components/common

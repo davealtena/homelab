@@ -8,5 +8,3 @@ resources:
   - ./mealie/ks.yaml
   - ./n8n/ks.yaml
   - ./paperless/ks.yaml
-components:
-  - ../../components/common

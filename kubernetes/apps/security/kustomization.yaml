@@ -7,5 +7,3 @@ resources:
   - ./external-secrets/ks.yaml
   - ./onepassword-connect/ks.yaml
   - ./trivy-operator/ks.yaml
-components:
-  - ../../components/common

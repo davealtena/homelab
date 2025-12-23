@@ -6,5 +6,3 @@ resources:
   - ./namespace.yaml
   - ./home-assistant/ks.yaml
   - ./zigbee2mqtt/ks.yaml
-components:
-  - ../../components/common

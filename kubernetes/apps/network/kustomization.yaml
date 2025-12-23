@@ -9,5 +9,3 @@ resources:
   - ./external-dns/ks.yaml
   - ./echo-server/ks.yaml
   - ./multus/ks.yaml
-components:
-  - ../../components/common

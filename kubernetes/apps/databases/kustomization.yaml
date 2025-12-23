@@ -7,5 +7,3 @@ resources:
   - ./cnpg/ks.yaml
   - ./mosquitto/ks.yaml
   - ./pgadmin/ks.yaml
-components:
-  - ../../components/common
