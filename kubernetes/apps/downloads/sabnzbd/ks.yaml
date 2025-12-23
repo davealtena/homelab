@@ -11,7 +11,6 @@ spec:
       app.kubernetes.io/name: *appname
   dependsOn:
     - name: external-secrets-stores
-      namespace: security
   interval: 30m
   path: "./kubernetes/apps/downloads/sabnzbd/app"
   postBuild:
@@ -21,7 +20,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   targetNamespace: downloads
   timeout: 5m
   wait: false

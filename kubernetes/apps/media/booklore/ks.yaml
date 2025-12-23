@@ -13,13 +13,11 @@ spec:
   path: kubernetes/apps/media/booklore/app
   dependsOn:
     - name: cnpg-cluster
-      namespace: databases
   prune: true
   retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   targetNamespace: media
   timeout: 5m
   wait: false

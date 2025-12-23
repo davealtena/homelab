@@ -11,12 +11,10 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
-      namespace: volsync-system
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: *app
-      namespace: volsync-system
   interval: 1h
   path: ./kubernetes/apps/volsync-system/kopia/app
   postBuild:
@@ -27,6 +25,5 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   targetNamespace: volsync-system
   timeout: 5m

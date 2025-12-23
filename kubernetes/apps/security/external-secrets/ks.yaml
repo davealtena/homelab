@@ -15,7 +15,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   wait: true
   interval: 30m
   retryInterval: 1m
@@ -34,13 +33,11 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets
-      namespace: security
   path: ./kubernetes/apps/security/external-secrets/stores
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   wait: true
   interval: 30m
   retryInterval: 1m

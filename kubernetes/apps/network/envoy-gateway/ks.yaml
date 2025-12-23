@@ -13,14 +13,12 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: *appname
-      namespace: network
   interval: 30m
   path: "./kubernetes/apps/network/envoy-gateway/app"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   targetNamespace: network
   timeout: 5m
 ---
@@ -36,15 +34,12 @@ spec:
       app.kubernetes.io/name: *appname
   dependsOn:
     - name: cert-manager-issuers
-      namespace: cert-manager
     - name: envoy-gateway
-      namespace: network
   interval: 30m
   path: "./kubernetes/apps/network/envoy-gateway/config"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   targetNamespace: network
   timeout: 5m

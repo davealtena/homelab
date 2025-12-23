@@ -15,15 +15,12 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   wait: false # no flux ks dependents
   interval: 30m
   timeout: 5m
   dependsOn:
     - name: external-secrets-stores
-      namespace: security
     - name: cnpg-cluster
-      namespace: databases
   postBuild:
     substitute:
       APP: *app

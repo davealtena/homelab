@@ -14,18 +14,14 @@ spec:
   prune: true
   dependsOn:
     - name: openebs
-      namespace: openebs-system
     - name: snapshot-controller
-      namespace: kube-system
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: *app
-      namespace: volsync-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m
