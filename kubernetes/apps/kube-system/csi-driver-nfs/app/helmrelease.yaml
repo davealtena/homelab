@@ -20,7 +20,7 @@ spec:
       create: true
       name: nfs-csi-sc
       annotations:
-        storageclass.kubernetes.io/is-default-class: "true"
+        storageclass.kubernetes.io/is-default-class: "false"
       parameters:
         server: ${NFS_SERVER_ADDRESS}
         share: ${NFS_SERVER_PATH}
