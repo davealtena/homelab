@@ -21,54 +21,54 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: "odin"
-    ipAddress: "192.168.1.102"
-    installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
+  - hostname: "baldur"
+    ipAddress: "192.168.1.105"
+    installDisk: "/dev/sdb"
+    talosImageURL: factory.talos.dev/installer/4b3cd373a192c8469e859b7a0cfbed3ecc3577c4a2d346a37b0aeff9cd17cdb0
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:a8:85:76"
+          hardwareAddr: "b8:85:84:a2:8a:4b"
         dhcp: false
         addresses:
-          - "192.168.1.102/24"
+          - "192.168.1.105/24"
         routes:
           - network: 0.0.0.0/0
-            gateway: "192.168.1.254"
+            gateway: "192.168.1.1"
         mtu: 1500
         vip:
           ip: "192.168.1.101"
-  - hostname: "thor"
-    ipAddress: "192.168.1.103"
-    installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
+  - hostname: "freya"
+    ipAddress: "192.168.1.106"
+    installDisk: "/dev/sdc"
+    talosImageURL: factory.talos.dev/installer/4b3cd373a192c8469e859b7a0cfbed3ecc3577c4a2d346a37b0aeff9cd17cdb0
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:83:31:7d"
+          hardwareAddr: "54:bf:64:7d:72:d3"
         dhcp: false
         addresses:
-          - "192.168.1.103/24"
+          - "192.168.1.106/24"
         routes:
           - network: 0.0.0.0/0
-            gateway: "192.168.1.254"
+            gateway: "192.168.1.1"
         mtu: 1500
         vip:
           ip: "192.168.1.101"
-  - hostname: "frigg"
-    ipAddress: "192.168.1.104"
-    installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
+  - hostname: "heimdall"
+    ipAddress: "192.168.1.107"
+    installDisk: "/dev/sdc"
+    talosImageURL: factory.talos.dev/installer/4b3cd373a192c8469e859b7a0cfbed3ecc3577c4a2d346a37b0aeff9cd17cdb0
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:d2:28:c9"
+          hardwareAddr: "b8:85:84:a8:e7:55"
         dhcp: false
         addresses:
-          - "192.168.1.104/24"
+          - "192.168.1.107/24"
         routes:
           - network: 0.0.0.0/0
-            gateway: "192.168.1.254"
+            gateway: "192.168.1.1"
         mtu: 1500
         vip:
           ip: "192.168.1.101"

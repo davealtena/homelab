@@ -1,7 +1,4 @@
-192.168.1.102.yaml
-192.168.1.103.yaml
-192.168.1.104.yaml
 talosconfig
-valhalla-odin.yaml
-valhalla-thor.yaml
-valhalla-frigg.yaml
+valhalla-baldur.yaml
+valhalla-freya.yaml
+valhalla-heimdall.yaml
