@@ -39,13 +39,11 @@ _... powered by Talos Linux and Kubernetes_
 
 The Valhalla cluster runs on 3 dedicated bare-metal Dell Optiplex nodes, all control planes pulling double duty as workers:
 
-| Node | Role | IP | Hardware |
-|------|------|------|----------|
-| **Baldur** | Control Plane | 192.168.1.105 | Dell Optiplex (256GB SSD + 1TB storage) |
-| **Freya** | Control Plane | 192.168.1.106 | Dell Optiplex (256GB SSD + 1TB storage) |
-| **Heimdall** | Control Plane | 192.168.1.107 | Dell Optiplex (256GB SSD + 1TB storage) |
-
-The cluster uses a shared VIP at `192.168.1.101` for high availability API access.
+| Node | Role | Hardware |
+|------|------|----------|
+| **Baldur** | Control Plane | Dell Optiplex (256GB SSD + 1TB storage) |
+| **Freya** | Control Plane | Dell Optiplex (256GB SSD + 1TB storage) |
+| **Heimdall** | Control Plane | Dell Optiplex (256GB SSD + 1TB storage) |
 
 ### Storage
 
