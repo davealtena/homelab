@@ -15,4 +15,4 @@ spec:
   resources:
     requests:
       storage: "${VOLSYNC_CAPACITY:-5Gi}"
-  storageClassName: "${VOLSYNC_STORAGECLASS:-nfs-csi-sc}"
+  storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"

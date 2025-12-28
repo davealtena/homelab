@@ -13,6 +13,8 @@ spec:
     - ../../../../components/volsync
   dependsOn:
     - name: volsync
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: "./kubernetes/apps/selfhosted/paperless/app"
   postBuild:
@@ -22,6 +24,8 @@ spec:
       APP_GID: "100"
       VOLSYNC_CLAIM: paperless-data
       VOLSYNC_CAPACITY: 10Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool
   prune: true
   sourceRef:
     kind: GitRepository

@@ -9,12 +9,13 @@ spec:
     kind: OCIRepository
     name: rook-ceph-cluster
   interval: 30m
+  timeout: 15m
   values:
     monitoring:
       enabled: true
       createPrometheusRules: true
     toolbox:
-      enabled: true
+      enabled: false
     cephClusterSpec:
       cephConfig:
         global:

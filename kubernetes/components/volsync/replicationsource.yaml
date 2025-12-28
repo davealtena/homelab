@@ -14,8 +14,9 @@ spec:
     cacheAccessModes:
       - "${VOLSYNC_CACHE_ACCESSMODES:=ReadWriteOnce}"
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:=1Gi}"
-    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:=nfs-csi-sc}"
-    copyMethod: Direct
+    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:=openebs-hostpath}"
+    copyMethod: Snapshot
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:=csi-ceph-blockpool}"
     moverSecurityContext:
       runAsUser: ${APP_UID:=1000}
       runAsGroup: ${APP_GID:=1000}
@@ -25,4 +26,4 @@ spec:
       hourly: 24
       daily: 7
       weekly: 4
-    storageClassName: "${VOLSYNC_STORAGECLASS:=nfs-csi-sc}"
+    storageClassName: "${VOLSYNC_STORAGECLASS:=ceph-block}"
