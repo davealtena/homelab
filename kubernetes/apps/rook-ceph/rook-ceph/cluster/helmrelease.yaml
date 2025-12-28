@@ -66,8 +66,8 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        # Target the 1TB Crucial SSDs on all nodes (sda)
-        deviceFilter: ^sda$
+        # Target the 1TB Crucial SSDs on all nodes by WWN pattern
+        devicePathFilter: ^/dev/disk/by-id/wwn-0x500a0751e9.*
         config:
           osdsPerDevice: "1"
     cephBlockPools:
