@@ -36,12 +36,20 @@ _... powered by Talos Linux and Kubernetes_
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f3d7_fe0f/512.gif" alt="🏗️" width="20" height="20"> Infrastructure
 
 ### Hardware
-My entire Kubernetes cluster runs as VMs on a single beefy Proxmox machine. Yeah, not the most HA setup, but it gets the job done! The cluster consists of three control plane nodes (Odin, Thor, and Frigg) that handle both control plane and worker duties.
+
+The Valhalla cluster runs on 3 dedicated bare-metal Dell Optiplex nodes, all control planes pulling double duty as workers:
+
+| Node | Role | IP | Hardware |
+|------|------|------|----------|
+| **Baldur** | Control Plane | 192.168.1.105 | Dell Optiplex (256GB SSD + 1TB storage) |
+| **Freya** | Control Plane | 192.168.1.106 | Dell Optiplex (256GB SSD + 1TB storage) |
+| **Heimdall** | Control Plane | 192.168.1.107 | Dell Optiplex (256GB SSD + 1TB storage) |
+
+The cluster uses a shared VIP at `192.168.1.101` for high availability API access.
 
 ### Storage
-Currently running everything on NFS until I can afford to buy some proper NUCs (like the cool kids do!). Once I get those NUCs, the plan is to implement rook-ceph for distributed storage.
 
-For now, I maintain a dedicated 24 TB ZFS server that handles NFS/SMB file sharing, large-scale media storage, and backup operations.
+Currently running everything on NFS backed by a dedicated 24 TB ZFS server that handles NFS/SMB file sharing, large-scale media storage, and backup operations. With the bare-metal nodes each having 1TB SSDs, rook-ceph distributed storage is on the roadmap.
 
 ---
 
@@ -67,7 +75,7 @@ This is a [Talos Linux](https://www.talos.dev)-powered Kubernetes cluster manage
 
 **Home Automation**: Home Assistant handles all smart home devices and automations, with Zigbee devices connected via Zigbee2MQTT and EMQX as the MQTT broker.
 
-**Productivity**: Nextcloud for file sync and collaboration, Actual Budget for personal finance tracking, and n8n for workflow automation.
+**Productivity**: Actual Budget for personal finance tracking, and n8n for workflow automation.
 
 **Infrastructure**: PostgreSQL clusters managed by CloudNative-PG for application databases.
 
@@ -75,9 +83,8 @@ This is a [Talos Linux](https://www.talos.dev)-powered Kubernetes cluster manage
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.gif" alt="🚀" width="20" height="20"> Future Plans
 
-- **Storage**: Migrate from NFS to rook-ceph once I get dedicated NUC hardware
+- **Storage**: Migrate from NFS to rook-ceph using the 1TB SSDs on the bare-metal nodes
 - **Backups**: Properly configure Volsync for automated persistent volume backups
-- **High Availability**: Move to proper bare-metal nodes instead of running everything as VMs on one Proxmox host
 - **Monitoring**: Expand Grafana dashboards and alerting rules
 - **More Services**: Always looking for interesting self-hosted applications to add!
 
