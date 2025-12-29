@@ -21,9 +21,12 @@ cniConfig:
   name: none
 
 nodes:
+  # Baldur - Toshiba 256GB OS disk
   - hostname: "baldur"
     ipAddress: "192.168.1.105"
-    installDisk: "/dev/sdb"
+    installDiskSelector:
+      size: "<= 512GB"
+      model: "*TOSHIBA*"
     talosImageURL: factory.talos.dev/installer/4b3cd373a192c8469e859b7a0cfbed3ecc3577c4a2d346a37b0aeff9cd17cdb0
     controlPlane: true
     networkInterfaces:
@@ -38,9 +41,11 @@ nodes:
         mtu: 1500
         vip:
           ip: "192.168.1.101"
+  # Freya - Toshiba 256GB OS disk: naa.500080dc00d6459a
   - hostname: "freya"
     ipAddress: "192.168.1.106"
-    installDisk: "/dev/sdc"
+    installDiskSelector:
+      wwid: "naa.500080dc00d6459a"
     talosImageURL: factory.talos.dev/installer/4b3cd373a192c8469e859b7a0cfbed3ecc3577c4a2d346a37b0aeff9cd17cdb0
     controlPlane: true
     networkInterfaces:
@@ -55,9 +60,11 @@ nodes:
         mtu: 1500
         vip:
           ip: "192.168.1.101"
+  # Heimdall - Toshiba 256GB OS disk: naa.500080dc00f48477
   - hostname: "heimdall"
     ipAddress: "192.168.1.107"
-    installDisk: "/dev/sdc"
+    installDiskSelector:
+      wwid: "naa.500080dc00f48477"
     talosImageURL: factory.talos.dev/installer/4b3cd373a192c8469e859b7a0cfbed3ecc3577c4a2d346a37b0aeff9cd17cdb0
     controlPlane: true
     networkInterfaces:
