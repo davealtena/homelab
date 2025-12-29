@@ -6,11 +6,11 @@ metadata:
   name: homelab
 spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:16.9-22
-  instances: 3
+  instances: 1
   primaryUpdateStrategy: unsupervised
   storage:
     size: 10Gi
-    storageClass: openebs-hostpath
+    storageClass: ceph-block
   superuserSecret:
     name: cloudnative-pg-secret
   enableSuperuserAccess: true
