@@ -8,50 +8,8 @@ spec:
   chartRef:
     kind: OCIRepository
     name: mosquitto
-  interval: 1h
+  interval: 30m
   values:
-    controllers:
-      mosquitto:
-        type: statefulset
-        containers:
-          app:
-            image:
-              repository: public.ecr.aws/docker/library/eclipse-mosquitto
-              tag: 2.0.21
-            env:
-              TZ: Europe/Amsterdam
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 10m
-                memory: 32Mi
-              limits:
-                memory: 100Mi
-        statefulset:
-          volumeClaimTemplates:
-            - name: data
-              storageClass: nfs-csi-sc
-              accessMode: ReadWriteOnce
-              size: 1Gi
-              globalMounts:
-                - path: /mosquitto/data
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        controller: mosquitto
-        type: ClusterIP
-        ports:
-          mqtt:
-            port: 1883
     configMaps:
       config:
         data:
@@ -60,14 +18,54 @@ spec:
             autosave_interval 60
             connection_messages false
             listener 1883
-
             per_listener_settings false
             persistence true
-            persistence_location /mosquitto/data
+            persistence_location /config
+    controllers:
+      mosquitto:
+        pod:
+          securityContext:
+            fsGroup: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+        containers:
+          app:
+            image:
+              repository: public.ecr.aws/docker/library/eclipse-mosquitto
+              tag: 2.0.21
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
     persistence:
+      config:
+        existingClaim: mosquitto-config
       config-file:
         type: configMap
         identifier: config
-        globalMounts:
-          - path: /mosquitto/config/mosquitto.conf
-            subPath: mosquitto.conf
+        advancedMounts:
+          mosquitto:
+            app:
+              - path: /mosquitto/config/mosquitto.conf
+                subPath: mosquitto.conf
+    service:
+      app:
+        controller: mosquitto
+        type: ClusterIP
+        ports:
+          mqtt:
+            port: 1883

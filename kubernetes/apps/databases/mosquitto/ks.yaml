@@ -6,6 +6,11 @@ metadata:
   name: mosquitto
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: mosquitto
+  dependsOn:
+    - name: rook-ceph-cluster
   interval: 1h
   path: ./kubernetes/apps/databases/mosquitto/app
   prune: true
@@ -14,3 +19,4 @@ spec:
     name: flux-system
   targetNamespace: databases
   wait: false
+  timeout: 5m
