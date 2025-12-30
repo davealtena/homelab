@@ -6,7 +6,6 @@ metadata:
   name: mosquitto
   namespace: flux-system
 spec:
-  suspend: true
   interval: 1h
   path: ./kubernetes/apps/databases/mosquitto/app
   prune: true

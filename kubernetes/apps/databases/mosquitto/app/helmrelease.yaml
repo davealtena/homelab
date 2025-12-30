@@ -27,6 +27,7 @@ spec:
             resources:
               requests:
                 cpu: 10m
+                memory: 32Mi
               limits:
                 memory: 100Mi
         statefulset:
@@ -59,6 +60,7 @@ spec:
             autosave_interval 60
             connection_messages false
             listener 1883
+
             per_listener_settings false
             persistence true
             persistence_location /mosquitto/data

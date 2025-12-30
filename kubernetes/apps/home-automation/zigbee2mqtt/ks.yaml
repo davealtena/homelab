@@ -6,7 +6,6 @@ metadata:
   name: &app zigbee2mqtt
   namespace: flux-system
 spec:
-  suspend: true
   targetNamespace: home-automation
   commonMetadata:
     labels:
