@@ -39,6 +39,9 @@ nodes:
           - network: 0.0.0.0/0
             gateway: "192.168.1.1"
         mtu: 1500
+        vlans:
+          - vlanId: 20
+            dhcp: false
         vip:
           ip: "192.168.1.101"
   # Freya - Toshiba 256GB OS disk: naa.500080dc00d6459a
@@ -58,6 +61,9 @@ nodes:
           - network: 0.0.0.0/0
             gateway: "192.168.1.1"
         mtu: 1500
+        vlans:
+          - vlanId: 20
+            dhcp: false
         vip:
           ip: "192.168.1.101"
   # Heimdall - Toshiba 256GB OS disk: naa.500080dc00f48477
@@ -77,6 +83,9 @@ nodes:
           - network: 0.0.0.0/0
             gateway: "192.168.1.1"
         mtu: 1500
+        vlans:
+          - vlanId: 20
+            dhcp: false
         vip:
           ip: "192.168.1.101"
 
