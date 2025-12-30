@@ -14,10 +14,7 @@ spec:
           "master": "enp1s0.20",
           "mode": "bridge",
           "ipam": {
-            "type": "static",
-            "routes": [
-              { "dst": "192.168.20.0/24" }
-            ]
+            "type": "static"
           }
         }
       ]
