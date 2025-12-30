@@ -13,6 +13,7 @@ spec:
   path: ./kubernetes/apps/home-automation/home-assistant/app
   dependsOn:
     - name: external-secrets-stores
+    - name: mosquitto
   prune: true
   sourceRef:
     kind: GitRepository

@@ -67,7 +67,7 @@ spec:
     persistence:
       config-file:
         type: configMap
-        name: mosquitto-config
+        identifier: config
         globalMounts:
           - path: /mosquitto/config/mosquitto.conf
             subPath: mosquitto.conf
