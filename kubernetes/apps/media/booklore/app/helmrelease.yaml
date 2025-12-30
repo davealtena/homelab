@@ -65,6 +65,13 @@ spec:
                   timeoutSeconds: 3
                   failureThreshold: 30
 
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+
           mariadb:
             image:
               repository: lscr.io/linuxserver/mariadb
@@ -84,6 +91,13 @@ spec:
                   secretKeyRef:
                     name: booklore
                     key: DB_ROOT_PASSWORD
+
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
 
     service:
       app:

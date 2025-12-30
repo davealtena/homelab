@@ -18,6 +18,12 @@ spec:
       strategy: rollback
       retries: 3
   values:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 256Mi
+      limits:
+        memory: 1Gi
     service:
       enabled: true
       port: 8080

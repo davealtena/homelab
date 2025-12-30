@@ -65,6 +65,12 @@ spec:
           rule_path: /var/loki/rules/fake
     singleBinary:
       replicas: 1
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 256Mi
       persistence:
         enabled: true
         storageClass: nfs-csi-sc
