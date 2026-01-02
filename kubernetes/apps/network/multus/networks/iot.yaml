@@ -14,7 +14,10 @@ spec:
           "master": "enp1s0.20",
           "mode": "bridge",
           "ipam": {
-            "type": "static"
+            "type": "static",
+            "addresses": [
+              { "address": "192.168.20.140/24" }
+            ]
           }
         }
       ]
