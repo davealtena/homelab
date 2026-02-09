@@ -15,8 +15,8 @@ gatewayAPI:
   enabled: false
 cni:
   exclusive: false
-# NOTE: devices might need to be set if you have more than one active NIC on your hosts
-# devices: eno+ eth+
+# Explicit device selection required for L2 announcements on Talos nodes
+devices: enp+
 endpointRoutes:
   enabled: true
 hubble:
