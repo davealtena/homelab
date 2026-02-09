@@ -21,6 +21,15 @@
       "fileMatch": ["\\.yaml(?:\\.j2)?$"],
       "matchStrings": ["oci://(?<depName>[^:]+):(?<currentValue>\\S+)"],
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": ["Process OCIRepository tag field"],
+      "fileMatch": ["\\.yaml(?:\\.j2)?$"],
+      "matchStrings": [
+        "kind: OCIRepository[\\s\\S]*?url: oci://(?<depName>[^\\s]+)[\\s\\S]*?tag: (?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "docker"
     }
   ]
 }
