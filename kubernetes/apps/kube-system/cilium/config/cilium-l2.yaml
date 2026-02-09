@@ -8,7 +8,7 @@ spec:
   externalIPs: true
   loadBalancerIPs: true
   interfaces:
-    - ^enp.*
+    - ^(enp|eno|eth).*
   nodeSelector:
     matchLabels:
       kubernetes.io/os: linux
