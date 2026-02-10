@@ -59,14 +59,13 @@ spec:
                     name: keycloak-secret
                     key: KC_DB_PASSWORD
               KC_HEALTH_ENABLED: "true"
-              KC_HTTP_RELATIVE_PATH: /
               KC_METRICS_ENABLED: "true"
-              KEYCLOAK_ADMIN:
+              KC_BOOTSTRAP_ADMIN_USERNAME:
                 valueFrom:
                   secretKeyRef:
                     name: keycloak-secret
                     key: KEYCLOAK_ADMIN
-              KEYCLOAK_ADMIN_PASSWORD:
+              KC_BOOTSTRAP_ADMIN_PASSWORD:
                 valueFrom:
                   secretKeyRef:
                     name: keycloak-secret
@@ -78,9 +77,9 @@ spec:
                 spec:
                   httpGet:
                     path: /health/live
-                    port: &port 8080
-                  initialDelaySeconds: 60
-                  periodSeconds: 10
+                    port: &healthPort 9000
+                  initialDelaySeconds: 90
+                  periodSeconds: 30
                   timeoutSeconds: 5
                   failureThreshold: 3
               readiness:
@@ -89,8 +88,8 @@ spec:
                 spec:
                   httpGet:
                     path: /health/ready
-                    port: &healthPort 9000
-                  initialDelaySeconds: 60
+                    port: *healthPort
+                  initialDelaySeconds: 10
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 3
@@ -101,7 +100,7 @@ spec:
                   httpGet:
                     path: /health/started
                     port: *healthPort
-                  initialDelaySeconds: 30
+                  initialDelaySeconds: 60
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 30
@@ -117,7 +116,7 @@ spec:
         controller: keycloak
         ports:
           http:
-            port: *port
+            port: 8080
           metrics:
             port: 9000
       headless:
@@ -126,7 +125,7 @@ spec:
         clusterIP: None
         ports:
           http:
-            port: *port
+            port: 8080
 
     serviceMonitor:
       app:
@@ -155,4 +154,4 @@ spec:
         rules:
           - backendRefs:
               - name: keycloak
-                port: *port
+                port: 8080
