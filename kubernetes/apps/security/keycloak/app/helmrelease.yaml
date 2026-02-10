@@ -46,7 +46,7 @@ spec:
               - --http-enabled=true
               - --http-port=8080
               - --hostname-strict=false
-              - --hostname-url=https://sso.${CLUSTER_DOMAIN}
+              - --hostname=sso.${CLUSTER_DOMAIN}
               - --log-level=INFO
             env:
               JAVA_OPTS_APPEND: -Djgroups.dns.query=keycloak-headless
