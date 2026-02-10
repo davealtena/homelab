@@ -5,5 +5,6 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./external-secrets/ks.yaml
+  - ./keycloak/ks.yaml
   - ./onepassword-connect/ks.yaml
   - ./trivy-operator/ks.yaml
