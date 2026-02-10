@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: keycloak
+spec:
+  interval: 12h
+  provider: generic
+  url: oci://ghcr.io/bjw-s-labs/helm-charts/app-template
+  ref:
+    semver: 4.x

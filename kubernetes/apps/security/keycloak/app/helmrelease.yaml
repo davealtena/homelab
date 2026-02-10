@@ -1,0 +1,160 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: keycloak
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: keycloak
+  values:
+    controllers:
+      keycloak:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 17.4
+              pullPolicy: IfNotPresent
+            envFrom:
+              - secretRef:
+                  name: keycloak-secret
+
+        containers:
+          app:
+            image:
+              repository: quay.io/keycloak/keycloak
+              tag: 26.5.3
+            command:
+              - /opt/keycloak/bin/kc.sh
+            args:
+              - start
+              - --optimized
+              - --proxy-headers=xforwarded
+              - --http-enabled=true
+              - --http-port=8080
+              - --hostname-strict=false
+              - --hostname-url=https://sso.${CLUSTER_DOMAIN}
+              - --log-level=INFO
+            env:
+              JAVA_OPTS_APPEND: -Djgroups.dns.query=keycloak-headless
+              KC_DB: postgres
+              KC_DB_URL_HOST: homelab-rw.databases.svc.cluster.local
+              KC_DB_URL_PORT: "5432"
+              KC_DB_URL_DATABASE: keycloak
+              KC_DB_USERNAME: keycloak
+              KC_DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: keycloak-secret
+                    key: KC_DB_PASSWORD
+              KC_HEALTH_ENABLED: "true"
+              KC_HTTP_RELATIVE_PATH: /
+              KC_METRICS_ENABLED: "true"
+              KEYCLOAK_ADMIN:
+                valueFrom:
+                  secretKeyRef:
+                    name: keycloak-secret
+                    key: KEYCLOAK_ADMIN
+              KEYCLOAK_ADMIN_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: keycloak-secret
+                    key: KEYCLOAK_ADMIN_PASSWORD
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health/live
+                    port: &port 8080
+                  initialDelaySeconds: 60
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health/ready
+                    port: *port
+                  initialDelaySeconds: 60
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health/started
+                    port: *port
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 1Gi
+
+    service:
+      app:
+        controller: keycloak
+        ports:
+          http:
+            port: *port
+          metrics:
+            port: 9000
+      headless:
+        controller: keycloak
+        type: ClusterIP
+        clusterIP: None
+        ports:
+          http:
+            port: *port
+
+    serviceMonitor:
+      app:
+        serviceName: keycloak
+        endpoints:
+          - port: metrics
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+
+    persistence:
+      data:
+        existingClaim: keycloak
+        globalMounts:
+          - path: /opt/keycloak/data
+
+    route:
+      app:
+        hostnames:
+          - sso.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: keycloak
+                port: *port
