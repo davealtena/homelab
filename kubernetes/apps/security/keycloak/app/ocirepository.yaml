@@ -7,6 +7,6 @@ metadata:
 spec:
   interval: 12h
   provider: generic
-  url: oci://ghcr.io/bjw-s-labs/helm-charts/app-template
+  url: oci://ghcr.io/bjw-s-labs/helm/app-template
   ref:
     semver: 4.x
