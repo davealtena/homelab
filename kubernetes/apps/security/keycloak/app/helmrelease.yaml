@@ -89,7 +89,7 @@ spec:
                 spec:
                   httpGet:
                     path: /health/ready
-                    port: *port
+                    port: &healthPort 9000
                   initialDelaySeconds: 60
                   periodSeconds: 10
                   timeoutSeconds: 5
@@ -100,7 +100,7 @@ spec:
                 spec:
                   httpGet:
                     path: /health/started
-                    port: *port
+                    port: *healthPort
                   initialDelaySeconds: 30
                   periodSeconds: 10
                   timeoutSeconds: 5
