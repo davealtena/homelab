@@ -129,7 +129,7 @@ spec:
 
     serviceMonitor:
       app:
-        serviceName: keycloak
+        serviceName: keycloak-app
         endpoints:
           - port: metrics
             scheme: http
@@ -153,5 +153,5 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: keycloak
+              - name: keycloak-app
                 port: 8080
