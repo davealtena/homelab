@@ -10,7 +10,6 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="External-dns"
   gnetId: 15038
-  revision: 3
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus

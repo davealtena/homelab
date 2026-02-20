@@ -10,7 +10,6 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Node Exporter Full"
   gnetId: 1860
-  revision: 37
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
@@ -26,7 +25,6 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Prometheus"
   gnetId: 19105
-  revision: 3
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
