@@ -3,12 +3,14 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: cert-manager
+  name: ceph-cluster
 spec:
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  url: https://raw.githubusercontent.com/monitoring-mixins/website/master/assets/cert-manager/dashboards/cert-manager.json
+  # renovate: depName="Ceph Cluster"
+  gnetId: 2842
+  revision: 18
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
@@ -17,12 +19,14 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: external-secrets
+  name: ceph-osd
 spec:
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  url: https://raw.githubusercontent.com/external-secrets/external-secrets/main/docs/snippets/dashboard.json
+  # renovate: depName="Ceph - OSD (Single)"
+  gnetId: 5336
+  revision: 9
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
@@ -31,14 +35,14 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: trivy-operator
+  name: ceph-pools
 spec:
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  # renovate: depName="Trivy Operator Dashboard"
-  gnetId: 17813
-  revision: 2
+  # renovate: depName="Ceph - Pools"
+  gnetId: 5342
+  revision: 9
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus

@@ -13,3 +13,4 @@ configMapGenerator:
       - values.yaml=./helm-values.yaml
 configurations:
   - kustomizeconfig.yaml
+  - ./grafanadashboard.yaml

@@ -3,12 +3,12 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: miniflux
+  name: envoy-gateway
 spec:
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  url: https://raw.githubusercontent.com/miniflux/v2/main/contrib/grafana/dashboard.json
+  url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-gateway-global.json
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
@@ -17,14 +17,12 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: unpackerr
+  name: envoy-proxy
 spec:
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  # renovate: depName="Unpackerr"
-  gnetId: 18817
-  revision: 1
+  url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-proxy-global.json
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus

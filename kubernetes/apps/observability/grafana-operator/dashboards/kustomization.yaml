@@ -6,8 +6,5 @@ namespace: observability
 resources:
   - ./kubernetes.yaml
   - ./node-prometheus.yaml
-  - ./flux.yaml
   - ./networking.yaml
-  - ./security.yaml
-  - ./storage.yaml
-  - ./apps.yaml
+  - ./general.yaml
