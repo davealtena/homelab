@@ -1,0 +1,112 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-api-server
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  # renovate: depName="Kubernetes / System / API Server"
+  gnetId: 15761
+  revision: 17
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-coredns
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  # renovate: depName="Kubernetes / System / CoreDNS"
+  gnetId: 15762
+  revision: 18
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-global
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  # renovate: depName="Kubernetes / Views / Global"
+  gnetId: 15757
+  revision: 37
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-namespaces
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  # renovate: depName="Kubernetes / Views / Namespaces"
+  gnetId: 15758
+  revision: 35
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-nodes
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  # renovate: depName="Kubernetes / Views / Nodes"
+  gnetId: 15759
+  revision: 29
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-pods
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  # renovate: depName="Kubernetes / Views / Pods"
+  gnetId: 15760
+  revision: 29
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-volumes
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  # renovate: depName="K8s / Storage / Volumes / Cluster"
+  gnetId: 11454
+  revision: 14
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
