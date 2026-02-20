@@ -11,3 +11,4 @@ configMapGenerator:
       - values.yaml=./values.yaml
 configurations:
   - kustomizeconfig.yaml
+  - ./grafanadashboard.yaml

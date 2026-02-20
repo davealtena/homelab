@@ -7,3 +7,4 @@ resources:
   - ./ocirepository.yaml
   - ./prometheusrule.yaml
   - ./mutatingadmissionpolicy.yaml
+  - ./grafanadashboard.yaml
