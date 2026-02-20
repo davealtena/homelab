@@ -52,7 +52,7 @@ spec:
                 - name: GF_SECURITY_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: grafana-admin-secret
+                      name: grafana-admin-credentials
                       key: admin-password
               resources:
                 requests:
