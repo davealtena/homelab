@@ -6,4 +6,3 @@ namespace: observability
 resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
-  - ./grafanadashboard.yaml
