@@ -9,7 +9,8 @@ spec:
     matchLabels:
       grafana.internal/instance: grafana
   # renovate: depName="Trivy Operator Dashboard"
-  gnetId: 17813
+  grafanaCom:
+    id: 17813
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus

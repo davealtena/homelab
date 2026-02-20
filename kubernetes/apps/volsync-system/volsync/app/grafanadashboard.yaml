@@ -9,7 +9,8 @@ spec:
     matchLabels:
       grafana.internal/instance: grafana
   # renovate: depName="VolSync Dashboard"
-  gnetId: 21356
+  grafanaCom:
+    id: 21356
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
