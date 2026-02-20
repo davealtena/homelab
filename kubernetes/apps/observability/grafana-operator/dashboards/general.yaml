@@ -24,7 +24,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Unpackerr"
   grafanaCom:
-    id: 18817  datasources:
+    id: 18817
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -39,7 +40,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="ZFS"
   grafanaCom:
-    id: 7845  datasources:
+    id: 7845
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -54,6 +56,7 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Dashboard for smartctl_exporter"
   grafanaCom:
-    id: 20204  datasources:
+    id: 20204
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus

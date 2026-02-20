@@ -10,7 +10,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Ceph Cluster"
   grafanaCom:
-    id: 2842  datasources:
+    id: 2842
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -25,7 +26,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Ceph - OSD (Single)"
   grafanaCom:
-    id: 5336  datasources:
+    id: 5336
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -40,6 +42,7 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Ceph - Pools"
   grafanaCom:
-    id: 5342  datasources:
+    id: 5342
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus

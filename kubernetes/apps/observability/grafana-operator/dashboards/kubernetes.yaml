@@ -10,7 +10,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Kubernetes / System / API Server"
   grafanaCom:
-    id: 15761  datasources:
+    id: 15761
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -25,7 +26,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Kubernetes / System / CoreDNS"
   grafanaCom:
-    id: 15762  datasources:
+    id: 15762
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -40,7 +42,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Kubernetes / Views / Global"
   grafanaCom:
-    id: 15757  datasources:
+    id: 15757
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -55,7 +58,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Kubernetes / Views / Namespaces"
   grafanaCom:
-    id: 15758  datasources:
+    id: 15758
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -70,7 +74,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Kubernetes / Views / Nodes"
   grafanaCom:
-    id: 15759  datasources:
+    id: 15759
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -85,7 +90,8 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="Kubernetes / Views / Pods"
   grafanaCom:
-    id: 15760  datasources:
+    id: 15760
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
 ---
@@ -100,6 +106,7 @@ spec:
       grafana.internal/instance: grafana
   # renovate: depName="K8s / Storage / Volumes / Cluster"
   grafanaCom:
-    id: 11454  datasources:
+    id: 11454
+  datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
