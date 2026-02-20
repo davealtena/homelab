@@ -10,3 +10,4 @@ resources:
   - ./networking.yaml
   - ./security.yaml
   - ./storage.yaml
+  - ./apps.yaml
