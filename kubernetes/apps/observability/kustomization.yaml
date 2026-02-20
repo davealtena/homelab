@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./blackbox-exporter/ks.yaml
-  - ./grafana/ks.yaml
+  - ./grafana-operator/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./kromgo/ks.yaml
   - ./loki/ks.yaml
