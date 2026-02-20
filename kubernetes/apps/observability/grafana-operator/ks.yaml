@@ -17,3 +17,45 @@ spec:
     kind: GitRepository
     name: homelab
   wait: false
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app grafana-operator-instance
+  namespace: flux-system
+spec:
+  targetNamespace: observability
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: grafana-operator
+  interval: 10m
+  path: ./kubernetes/apps/observability/grafana-operator/instance
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: homelab
+  wait: false
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app grafana-operator-dashboards
+  namespace: flux-system
+spec:
+  targetNamespace: observability
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: grafana-operator-instance
+  interval: 10m
+  path: ./kubernetes/apps/observability/grafana-operator/dashboards
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: homelab
+  wait: false
