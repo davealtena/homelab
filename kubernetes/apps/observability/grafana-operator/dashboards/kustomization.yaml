@@ -8,3 +8,5 @@ resources:
   - ./node-prometheus.yaml
   - ./flux.yaml
   - ./networking.yaml
+  - ./security.yaml
+  - ./storage.yaml
