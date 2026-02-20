@@ -32,7 +32,6 @@ spec:
   dependsOn:
     - name: grafana-operator
     - name: rook-ceph-cluster
-      namespace: rook-ceph
   interval: 10m
   path: ./kubernetes/apps/observability/grafana-operator/instance
   prune: true
