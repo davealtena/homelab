@@ -39,6 +39,8 @@ spec:
 
     secrets:
       accesskeyEncryptionKey: SEMAPHORE_ACCESS_KEY_ENCRYPTION
+      cookieHashKey: SEMAPHORE_COOKIE_HASH
+      cookieEncryptionKey: SEMAPHORE_COOKIE_ENCRYPTION
       existingSecret: semaphore-secret
 
     postgresql:
@@ -94,12 +96,3 @@ spec:
       limits:
         memory: 512Mi
 
-  valuesFrom:
-    - kind: Secret
-      name: semaphore-secret
-      valuesKey: SEMAPHORE_COOKIE_HASH
-      targetPath: secrets.cookieHashKey
-    - kind: Secret
-      name: semaphore-secret
-      valuesKey: SEMAPHORE_COOKIE_ENCRYPTION
-      targetPath: secrets.cookieEncryptionKey
