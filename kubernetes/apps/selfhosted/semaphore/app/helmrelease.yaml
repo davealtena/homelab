@@ -96,3 +96,12 @@ spec:
       limits:
         memory: 512Mi
 
+  valuesFrom:
+    - kind: Secret
+      name: semaphore-secret
+      valuesKey: OIDC_CLIENT_ID
+      targetPath: oidc.providers.keycloak.client_id
+    - kind: Secret
+      name: semaphore-secret
+      valuesKey: OIDC_CLIENT_SECRET
+      targetPath: oidc.providers.keycloak.client_secret
