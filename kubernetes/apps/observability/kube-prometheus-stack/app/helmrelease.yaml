@@ -22,7 +22,6 @@ spec:
       rules:
         kubeApiserverBurnrate: false
         kubeApiserverSlos: false
-        kubeMemoryOvercommit: false
     alertmanager:
       route:
         main:
