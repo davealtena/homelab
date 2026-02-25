@@ -1,0 +1,105 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: semaphore
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: semaphore
+  interval: 30m
+  values:
+    fullnameOverride: ansible-semaphore
+    replicaCount: 1
+
+    annotations:
+      reloader.stakater.com/auto: "true"
+
+    extraInitContainers:
+      - name: 01-init-db
+        image: ghcr.io/onedr0p/postgres-init:17.4
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - secretRef:
+              name: semaphore-secret
+
+    image:
+      repository: docker.io/semaphoreui/semaphore
+      tag: v2.16.51
+      pullPolicy: IfNotPresent
+
+    extraEnvVariables:
+      SEMAPHORE_SCHEDULE_TIMEZONE: Europe/Amsterdam
+      ANSIBLE_HOST_KEY_CHECKING: "false"
+      SEMAPHORE_PORT: &port 3000
+
+    general:
+      host: https://semaphore.${CLUSTER_DOMAIN}
+      tmp_path: /tmp/semaphore/
+
+    secrets:
+      accesskeyEncryptionKey: SEMAPHORE_ACCESS_KEY_ENCRYPTION
+      existingSecret: semaphore-secret
+
+    postgresql:
+      enabled: false
+
+    database:
+      type: postgres
+      host: homelab-rw.databases.svc.cluster.local
+      name: semaphore
+      port: "5432"
+      usernameFromSecret: true
+      usernameKey: SEMAPHORE_DB_USER
+      passwordKey: SEMAPHORE_DB_PASS
+      existingSecret: semaphore-secret
+
+    persistence:
+      enabled: true
+      storageClass: ceph-block
+      size: 5Gi
+      accessModes:
+        - ReadWriteOnce
+
+    oidc:
+      enable: true
+      providers:
+        keycloak:
+          display_name: Login with Keycloak
+          provider_url: https://sso.${CLUSTER_DOMAIN}/realms/master
+          redirect_url: https://semaphore.${CLUSTER_DOMAIN}/api/auth/oidc/keycloak/redirect/
+          username_claim: preferred_username
+          name_claim: name
+          email_claim: email
+          scopes:
+            - openid
+            - email
+            - profile
+
+    ldap:
+      enable: false
+
+    service:
+      type: ClusterIP
+      port: *port
+      internalPort: *port
+
+    ingress:
+      enabled: false
+
+    resources:
+      requests:
+        cpu: 5m
+        memory: 50M
+      limits:
+        memory: 512Mi
+
+  valuesFrom:
+    - kind: Secret
+      name: semaphore-secret
+      valuesKey: SEMAPHORE_COOKIE_HASH
+      targetPath: secrets.cookieHashKey
+    - kind: Secret
+      name: semaphore-secret
+      valuesKey: SEMAPHORE_COOKIE_ENCRYPTION
+      targetPath: secrets.cookieEncryptionKey
