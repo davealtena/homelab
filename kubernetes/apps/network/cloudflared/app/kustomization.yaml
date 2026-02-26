@@ -7,10 +7,10 @@ resources:
   - ./dnsEndpoint.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./grafanadashboard.yaml
 configMapGenerator:
   - name: cloudflared-configmap
     files:
       - config.yaml=./resources/config.yaml
 generatorOptions:
   disableNameSuffixHash: true
-  - ./grafanadashboard.yaml
