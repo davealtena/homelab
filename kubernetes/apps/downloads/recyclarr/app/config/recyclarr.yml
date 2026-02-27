@@ -5,10 +5,8 @@ sonarr:
     base_url: http://sonarr.downloads.svc.cluster.local:8989
     api_key: !env_var SONARR_API_KEY
     delete_old_custom_formats: true
-    include:
-      - template: sonarr-quality-definition-series
-      - template: sonarr-v4-quality-profile-web-1080p
-      - template: sonarr-v4-custom-formats-web-1080p
+    quality_definition:
+      type: series
     quality_profiles:
       - name: WEB-1080p
     custom_formats:
