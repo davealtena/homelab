@@ -17,7 +17,7 @@
       "automergeType": "pr",
       "matchUpdateTypes": ["minor", "patch"],
       "matchPackagePatterns": ["/kube-prometheus-stack/", "/grafana/"],
-      "ignoreTests": false
+      "ignoreTests": true
     },
     {
       "description": ["Auto-merge GitHub Actions"],

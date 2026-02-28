@@ -12,12 +12,12 @@
     "github>davealtena/homelab//.renovate/labels.json5",
     "github>davealtena/homelab//.renovate/overrides.json5",
     "github>davealtena/homelab//.renovate/semanticCommits.json5",
-    ":automergeBranch",
     ":disableRateLimiting",
     ":dependencyDashboard",
     ":semanticCommits",
     ":timezone(Europe/Amsterdam)"
   ],
+  "platformAutomerge": true,
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": [
     "prEditedNotification",
