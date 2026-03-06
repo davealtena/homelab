@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: ghcr.io/booklore-app/booklore
-              tag: v2.0.4
+              tag: v2.0.5
 
             env:
               TZ: ${TIMEZONE}
@@ -75,7 +75,7 @@ spec:
           mariadb:
             image:
               repository: lscr.io/linuxserver/mariadb
-              tag: 11.4.8
+              tag: 11.4.9
 
             env:
               TZ: ${TIMEZONE}
