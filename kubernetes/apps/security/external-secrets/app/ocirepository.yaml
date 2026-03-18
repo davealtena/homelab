@@ -16,4 +16,4 @@ spec:
     provider: cosign
     matchOIDCIdentity:
       - issuer: "https://token.actions.githubusercontent.com"
-        subject: "https://github.com/external-secrets/external-secrets/.github/workflows/publish.yml@refs/tags/.*"
+        subject: "https://github.com/external-secrets/external-secrets/.github/workflows/helm.yml@refs/heads/main"
