@@ -9,8 +9,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: mosquitto
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: rook-ceph-cluster
+    - name: volsync
   interval: 1h
   path: ./kubernetes/apps/databases/mosquitto/app
   prune: true
@@ -20,3 +23,10 @@ spec:
   targetNamespace: databases
   wait: false
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: mosquitto
+      VOLSYNC_CLAIM: mosquitto-config
+      VOLSYNC_CAPACITY: 1Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

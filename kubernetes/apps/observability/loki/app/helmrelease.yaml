@@ -73,7 +73,7 @@ spec:
           memory: 256Mi
       persistence:
         enabled: true
-        storageClass: nfs-csi-sc
+        storageClass: ceph-block
         size: 50Gi
     gateway:
       replicas: 0

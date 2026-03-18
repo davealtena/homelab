@@ -2,21 +2,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: booklore
-spec:
-  accessModes: ["ReadWriteOnce"]
-  resources:
-    requests:
-      storage: 50Gi
-  storageClassName: nfs-csi-sc
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: booklore-mariadb
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:
       storage: 10Gi
-  storageClassName: nfs-csi-sc
+  storageClassName: ceph-block

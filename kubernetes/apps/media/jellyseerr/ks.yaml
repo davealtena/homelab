@@ -10,6 +10,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: volsync
+    - name: rook-ceph-cluster
   interval: 30m
   path: ./kubernetes/apps/media/jellyseerr/app
   prune: true
@@ -21,3 +26,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CAPACITY: 15Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

@@ -10,9 +10,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: external-secrets-stores
     - name: mosquitto
+    - name: volsync
+    - name: rook-ceph-cluster
   path: ./kubernetes/apps/home-automation/zigbee2mqtt/app
   prune: true
   sourceRef:
@@ -22,3 +26,9 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool
