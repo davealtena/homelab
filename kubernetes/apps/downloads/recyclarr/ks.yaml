@@ -10,6 +10,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
+  components:
+    - ../../../../components/volsync
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/downloads/recyclarr/app
@@ -20,3 +22,12 @@ spec:
   wait: false
   dependsOn:
     - name: external-secrets-stores
+    - name: volsync
+    - name: rook-ceph-cluster
+  postBuild:
+    substitute:
+      APP: *appname
+      VOLSYNC_CLAIM: recyclarr-config
+      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

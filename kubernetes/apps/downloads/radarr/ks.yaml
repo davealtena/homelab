@@ -10,6 +10,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
+  components:
+    - ../../../../components/volsync
   interval: 10m
   path: ./kubernetes/apps/downloads/radarr/app
   prune: true
@@ -19,7 +21,12 @@ spec:
   wait: false
   dependsOn:
     - name: external-secrets-stores
+    - name: volsync
+    - name: rook-ceph-cluster
   postBuild:
     substitute:
       APP: *appname
-      VOLSYNC_CLAIM: radarr-config
+      VOLSYNC_CLAIM: radarr
+      VOLSYNC_CAPACITY: 15Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

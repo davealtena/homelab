@@ -6,7 +6,6 @@ resources:
   - ./helmrelease.yaml
   - ./externalsecret.yaml
   - ./ocirepository.yaml
-  - ./pvc.yaml
 configMapGenerator:
   - name: sabnzbd-scripts
     files:

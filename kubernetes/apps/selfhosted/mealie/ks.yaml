@@ -10,6 +10,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: external-secrets-stores
+    - name: cnpg-cluster
+    - name: volsync
+    - name: rook-ceph-cluster
   path: "./kubernetes/apps/selfhosted/mealie/app"
   prune: true
   sourceRef:
@@ -18,10 +25,10 @@ spec:
   wait: false # no flux ks dependents
   interval: 30m
   timeout: 5m
-  dependsOn:
-    - name: external-secrets-stores
-    - name: cnpg-cluster
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CAPACITY: 15Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool
 

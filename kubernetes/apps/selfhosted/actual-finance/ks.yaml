@@ -10,6 +10,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: volsync
+    - name: rook-ceph-cluster
   path: ./kubernetes/apps/selfhosted/actual-finance/app
   prune: true
   sourceRef:
@@ -22,3 +27,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CLAIM: actual
+      VOLSYNC_CAPACITY: 10Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

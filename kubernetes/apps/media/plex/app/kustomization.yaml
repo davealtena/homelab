@@ -3,4 +3,3 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./pvc-cache.yaml
-  - ./pvc-config.yaml

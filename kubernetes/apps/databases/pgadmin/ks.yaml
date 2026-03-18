@@ -10,9 +10,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
-  path: ./kubernetes/apps/databases/pgadmin/app
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: cnpg-cluster
+    - name: volsync
+    - name: rook-ceph-cluster
+  path: ./kubernetes/apps/databases/pgadmin/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -21,3 +25,10 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: pgadmin
+      VOLSYNC_CLAIM: pgadmin-data
+      VOLSYNC_CAPACITY: 1Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

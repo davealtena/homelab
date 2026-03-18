@@ -10,10 +10,14 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/home-automation/home-assistant/app
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: external-secrets-stores
     - name: mosquitto
+    - name: volsync
+    - name: rook-ceph-cluster
+  path: ./kubernetes/apps/home-automation/home-assistant/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -25,4 +29,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_CAPACITY: 15Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

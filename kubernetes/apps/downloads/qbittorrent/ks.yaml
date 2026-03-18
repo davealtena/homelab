@@ -10,8 +10,12 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: external-secrets-stores
+    - name: volsync
+    - name: rook-ceph-cluster
   path: ./kubernetes/apps/downloads/qbittorrent/app
   prune: true
   sourceRef:
@@ -24,3 +28,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CAPACITY: 75Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

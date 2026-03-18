@@ -10,6 +10,12 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: external-secrets-stores
+    - name: volsync
+    - name: rook-ceph-cluster
   interval: 30m
   timeout: 5m
   path: "./kubernetes/apps/selfhosted/n8n/app"
@@ -18,10 +24,11 @@ spec:
     kind: GitRepository
     name: flux-system
   wait: false
-  dependsOn:
-    - name: external-secrets-stores
   postBuild:
     substitute:
       APP: *appname
       APP_UID: "1000"
       APP_GID: "1000"
+      VOLSYNC_CAPACITY: 20Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

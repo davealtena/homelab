@@ -9,13 +9,21 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: external-secrets-stores
+    - name: volsync
+    - name: rook-ceph-cluster
   interval: 30m
   path: "./kubernetes/apps/downloads/sabnzbd/app"
   postBuild:
     substitute:
       APP: *appname
+      VOLSYNC_CLAIM: sabnzbd-config
+      VOLSYNC_CAPACITY: 2Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool
   prune: true
   sourceRef:
     kind: GitRepository

@@ -10,6 +10,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
+  components:
+    - ../../../../components/volsync
   interval: 10m
   path: ./kubernetes/apps/downloads/sonarr/app
   prune: true
@@ -19,7 +21,12 @@ spec:
   wait: false
   dependsOn:
     - name: external-secrets-stores
+    - name: volsync
+    - name: rook-ceph-cluster
   postBuild:
     substitute:
       APP: *name
-      VOLSYNC_CLAIM: sonarr-config
+      VOLSYNC_CLAIM: sonarr
+      VOLSYNC_CAPACITY: 15Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool

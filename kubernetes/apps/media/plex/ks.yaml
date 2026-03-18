@@ -10,6 +10,12 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: external-secrets-stores
+    - name: volsync
+    - name: rook-ceph-cluster
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/media/plex/app
@@ -18,5 +24,10 @@ spec:
     kind: GitRepository
     name: flux-system
   wait: true
-  dependsOn:
-    - name: external-secrets-stores
+  postBuild:
+    substitute:
+      APP: plex
+      VOLSYNC_CLAIM: plex-config
+      VOLSYNC_CAPACITY: 15Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool
