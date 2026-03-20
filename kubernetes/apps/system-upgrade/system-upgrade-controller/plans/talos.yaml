@@ -19,6 +19,7 @@ spec:
       ignoreUpdates: true
   serviceAccountName: system-upgrade-controller
   upgrade:
+    # renovate: datasource=docker depName=ghcr.io/jfroy/tnu
     image: ghcr.io/jfroy/tnu:0.4.4
     args:
       - --node=$(SYSTEM_UPGRADE_NODE_NAME)

@@ -49,6 +49,14 @@
       "matchUpdateTypes": ["minor", "patch"],
       "matchPackagePatterns": ["/external-dns/", "/gateway-api/", "/prometheus-operator/"],
       "ignoreTests": true
+    },
+    {
+      "description": ["Auto-merge all non-breaking container updates"],
+      "matchDatasources": ["docker"],
+      "automerge": true,
+      "automergeType": "pr",
+      "matchUpdateTypes": ["minor", "patch"],
+      "ignoreTests": false
     }
   ]
 }
