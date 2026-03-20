@@ -81,10 +81,10 @@
       "separateMinorPatch": true
     },
     {
-      "description": ["System Upgrade Controller"],
-      "groupName": "System Upgrade Controller",
-      "matchPackagePatterns": ["system-upgrade-controller"],
-      "matchDatasources": ["docker", "github-releases"],
+      "description": ["Tuppr"],
+      "groupName": "Tuppr",
+      "matchPackagePatterns": ["tuppr"],
+      "matchDatasources": ["docker"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
