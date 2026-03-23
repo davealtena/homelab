@@ -12,16 +12,23 @@ spec:
   kopia:
     accessModes:
       - "${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"
-    cacheAccessModes:
-      - "${VOLSYNC_CACHE_ACCESSMODES:=ReadWriteOnce}"
-    cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:=1Gi}"
-    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:=ceph-block}"
     capacity: "${VOLSYNC_CAPACITY:=5Gi}"
+    cleanupCachePVC: true
+    cleanupTempPVC: true
     copyMethod: Snapshot
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:=csi-ceph-blockpool}"
+    enableFileDeletion: true
     moverSecurityContext:
       runAsUser: ${APP_UID:=1000}
       runAsGroup: ${APP_GID:=1000}
       fsGroup: ${APP_GID:=1000}
+    moverVolumes:
+      - mountPath: repository
+        volumeSource:
+          nfs:
+            path: /mnt/zfs/kopia
+            server: 192.168.1.100
     repository: ${APP}-volsync-secret
+    sourceIdentity:
+      sourceName: ${APP}
     storageClassName: "${VOLSYNC_STORAGECLASS:=ceph-block}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:=csi-ceph-blockpool}"
