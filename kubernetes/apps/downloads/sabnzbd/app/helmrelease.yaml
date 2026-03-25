@@ -87,8 +87,8 @@ spec:
               - path: /config
       downloads:
         type: nfs
-        server: 192.168.1.100
-        path: /mnt/zfs/media
+        server: 192.168.1.200
+        path: /volume1/media
         globalMounts:
           - path: /media/Downloads/sabnzbd
             subPath: Downloads/sabnzbd

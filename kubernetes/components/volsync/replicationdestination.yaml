@@ -25,8 +25,8 @@ spec:
       - mountPath: repository
         volumeSource:
           nfs:
-            path: /mnt/zfs/kopia
-            server: 192.168.1.100
+            path: /volume1/kopia
+            server: 192.168.1.200
     repository: ${APP}-volsync-secret
     sourceIdentity:
       sourceName: ${APP}

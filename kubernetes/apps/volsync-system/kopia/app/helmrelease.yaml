@@ -87,8 +87,8 @@ spec:
             subPath: repository.config
       repository:
         type: nfs
-        path: /mnt/zfs/kopia
-        server: 192.168.1.100
+        path: /volume1/kopia
+        server: 192.168.1.200
         globalMounts:
           - path: /repository
       tmpfs:

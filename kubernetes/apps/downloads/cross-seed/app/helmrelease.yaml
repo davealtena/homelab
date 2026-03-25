@@ -83,8 +83,8 @@ spec:
           - path: /qbittorrent
       media:
         type: nfs
-        server: 192.168.1.100
-        path: /mnt/zfs/media
+        server: 192.168.1.200
+        path: /volume1/media
         advancedMounts:
           cross-seed:
             app:
