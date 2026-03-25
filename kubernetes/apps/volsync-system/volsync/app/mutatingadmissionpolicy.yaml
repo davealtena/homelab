@@ -97,8 +97,8 @@ spec:
               value: Object.spec.template.spec.volumes{
                 name: "repository",
                 nfs: Object.spec.template.spec.volumes.nfs{
-                  server: "192.168.1.100",
-                  path: "/mnt/zfs/kopia"
+                  server: "192.168.1.200",
+                  path: "/volume1/kopia"
                 }
               }
             },

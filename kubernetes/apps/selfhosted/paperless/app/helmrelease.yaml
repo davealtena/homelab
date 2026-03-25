@@ -113,8 +113,8 @@ spec:
               - path: /data/local
       nas:
         type: nfs
-        path: /mnt/zfs/paperless
-        server: 192.168.1.100
+        path: /volume1/paperless
+        server: 192.168.1.200
         advancedMounts:
           paperless:
             app:

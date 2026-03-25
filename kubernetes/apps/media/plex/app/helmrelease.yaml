@@ -108,8 +108,8 @@ spec:
               - path: /config/Library/Application Support/Plex Media Server/Logs
       nfs-nas-media:
         type: nfs
-        server: 192.168.1.100
-        path: /mnt/zfs/media
+        server: 192.168.1.200
+        path: /volume1/media
       transcode:
         type: emptyDir
         medium: Memory

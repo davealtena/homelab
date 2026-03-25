@@ -58,5 +58,5 @@ spec:
           url: 192.168.1.1
 
         - module: icmp
-          name: proxmox
-          url: 192.168.1.100
+          name: synology
+          url: 192.168.1.200
