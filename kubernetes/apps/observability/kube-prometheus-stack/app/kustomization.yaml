@@ -8,3 +8,4 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./scrapeconfig.yaml
