@@ -6,16 +6,21 @@ metadata:
 data:
   openclaw.json: |
     {
-      "provider": "moonshot",
-      "defaultModel": {
-        "id": "moonshot/kimi-k2-0905",
-        "contextWindow": 262144
-      },
       "gateway": {
-        "host": "127.0.0.1",
-        "port": 18789
+        "port": 18789,
+        "bind": "127.0.0.1",
+        "auth": {
+          "token": "${OPENCLAW_GATEWAY_TOKEN}"
+        }
       },
-      "browser": {
-        "enabled": false
+      "agents": {
+        "defaults": {
+          "model": {
+            "primary": "moonshot/kimi-k2-0905"
+          }
+        },
+        "list": [
+          { "id": "main", "default": true }
+        ]
       }
     }
