@@ -10,7 +10,11 @@ data:
         "port": 18789,
         "bind": "0.0.0.0",
         "auth": {
-          "token": "${OPENCLAW_GATEWAY_TOKEN}"
+          "token": {
+            "source": "env",
+            "provider": "default",
+            "id": "OPENCLAW_GATEWAY_TOKEN"
+          }
         },
         "controlUi": {
           "allowedOrigins": [
@@ -26,12 +30,20 @@ data:
             "inframan": {
               "enabled": true,
               "name": "Inframan",
-              "token": "${DISCORD_INFRAMAN_TOKEN}"
+              "token": {
+                "source": "env",
+                "provider": "default",
+                "id": "DISCORD_INFRAMAN_TOKEN"
+              }
             },
             "marja": {
               "enabled": true,
               "name": "Marja",
-              "token": "${DISCORD_MARJA_TOKEN}"
+              "token": {
+                "source": "env",
+                "provider": "default",
+                "id": "DISCORD_MARJA_TOKEN"
+              }
             }
           }
         }
