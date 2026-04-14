@@ -6,6 +6,18 @@ metadata:
 data:
   openclaw.json: |
     {
+      "secrets": {
+        "providers": {
+          "default": {
+            "source": "env",
+            "allowlist": [
+              "OPENCLAW_GATEWAY_TOKEN",
+              "DISCORD_INFRAMAN_TOKEN",
+              "DISCORD_MARJA_TOKEN"
+            ]
+          }
+        }
+      },
       "gateway": {
         "port": 18789,
         "bind": "0.0.0.0",
