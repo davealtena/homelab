@@ -11,6 +11,11 @@ data:
         "bind": "0.0.0.0",
         "auth": {
           "token": "${OPENCLAW_GATEWAY_TOKEN}"
+        },
+        "controlUi": {
+          "allowedOrigins": [
+            "https://openclaw.altena.io"
+          ]
         }
       },
       "agents": {
