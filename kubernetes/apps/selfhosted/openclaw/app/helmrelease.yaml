@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: ghcr.io/openclaw/openclaw
-              tag: v2026.4.11
+              tag: 2026.4.12
             envFrom:
               - secretRef:
                   name: openclaw-secrets
