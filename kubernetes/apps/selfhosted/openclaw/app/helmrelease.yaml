@@ -1,0 +1,107 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openclaw
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: openclaw
+  interval: 30m
+  values:
+    controllers:
+      openclaw:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            fsGroup: 1000
+            fsGroupChangePolicy: "OnRootMismatch"
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/openclaw/openclaw
+              tag: v2026.4.11
+            envFrom:
+              - secretRef:
+                  name: openclaw-secrets
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: &port 18789
+                  periodSeconds: 30
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: *port
+                  periodSeconds: 10
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 200m
+                memory: 512Mi
+              limits:
+                cpu: 1000m
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+
+    service:
+      app:
+        forceRename: openclaw
+        primary: true
+        ports:
+          http:
+            port: *port
+
+    route:
+      app:
+        hostnames:
+          - openclaw.valhalla.local
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+
+    persistence:
+      config:
+        type: persistentVolumeClaim
+        storageClass: ceph-filesystem
+        size: 5Gi
+        accessMode: ReadWriteMany
+        globalMounts:
+          - path: /home/node/.openclaw
+      openclaw-json:
+        type: configMap
+        name: openclaw-config
+        advancedMounts:
+          openclaw:
+            app:
+              - path: /home/node/.openclaw/openclaw.json
+                subPath: openclaw.json
+                readOnly: true

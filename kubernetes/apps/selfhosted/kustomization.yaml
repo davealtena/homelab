@@ -7,5 +7,6 @@ resources:
   - ./actual-finance/ks.yaml
   - ./mealie/ks.yaml
   - ./n8n/ks.yaml
+  - ./openclaw/ks.yaml
   - ./paperless/ks.yaml
   - ./semaphore/ks.yaml
