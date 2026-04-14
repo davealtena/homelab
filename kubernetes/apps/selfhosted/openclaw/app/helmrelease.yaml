@@ -78,7 +78,7 @@ spec:
     route:
       app:
         hostnames:
-          - openclaw.valhalla.local
+          - openclaw.altena.io
         parentRefs:
           - name: envoy-internal
             namespace: network
