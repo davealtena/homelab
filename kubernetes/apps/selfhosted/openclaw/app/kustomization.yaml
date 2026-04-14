@@ -4,6 +4,9 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./configmap.yaml
+  - ./skills-valhalla.yaml
+  - ./skills-sport.yaml
+  - ./rbac.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./networkpolicy.yaml

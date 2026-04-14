@@ -18,6 +18,24 @@ data:
           ]
         }
       },
+      "channels": {
+        "discord": {
+          "enabled": true,
+          "defaultAccount": "inframan",
+          "accounts": {
+            "inframan": {
+              "enabled": true,
+              "name": "Inframan",
+              "token": "${DISCORD_INFRAMAN_TOKEN}"
+            },
+            "marja": {
+              "enabled": true,
+              "name": "Marja",
+              "token": "${DISCORD_MARJA_TOKEN}"
+            }
+          }
+        }
+      },
       "agents": {
         "defaults": {
           "model": {
@@ -25,7 +43,45 @@ data:
           }
         },
         "list": [
-          { "id": "main", "default": true }
+          {
+            "id": "main",
+            "default": true
+          },
+          {
+            "id": "valhalla",
+            "skills": [
+              "valhalla",
+              "discord"
+            ]
+          },
+          {
+            "id": "sport",
+            "skills": [
+              "sport",
+              "discord",
+              "weather"
+            ]
+          }
         ]
-      }
+      },
+      "bindings": [
+        {
+          "type": "route",
+          "agentId": "valhalla",
+          "match": {
+            "channel": "discord",
+            "accountId": "inframan"
+          },
+          "comment": "All traffic naar de inframan bot gaat naar de valhalla agent"
+        },
+        {
+          "type": "route",
+          "agentId": "sport",
+          "match": {
+            "channel": "discord",
+            "accountId": "marja"
+          },
+          "comment": "All traffic naar de marja bot gaat naar de sport agent"
+        }
+      ]
     }

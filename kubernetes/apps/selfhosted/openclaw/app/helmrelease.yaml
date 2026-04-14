@@ -10,6 +10,8 @@ spec:
     name: openclaw
   interval: 30m
   values:
+    defaultPodOptions:
+      serviceAccountName: openclaw
     controllers:
       openclaw:
         annotations:
@@ -104,4 +106,22 @@ spec:
             app:
               - path: /home/node/.openclaw/openclaw.json
                 subPath: openclaw.json
+                readOnly: true
+      skill-valhalla:
+        type: configMap
+        name: openclaw-skill-valhalla
+        advancedMounts:
+          openclaw:
+            app:
+              - path: /home/node/.openclaw/workspace/skills/valhalla/SKILL.md
+                subPath: SKILL.md
+                readOnly: true
+      skill-sport:
+        type: configMap
+        name: openclaw-skill-sport
+        advancedMounts:
+          openclaw:
+            app:
+              - path: /home/node/.openclaw/workspace/skills/sport/SKILL.md
+                subPath: SKILL.md
                 readOnly: true

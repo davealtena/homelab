@@ -27,6 +27,9 @@ spec:
               protocol: UDP
             - port: "53"
               protocol: TCP
+    # kubectl toegang naar kube-apiserver (voor valhalla agent)
+    - toEntities:
+        - kube-apiserver
     - toCIDRSet:
         - cidr: 0.0.0.0/0
           except:
