@@ -10,8 +10,9 @@ spec:
     name: openclaw
   interval: 30m
   values:
-    defaultPodOptions:
-      serviceAccountName: openclaw
+    serviceAccount:
+      openclaw:
+        enabled: true
     controllers:
       openclaw:
         annotations:
