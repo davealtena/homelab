@@ -6,6 +6,8 @@ resources:
   - ./configmap.yaml
   - ./skills-valhalla.yaml
   - ./skills-sport.yaml
+  - ./workspace-valhalla.yaml
+  - ./workspace-sport.yaml
   - ./rbac.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml

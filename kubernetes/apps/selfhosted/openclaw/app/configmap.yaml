@@ -6,6 +6,10 @@ metadata:
 data:
   openclaw.json: |
     {
+      "diagnostics": {
+        "enabled": true,
+        "flags": ["discord.*"]
+      },
       "secrets": {
         "providers": {
           "default": {
@@ -99,6 +103,7 @@ data:
           },
           {
             "id": "valhalla",
+            "workspace": "/home/node/.openclaw/workspace-valhalla",
             "skills": [
               "valhalla",
               "discord"
@@ -106,6 +111,7 @@ data:
           },
           {
             "id": "sport",
+            "workspace": "/home/node/.openclaw/workspace-sport",
             "skills": [
               "sport",
               "discord",
