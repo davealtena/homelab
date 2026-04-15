@@ -10,6 +10,10 @@ data:
         "enabled": true,
         "flags": ["discord.*"]
       },
+      "logging": {
+        "level": "debug",
+        "consoleLevel": "debug"
+      },
       "secrets": {
         "providers": {
           "default": {
@@ -42,6 +46,10 @@ data:
       "channels": {
         "discord": {
           "enabled": true,
+          "intents": {
+            "presence": false,
+            "guildMembers": false
+          },
           "defaultAccount": "inframan",
           "accounts": {
             "inframan": {
