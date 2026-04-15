@@ -125,3 +125,39 @@ spec:
               - path: /home/node/.openclaw/workspace/skills/sport/SKILL.md
                 subPath: SKILL.md
                 readOnly: true
+      workspace-valhalla:
+        type: configMap
+        name: openclaw-workspace-valhalla
+        advancedMounts:
+          openclaw:
+            app:
+              - path: /home/node/.openclaw/workspace-valhalla/IDENTITY.md
+                subPath: IDENTITY.md
+                readOnly: true
+              - path: /home/node/.openclaw/workspace-valhalla/SOUL.md
+                subPath: SOUL.md
+                readOnly: true
+              - path: /home/node/.openclaw/workspace-valhalla/USER.md
+                subPath: USER.md
+                readOnly: true
+              - path: /home/node/.openclaw/workspace-valhalla/TOOLS.md
+                subPath: TOOLS.md
+                readOnly: true
+      workspace-sport:
+        type: configMap
+        name: openclaw-workspace-sport
+        advancedMounts:
+          openclaw:
+            app:
+              - path: /home/node/.openclaw/workspace-sport/IDENTITY.md
+                subPath: IDENTITY.md
+                readOnly: true
+              - path: /home/node/.openclaw/workspace-sport/SOUL.md
+                subPath: SOUL.md
+                readOnly: true
+              - path: /home/node/.openclaw/workspace-sport/USER.md
+                subPath: USER.md
+                readOnly: true
+              - path: /home/node/.openclaw/workspace-sport/TOOLS.md
+                subPath: TOOLS.md
+                readOnly: true
