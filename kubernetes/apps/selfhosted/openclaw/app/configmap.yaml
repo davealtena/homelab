@@ -21,7 +21,7 @@ data:
       },
       "gateway": {
         "port": 18789,
-        "bind": "0.0.0.0",
+        "bind": "lan",
         "auth": {
           "token": {
             "source": "env",
@@ -71,7 +71,18 @@ data:
               "source": "env",
               "provider": "default",
               "id": "MOONSHOT_API_KEY"
-            }
+            },
+            "models": [
+              {
+                "id": "kimi-k2.5",
+                "name": "Kimi K2.5",
+                "reasoning": false,
+                "input": ["text"],
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "contextWindow": 262144,
+                "maxTokens": 262144
+              }
+            ]
           }
         }
       },
