@@ -13,7 +13,8 @@ data:
             "allowlist": [
               "OPENCLAW_GATEWAY_TOKEN",
               "DISCORD_INFRAMAN_TOKEN",
-              "DISCORD_MARJA_TOKEN"
+              "DISCORD_MARJA_TOKEN",
+              "MOONSHOT_API_KEY"
             ]
           }
         }
@@ -60,10 +61,24 @@ data:
           }
         }
       },
+      "models": {
+        "mode": "merge",
+        "providers": {
+          "moonshot": {
+            "baseUrl": "https://api.moonshot.ai/v1",
+            "api": "openai-completions",
+            "apiKey": {
+              "source": "env",
+              "provider": "default",
+              "id": "MOONSHOT_API_KEY"
+            }
+          }
+        }
+      },
       "agents": {
         "defaults": {
           "model": {
-            "primary": "moonshot/kimi-k2-0905"
+            "primary": "moonshot/kimi-k2.5"
           }
         },
         "list": [
