@@ -52,6 +52,7 @@ data:
           },
           "dmPolicy": "open",
           "groupPolicy": "open",
+          "allowFrom": ["*"],
           "defaultAccount": "inframan",
           "accounts": {
             "inframan": {
