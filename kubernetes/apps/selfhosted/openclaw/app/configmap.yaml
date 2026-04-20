@@ -11,8 +11,8 @@ data:
         "flags": ["discord.*"]
       },
       "logging": {
-        "level": "debug",
-        "consoleLevel": "debug"
+        "level": "info",
+        "consoleLevel": "info"
       },
       "secrets": {
         "providers": {
@@ -28,6 +28,7 @@ data:
         }
       },
       "gateway": {
+        "mode": "local",
         "port": 18789,
         "bind": "lan",
         "auth": {

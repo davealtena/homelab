@@ -31,6 +31,13 @@ spec:
             image:
               repository: ghcr.io/openclaw/openclaw
               tag: 2026.4.15
+            command:
+              - /bin/sh
+              - -c
+              - exec node dist/index.js gateway --bind lan
+            env:
+              HOME: /home/node
+              OPENCLAW_GATEWAY_PORT: "18789"
             envFrom:
               - secretRef:
                   name: openclaw-secrets
@@ -59,10 +66,10 @@ spec:
             resources:
               requests:
                 cpu: 200m
-                memory: 512Mi
-              limits:
-                cpu: 1000m
                 memory: 1Gi
+              limits:
+                cpu: 2000m
+                memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
