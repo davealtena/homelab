@@ -3,6 +3,11 @@ machine:
   kubelet:
     extraConfig:
       serializeImagePulls: false
+      # Trigger image GC before ceph mon_data_avail_warn (30% free) fires
+      imageGCHighThresholdPercent: 70
+      imageGCLowThresholdPercent: 55
+      # Reap images unused for 7d regardless of disk pressure
+      imageMaximumGCAge: 168h
     nodeIP:
       validSubnets:
         - 192.168.1.0/24
