@@ -12,6 +12,23 @@
       "matchDatasources": ["docker"],
       "matchPackagePatterns": ["/factory\\.talos\\.dev/"],
       "packageNameTemplate": "ghcr.io/siderolabs/installer"
+    },
+    {
+      "description": [
+        "Pin kubelet to <1.36.0 — Talos v1.12.x supports up to k8s 1.35.x.",
+        "Lift this constraint once Talos v1.13.x ships (which adds 1.36 support)."
+      ],
+      "matchPackageNames": ["ghcr.io/siderolabs/kubelet"],
+      "allowedVersions": "<1.36.0"
+    },
+    {
+      "description": [
+        "Don't auto-merge Talos installer bumps — minor-in-semver bumps still",
+        "trigger a rolling reboot of every node (mons/OSDs go briefly down).",
+        "Force manual review so upgrades land in a known maintenance window."
+      ],
+      "matchPackageNames": ["ghcr.io/siderolabs/installer"],
+      "automerge": false
     }
   ]
 }
