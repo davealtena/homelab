@@ -29,6 +29,15 @@
       ],
       "matchPackageNames": ["ghcr.io/grafana/helm-charts/loki"],
       "allowedVersions": "<7.0.0"
+    },
+    {
+      "description": [
+        "Pin grafana-community Loki to <13 — fork jumped 6.x → 13.x as part of",
+        "umbrella versioning across charts in the monorepo. Stay on 6.x until",
+        "we explicitly evaluate the 13.x line."
+      ],
+      "matchPackageNames": ["ghcr.io/grafana-community/helm-charts/loki"],
+      "allowedVersions": "<13.0.0"
     }
   ]
 }
