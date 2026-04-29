@@ -35,13 +35,6 @@ spec:
 
     vmsingle:
       enabled: true
-      route:
-        enabled: true
-        hostnames: ["prometheus.${CLUSTER_DOMAIN}"]
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-            sectionName: https
       spec:
         retentionPeriod: "14d"
         extraArgs:
@@ -80,13 +73,6 @@ spec:
 
     vmalert:
       enabled: true
-      route:
-        enabled: true
-        hostnames: ["vmalert.${CLUSTER_DOMAIN}"]
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-            sectionName: https
       spec:
         evaluationInterval: 1m
         selectAllByDefault: true
@@ -103,13 +89,6 @@ spec:
 
     vmalertmanager:
       enabled: true
-      route:
-        enabled: true
-        hostnames: ["alertmanager.${CLUSTER_DOMAIN}"]
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-            sectionName: https
       # Inline alertmanager.yaml — avoids the chicken-and-egg of a separate
       # VMAlertmanagerConfig CRD that wouldn't exist until after this chart
       # had already failed to apply.
