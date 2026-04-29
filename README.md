@@ -47,7 +47,7 @@ The Valhalla cluster runs on 3 dedicated bare-metal Dell Optiplex nodes, all con
 
 ### Storage
 
-Currently running everything on NFS backed by a dedicated 24 TB ZFS server that handles NFS/SMB file sharing, large-scale media storage, and backup operations. With the bare-metal nodes each having 1TB SSDs, rook-ceph distributed storage is on the roadmap.
+Persistent volumes run on **rook-ceph** distributed storage, with one 1TB SSD per node providing 3-way replication and ~1TB usable. Application backups are pushed hourly via **volsync** to a **Synology DS925+** (2x 12TB WD RED, SHR/Btrfs) over NFS, with kopia handling deduplication. The Synology is the off-cluster restore point if anything goes south.
 
 ---
 
@@ -61,9 +61,9 @@ This is a [Talos Linux](https://www.talos.dev)-powered Kubernetes cluster manage
 
 **Security**: Certificates are automatically provisioned via cert-manager and Let's Encrypt. Secrets are managed through 1Password Connect (via external-secrets) and SOPS for Git-stored secrets.
 
-**Storage**: OpenEBS provides local persistent volumes. Volsync is installed for backups (configuration in progress).
+**Storage**: rook-ceph for distributed block + filesystem PVs across all nodes; OpenEBS for hot-path local volumes. Volsync replicates application data hourly to a Synology NAS via kopia.
 
-**Observability**: Complete monitoring stack with Prometheus, Grafana, and Loki. Kromgo powers the cluster metrics badges at the top of this README.
+**Observability**: Monitoring stack on **VictoriaMetrics** (vmsingle + vmagent + vmalert + vmalertmanager via the vm-operator), Grafana for dashboards, and Loki for logs. Alerts route to Pushover. Kromgo powers the cluster metrics badges at the top of this README.
 
 ---
 
@@ -81,9 +81,8 @@ This is a [Talos Linux](https://www.talos.dev)-powered Kubernetes cluster manage
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.gif" alt="🚀" width="20" height="20"> Future Plans
 
-- **Storage**: Migrate from NFS to rook-ceph using the 1TB SSDs on the bare-metal nodes
-- **Backups**: Properly configure Volsync for automated persistent volume backups
-- **Monitoring**: Expand Grafana dashboards and alerting rules
+- **Offsite backups**: Sync the Synology kopia repo to Cloudflare R2 as a backup-of-the-backup
+- **Monitoring**: More custom Grafana dashboards now that VictoriaMetrics is in place
 - **More Services**: Always looking for interesting self-hosted applications to add!
 
 ---

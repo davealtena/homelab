@@ -1,0 +1,160 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-metrics
+spec:
+  interval: 30m
+  timeout: 15m
+  chartRef:
+    kind: OCIRepository
+    name: victoria-metrics
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    fullnameOverride: vm
+    victoria-metrics-operator:
+      enabled: true
+      operator:
+        # Convert PrometheusRule, ServiceMonitor, PodMonitor, Probe and ScrapeConfig
+        # objects in-place into their VictoriaMetrics-native equivalents so we don't
+        # have to rewrite anything that ships them (rook-ceph, cnpg, etc).
+        enable_converter_ownership: true
+      crd:
+        cleanup:
+          enabled: false
+
+    defaultRules:
+      create: true
+      rules:
+        kubeApiserverBurnrate: false
+        kubeApiserverSlos: false
+
+    vmsingle:
+      enabled: true
+      spec:
+        retentionPeriod: "14d"
+        scrapeInterval: 1m
+        externalLabels:
+          cluster: valhalla
+        extraArgs:
+          maxLabelsPerTimeseries: "40"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            memory: 1Gi
+        storage:
+          accessModes: ["ReadWriteOnce"]
+          storageClassName: ceph-block
+          resources:
+            requests:
+              storage: 75Gi
+
+    vmcluster:
+      enabled: false
+
+    vmagent:
+      enabled: true
+      spec:
+        scrapeInterval: 1m
+        selectAllByDefault: true
+        externalLabels:
+          cluster: valhalla
+        extraArgs:
+          promscrape.streamParse: "true"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+
+    vmalert:
+      enabled: true
+      spec:
+        evaluationInterval: 1m
+        selectAllByDefault: true
+        externalLabels:
+          cluster: valhalla
+        extraArgs:
+          external.url: https://vmalert.${CLUSTER_DOMAIN}
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            memory: 256Mi
+
+    vmalertmanager:
+      enabled: true
+      spec:
+        selectAllByDefault: true
+        externalURL: https://alertmanager.${CLUSTER_DOMAIN}
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            memory: 128Mi
+        storage:
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: ceph-block
+              resources:
+                requests:
+                  storage: 1Gi
+
+    grafana:
+      enabled: false
+      forceDeployDashboards: false
+      sidecar:
+        dashboards:
+          enabled: false
+
+    prometheus-node-exporter:
+      enabled: true
+      fullnameOverride: node-exporter
+
+    kube-state-metrics:
+      enabled: true
+      fullnameOverride: kube-state-metrics
+      metricLabelsAllowlist:
+        - pods=[*]
+        - deployments=[*]
+        - persistentvolumeclaims=[*]
+      prometheus:
+        monitor:
+          enabled: true
+          relabelings:
+            - action: replace
+              regex: (.*)
+              replacement: $1
+              sourceLabels: ["__meta_kubernetes_pod_node_name"]
+              targetLabel: kubernetes_node
+
+    kubelet:
+      enabled: true
+    kubeApiServer:
+      enabled: true
+    kubeControllerManager:
+      enabled: true
+      endpoints: &cp
+        - 192.168.1.105
+        - 192.168.1.106
+        - 192.168.1.107
+    kubeEtcd:
+      enabled: false
+    kubeScheduler:
+      enabled: true
+      endpoints: *cp
+    kubeProxy:
+      enabled: false
+
+    coreDns:
+      enabled: true

@@ -1,51 +1,39 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/alertmanagerconfig_v1alpha1.json
-apiVersion: monitoring.coreos.com/v1alpha1
-kind: AlertmanagerConfig
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/operator.victoriametrics.com/vmalertmanagerconfig_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanagerConfig
 metadata:
   name: alertmanager
 spec:
   route:
-    groupBy: ["alertname", "job"]
-    groupInterval: 10m
-    groupWait: 1m
+    group_by: ["alertname", "job"]
+    group_interval: 10m
+    group_wait: 1m
     receiver: pushover
-    repeatInterval: 12h
+    repeat_interval: 12h
     routes:
       - receiver: "null"
         matchers:
-          - name: alertname
-            value: Watchdog
-            matchType: =
+          - 'alertname = "Watchdog"'
       - receiver: "null"
         matchers:
-          - name: alertname
-            value: InfoInhibitor
-            matchType: =
+          - 'alertname = "InfoInhibitor"'
       - receiver: "null"
         matchers:
-          - name: alertname
-            value: KubeMemoryOvercommit
-            matchType: =
+          - 'alertname = "KubeMemoryOvercommit"'
       - receiver: pushover
         matchers:
-          - name: severity
-            value: critical
-            matchType: =
-  inhibitRules:
+          - 'severity = "critical"'
+  inhibit_rules:
     - equal: ["alertname", "namespace"]
-      sourceMatch:
-        - name: severity
-          value: critical
-          matchType: =
-      targetMatch:
-        - name: severity
-          value: warning
-          matchType: =
+      source_matchers:
+        - 'severity = "critical"'
+      target_matchers:
+        - 'severity = "warning"'
   receivers:
     - name: "null"
     - name: pushover
-      pushoverConfigs:
+      pushover_configs:
         - html: true
           message: |-
             {{- range .Alerts }}
@@ -68,7 +56,7 @@ spec:
             {{- end }}
           priority: |-
             {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
-          sendResolved: true
+          send_resolved: true
           sound: gamelan
           title: >-
             [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
@@ -77,7 +65,7 @@ spec:
           token:
             name: &secret alertmanager-secret
             key: ALERTMANAGER_TOKEN
-          userKey:
+          user_key:
             name: *secret
             key: PUSHOVER_USER_KEY
-          urlTitle: View in Alertmanager
+          url_title: View in Alertmanager
