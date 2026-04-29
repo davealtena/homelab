@@ -37,7 +37,6 @@ spec:
       enabled: true
       spec:
         retentionPeriod: "14d"
-        scrapeInterval: 1m
         externalLabels:
           cluster: valhalla
         extraArgs:
