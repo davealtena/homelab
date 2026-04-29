@@ -15,7 +15,7 @@ spec:
     access: proxy
     isDefault: true
     # VictoriaMetrics single-node — PromQL-compatible drop-in
-    url: http://vmsingle-vm.observability.svc.cluster.local:8429
+    url: http://vmsingle-vm.observability.svc.cluster.local:8428
     jsonData:
       timeInterval: 1m
 ---
