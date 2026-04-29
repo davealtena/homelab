@@ -25,7 +25,7 @@ spec:
 
     image:
       repository: docker.io/semaphoreui/semaphore
-      tag: v2.17.38
+      tag: v2.17.39
       pullPolicy: IfNotPresent
 
     extraEnvVariables:
