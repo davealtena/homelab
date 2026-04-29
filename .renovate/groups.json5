@@ -69,7 +69,8 @@
       "description": ["Monitoring Stack"],
       "groupName": "Monitoring Stack",
       "matchPackagePatterns": [
-        "kube-prometheus-stack",
+        "victoria-metrics",
+        "victoriametrics",
         "prometheus-operator",
         "grafana",
         "loki"

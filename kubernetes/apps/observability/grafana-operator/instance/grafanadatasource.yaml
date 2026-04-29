@@ -14,7 +14,8 @@ spec:
     uid: prometheus
     access: proxy
     isDefault: true
-    url: http://prometheus-operated.observability.svc.cluster.local:9090
+    # VictoriaMetrics single-node — PromQL-compatible drop-in
+    url: http://vmsingle-vm.observability.svc.cluster.local:8429
     jsonData:
       timeInterval: 1m
 ---
@@ -32,7 +33,7 @@ spec:
     name: Alertmanager
     uid: alertmanager
     access: proxy
-    url: http://alertmanager-operated.observability.svc.cluster.local:9093
+    url: http://vmalertmanager-vm.observability.svc.cluster.local:9093
     jsonData:
       implementation: prometheus
 ---
