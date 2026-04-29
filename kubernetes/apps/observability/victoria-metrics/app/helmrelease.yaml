@@ -92,6 +92,67 @@ spec:
 
     vmalertmanager:
       enabled: true
+      # Inline alertmanager.yaml — avoids the chicken-and-egg of a separate
+      # VMAlertmanagerConfig CRD that wouldn't exist until after this chart
+      # had already failed to apply.
+      useManagedConfig: true
+      config:
+        route:
+          group_by: ["alertname", "job"]
+          group_interval: 10m
+          group_wait: 1m
+          receiver: pushover
+          repeat_interval: 12h
+          routes:
+            - receiver: "null"
+              matchers: ['alertname = "Watchdog"']
+            - receiver: "null"
+              matchers: ['alertname = "InfoInhibitor"']
+            - receiver: "null"
+              matchers: ['alertname = "KubeMemoryOvercommit"']
+            - receiver: pushover
+              matchers: ['severity = "critical"']
+        inhibit_rules:
+          - equal: ["alertname", "namespace"]
+            source_matchers: ['severity = "critical"']
+            target_matchers: ['severity = "warning"']
+        receivers:
+          - name: "null"
+          - name: pushover
+            pushover_configs:
+              - html: true
+                message: |-
+                  {{- range .Alerts }}
+                    {{- if ne .Annotations.description "" }}
+                      {{ .Annotations.description }}
+                    {{- else if ne .Annotations.summary "" }}
+                      {{ .Annotations.summary }}
+                    {{- else if ne .Annotations.message "" }}
+                      {{ .Annotations.message }}
+                    {{- else }}
+                      Alert description not available
+                    {{- end }}
+                    {{- if gt (len .Labels.SortedPairs) 0 }}
+                      <small>
+                        {{- range .Labels.SortedPairs }}
+                          <b>{{ .Name }}:</b> {{ .Value }}
+                        {{- end }}
+                      </small>
+                    {{- end }}
+                  {{- end }}
+                priority: |-
+                  {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
+                send_resolved: true
+                sound: gamelan
+                title: >-
+                  [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+                token:
+                  name: alertmanager-secret
+                  key: ALERTMANAGER_TOKEN
+                user_key:
+                  name: alertmanager-secret
+                  key: PUSHOVER_USER_KEY
+                url_title: View in Alertmanager
       spec:
         selectAllByDefault: true
         externalURL: https://alertmanager.${CLUSTER_DOMAIN}
