@@ -37,8 +37,6 @@ spec:
       enabled: true
       spec:
         retentionPeriod: "14d"
-        externalLabels:
-          cluster: valhalla
         extraArgs:
           maxLabelsPerTimeseries: "40"
         resources:
