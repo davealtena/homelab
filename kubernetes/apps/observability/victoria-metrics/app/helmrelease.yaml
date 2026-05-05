@@ -29,9 +29,15 @@ spec:
 
     defaultRules:
       create: true
-      rules:
-        kubeApiserverBurnrate: false
-        kubeApiserverSlos: false
+      # Disable rule groups that don't apply on Talos (kube-scheduler /
+      # kube-controller-manager metrics aren't reachable per default
+      # without extra config) or that produce noise without a payoff.
+      groups:
+        kubeApiserverBurnrate: { create: false }
+        kubeApiserverSlos: { create: false }
+        kubeScheduler: { create: false }
+        kubernetesSystemScheduler: { create: false }
+        kubernetesSystemControllerManager: { create: false }
 
     vmsingle:
       enabled: true
@@ -44,7 +50,7 @@ spec:
             cpu: 100m
             memory: 256Mi
           limits:
-            memory: 1Gi
+            memory: 2Gi
         storage:
           accessModes: ["ReadWriteOnce"]
           storageClassName: ceph-block
@@ -214,17 +220,15 @@ spec:
       enabled: true
     kubeApiServer:
       enabled: true
+    # kube-scheduler / kube-controller-manager are bound to localhost on
+    # Talos by default — scrape would always fail and trigger TargetDown
+    # noise. Same for kubeEtcd / kubeProxy on Talos.
     kubeControllerManager:
-      enabled: true
-      endpoints: &cp
-        - 192.168.1.105
-        - 192.168.1.106
-        - 192.168.1.107
+      enabled: false
     kubeEtcd:
       enabled: false
     kubeScheduler:
-      enabled: true
-      endpoints: *cp
+      enabled: false
     kubeProxy:
       enabled: false
 
