@@ -60,6 +60,32 @@ spec:
                 memory: 512Mi
               limits:
                 memory: 2Gi
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.117.0@sha256:e6702766518b961c7e3c41095c129c7c9a82b041578c53326c52fa363a057727
+            args:
+              - --auth
+              - none
+              - --disable-telemetry
+              - --disable-update-check
+              - --user-data-dir
+              - /config/.vscode-server
+              - --extensions-dir
+              - /config/.vscode-server/extensions
+              - --port
+              - "12321"
+              - /config
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
 
     defaultPodOptions:
       securityContext:
@@ -75,7 +101,10 @@ spec:
         controller: home-assistant
         ports:
           http:
+            primary: true
             port: 8123
+          code-server:
+            port: 12321
 
     route:
       app:
@@ -89,6 +118,17 @@ spec:
           - backendRefs:
               - name: home-assistant
                 port: 8123
+      code:
+        hostnames:
+          - hass-code.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: home-assistant
+                port: 12321
 
     persistence:
       config:
