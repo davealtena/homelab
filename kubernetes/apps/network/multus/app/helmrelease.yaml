@@ -18,6 +18,10 @@ spec:
         pod:
           hostNetwork: true
           priorityClassName: system-node-critical
+          # app-template v5 defaults this to false; multus needs the SA token
+          # mounted at /var/run/secrets/kubernetes.io/serviceaccount/ to write
+          # its kubeconfig. Without it the container exits 0 in a restart loop.
+          automountServiceAccountToken: true
           tolerations:
             - key: CriticalAddonsOnly
               operator: Exists
