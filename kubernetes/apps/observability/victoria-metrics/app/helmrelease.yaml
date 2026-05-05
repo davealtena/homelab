@@ -87,12 +87,34 @@ spec:
           limits:
             memory: 256Mi
 
-    vmalertmanager:
+    # NOTE: in chart 0.76+ the key is `alertmanager:` (NOT `vmalertmanager:`).
+    # Pre-fix this block was silently ignored by the chart and alertmanager
+    # ran with the chart's default `route: { receiver: blackhole }` config
+    # — i.e. all alerts were dropped for ~8 days.
+    alertmanager:
       enabled: true
-      # Inline alertmanager.yaml — avoids the chicken-and-egg of a separate
-      # VMAlertmanagerConfig CRD that wouldn't exist until after this chart
-      # had already failed to apply.
-      useManagedConfig: true
+      spec:
+        replicaCount: 1
+        selectAllByDefault: true
+        externalURL: https://alertmanager.${CLUSTER_DOMAIN}
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            memory: 128Mi
+        storage:
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: ceph-block
+              resources:
+                requests:
+                  storage: 1Gi
+      # useManagedConfig: false (the default) means `config:` below is plain
+      # alertmanager.yaml — what we want. With true it'd need VMAlertmanagerConfig
+      # CRD shape, which we don't use.
+      useManagedConfig: false
       config:
         route:
           group_by: ["alertname", "job"]
@@ -150,23 +172,6 @@ spec:
                   name: alertmanager-secret
                   key: PUSHOVER_USER_KEY
                 url_title: View in Alertmanager
-      spec:
-        selectAllByDefault: true
-        externalURL: https://alertmanager.${CLUSTER_DOMAIN}
-        resources:
-          requests:
-            cpu: 10m
-            memory: 32Mi
-          limits:
-            memory: 128Mi
-        storage:
-          volumeClaimTemplate:
-            spec:
-              accessModes: ["ReadWriteOnce"]
-              storageClassName: ceph-block
-              resources:
-                requests:
-                  storage: 1Gi
 
     grafana:
       enabled: false
