@@ -76,6 +76,9 @@ spec:
               - --port
               - "12321"
               - /config
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
