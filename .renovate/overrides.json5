@@ -21,23 +21,6 @@
       ],
       "matchPackageNames": ["ghcr.io/siderolabs/installer"],
       "automerge": false
-    },
-    {
-      "description": [
-        "Pin grafana/helm-charts Loki to <7.0.0 — chart 7.0.0 is GEL-only;",
-        "OSS distribution moved to grafana-community/helm-charts fork."
-      ],
-      "matchPackageNames": ["ghcr.io/grafana/helm-charts/loki"],
-      "allowedVersions": "<7.0.0"
-    },
-    {
-      "description": [
-        "Pin grafana-community Loki to <13 — fork jumped 6.x → 13.x as part of",
-        "umbrella versioning across charts in the monorepo. Stay on 6.x until",
-        "we explicitly evaluate the 13.x line."
-      ],
-      "matchPackageNames": ["ghcr.io/grafana-community/helm-charts/loki"],
-      "allowedVersions": "<13.0.0"
     }
   ]
 }

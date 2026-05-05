@@ -70,10 +70,10 @@
       "groupName": "Monitoring Stack",
       "matchPackagePatterns": [
         "victoria-metrics",
+        "victoria-logs",
         "victoriametrics",
         "prometheus-operator",
-        "grafana",
-        "loki"
+        "grafana"
       ],
       "matchDatasources": ["docker", "helm"],
       "group": {
