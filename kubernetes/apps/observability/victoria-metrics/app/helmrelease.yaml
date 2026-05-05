@@ -111,10 +111,13 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
-      # useManagedConfig: false (the default) means `config:` below is plain
-      # alertmanager.yaml — what we want. With true it'd need VMAlertmanagerConfig
-      # CRD shape, which we don't use.
-      useManagedConfig: false
+      # useManagedConfig: true renders the config below into a VMAlertmanagerConfig
+      # CR. The CRD shape (camelCase fields, SecretKeyRef for tokens) is required
+      # to reference the alertmanager-secret for the Pushover token & user key —
+      # plain alertmanager.yaml only accepts string tokens, which would mean
+      # hardcoding secrets in git.
+      useManagedConfig: true
+      # VMAlertmanagerConfig CRD schema (camelCase, secret refs supported).
       config:
         route:
           group_by: ["alertname", "job"]
@@ -124,17 +127,23 @@ spec:
           repeat_interval: 12h
           routes:
             - receiver: "null"
-              matchers: ['alertname = "Watchdog"']
+              matchers:
+                - alertname = "Watchdog"
             - receiver: "null"
-              matchers: ['alertname = "InfoInhibitor"']
+              matchers:
+                - alertname = "InfoInhibitor"
             - receiver: "null"
-              matchers: ['alertname = "KubeMemoryOvercommit"']
+              matchers:
+                - alertname = "KubeMemoryOvercommit"
             - receiver: pushover
-              matchers: ['severity = "critical"']
+              matchers:
+                - severity = "critical"
         inhibit_rules:
           - equal: ["alertname", "namespace"]
-            source_matchers: ['severity = "critical"']
-            target_matchers: ['severity = "warning"']
+            source_matchers:
+              - severity = "critical"
+            target_matchers:
+              - severity = "warning"
         receivers:
           - name: "null"
           - name: pushover
