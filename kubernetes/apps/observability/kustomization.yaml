@@ -6,5 +6,5 @@ resources:
   - ./blackbox-exporter/ks.yaml
   - ./grafana-operator/ks.yaml
   - ./kromgo/ks.yaml
-  - ./loki/ks.yaml
+  - ./victoria-logs/ks.yaml
   - ./victoria-metrics/ks.yaml

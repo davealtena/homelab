@@ -63,7 +63,7 @@ This is a [Talos Linux](https://www.talos.dev)-powered Kubernetes cluster manage
 
 **Storage**: rook-ceph for distributed block + filesystem PVs across all nodes; OpenEBS for hot-path local volumes. Volsync replicates application data hourly to a Synology NAS via kopia.
 
-**Observability**: Monitoring stack on **VictoriaMetrics** (vmsingle + vmagent + vmalert + vmalertmanager via the vm-operator), Grafana for dashboards, and Loki for logs. Alerts route to Pushover. Kromgo powers the cluster metrics badges at the top of this README.
+**Observability**: Full **VictoriaMetrics** stack — vmsingle for metrics, VictoriaLogs for logs, vmagent + victoria-logs-collector as shippers, vmalert + vmalertmanager for alerting, all glued together by the vm-operator. Grafana renders the dashboards. Alerts route to Pushover. Kromgo powers the cluster metrics badges at the top of this README.
 
 ---
 
