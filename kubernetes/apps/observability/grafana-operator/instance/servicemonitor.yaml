@@ -7,7 +7,9 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: grafana
+      # grafana-operator names its generated service `grafana-service`
+      # with this label set; matching the plain "grafana" name finds nothing.
+      grafana.internal/instance: grafana
   endpoints:
     - port: grafana
       interval: 1m

@@ -14,8 +14,11 @@ spec:
     csi:
       cephFSKernelMountOptions: ms_mode=prefer-crc
       enableLiveness: true
+      # csi-metrics service is not provisioned by this chart — enabling the
+      # ServiceMonitor produces an orphan VMServiceScrape with 0 targets,
+      # which triggers ScrapePoolHasNoTargets / TargetDown alerts.
       serviceMonitor:
-        enabled: true
+        enabled: false
     image:
       repository: ghcr.io/rook/ceph
     monitoring:
