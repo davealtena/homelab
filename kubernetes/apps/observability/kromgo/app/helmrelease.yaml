@@ -35,7 +35,7 @@ spec:
           kromgo:
             image:
               repository: ghcr.io/kashalls/kromgo
-              tag: v0.9.1
+              tag: v0.10.0
             env:
               PROMETHEUS_URL: http://vmsingle-vm.observability.svc.cluster.local:8428
               SERVER_HOST: 0.0.0.0
