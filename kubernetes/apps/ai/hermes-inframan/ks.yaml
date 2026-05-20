@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app hermes
+  name: &app hermes-inframan
   namespace: flux-system
 spec:
   targetNamespace: ai
@@ -18,7 +18,7 @@ spec:
     - name: toolhive-config
     - name: volsync
     - name: rook-ceph-cluster
-  path: ./kubernetes/apps/ai/hermes/app
+  path: ./kubernetes/apps/ai/hermes-inframan/app
   prune: true
   sourceRef:
     kind: GitRepository

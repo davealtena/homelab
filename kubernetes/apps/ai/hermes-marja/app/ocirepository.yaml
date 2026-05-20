@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: hermes
+  name: hermes-marja
 spec:
   interval: 10m
   layerSelector:

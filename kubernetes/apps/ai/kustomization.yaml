@@ -8,4 +8,5 @@ resources:
   - ./toolhive/crds/ks.yaml
   - ./toolhive/operator/ks.yaml
   - ./toolhive/config/ks.yaml
-  - ./hermes/ks.yaml
+  - ./hermes-inframan/ks.yaml
+  - ./hermes-marja/ks.yaml
