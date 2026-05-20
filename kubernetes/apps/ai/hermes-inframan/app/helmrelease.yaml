@@ -3,11 +3,11 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: hermes
+  name: hermes-inframan
 spec:
   chartRef:
     kind: OCIRepository
-    name: hermes
+    name: hermes-inframan
   interval: 30m
   values:
     defaultPodOptions:
@@ -19,7 +19,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
 
     controllers:
-      hermes:
+      hermes-inframan:
         annotations:
           reloader.stakater.com/auto: "true"
 
@@ -34,7 +34,8 @@ spec:
               - |
                 set -euo pipefail
                 cp /tmp/config.yaml /opt/data/config.yaml
-                chown 10000:10000 /opt/data/config.yaml
+                cp /tmp/SOUL.md /opt/data/SOUL.md
+                chown 10000:10000 /opt/data/config.yaml /opt/data/SOUL.md
 
         containers:
           app:
@@ -48,7 +49,7 @@ spec:
               TZ: Europe/Amsterdam
             envFrom:
               - secretRef:
-                  name: hermes
+                  name: hermes-inframan
             resources:
               requests:
                 cpu: 100m
@@ -85,42 +86,14 @@ spec:
                 name: http
                 protocol: TCP
 
-          codeserver:
-            image:
-              repository: ghcr.io/coder/code-server
-              tag: 4.118.0
-            env:
-              TZ: Europe/Amsterdam
-            args:
-              - --auth
-              - none
-              - --user-data-dir
-              - /home/node/.vscode
-              - --extensions-dir
-              - /home/node/.vscode
-              - --port
-              - "12321"
-              - /config
-            ports:
-              - containerPort: &codeserverPort 12321
-                name: codeserver
-                protocol: TCP
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 1Gi
-
     service:
       app:
-        controller: hermes
+        controller: hermes-inframan
         ports:
           http:
             port: *port
-          codeserver:
-            port: *codeserverPort
       dashboard:
-        controller: hermes
+        controller: hermes-inframan
         ports:
           http:
             port: *dashboardPort
@@ -128,7 +101,7 @@ spec:
     route:
       app:
         hostnames:
-          - hermes.${CLUSTER_DOMAIN}
+          - inframan.${CLUSTER_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -137,37 +110,28 @@ spec:
           - backendRefs:
               - identifier: dashboard
                 port: http
-      codeserver:
-        hostnames:
-          - hermes-code.${CLUSTER_DOMAIN}
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: codeserver
 
     persistence:
       config:
-        existingClaim: hermes
+        existingClaim: hermes-inframan
         globalMounts:
           - path: /opt/data
       configmap:
         type: configMap
-        name: hermes
+        name: hermes-inframan
         defaultMode: 0755
         globalMounts:
           - path: /tmp/config.yaml
             subPath: config.yaml
+          - path: /tmp/SOUL.md
+            subPath: SOUL.md
 
     serviceAccount:
-      hermes: {}
+      hermes-inframan: {}
 
     rbac:
       roles:
-        hermes-read-all:
+        hermes-inframan-read-all:
           type: ClusterRole
           rules:
             - apiGroups: [""]
@@ -272,13 +236,13 @@ spec:
                 - volumesnapshotclasses
               verbs: ["get", "list", "watch"]
       bindings:
-        hermes-read-all:
+        hermes-inframan-read-all:
           type: ClusterRoleBinding
           roleRef:
-            identifier: hermes-read-all
+            identifier: hermes-inframan-read-all
           subjects:
-            - identifier: hermes
-              serviceAccount: hermes
+            - identifier: hermes-inframan
+              serviceAccount: hermes-inframan
 
     configMaps:
       config:
@@ -299,6 +263,11 @@ spec:
             mcp_servers:
               toolhive:
                 url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
+            discord:
+              require_mention: true
+              auto_thread: true
+              reactions: true
+              thread_require_mention: true
             toolsets:
               - hermes-cli
             terminal:
@@ -318,3 +287,10 @@ spec:
               reasoning_effort: medium
             security:
               redact_secrets: true
+          SOUL.md: |
+            Je bent Inframan, de infrastructure management bot. Je beheert en monitort
+            het Kubernetes homelab cluster. Je hebt toegang tot kubectl voor cluster
+            inspectie, GitHub voor repo management, en je kent de Flux GitOps workflow.
+
+            Focus: Kubernetes pods, deployments, Flux kustomizations, HelmReleases,
+            node status, resource usage, en GitHub issues/PRs.
