@@ -7,6 +7,5 @@ resources:
   - ./kubectl-mcp.yaml
   - ./github-mcp.yaml
   - ./garmin-mcp.yaml
-  - ./memory-mcp.yaml
   - ./mcpgroup.yaml
   - ./virtualmcpserver.yaml
