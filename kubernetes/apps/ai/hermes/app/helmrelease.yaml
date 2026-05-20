@@ -1,0 +1,201 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hermes
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: hermes
+  interval: 30m
+  values:
+    controllers:
+      hermes:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: "OnRootMismatch"
+
+        containers:
+          gateway:
+            image:
+              repository: nousresearch/hermes-agent
+              tag: v2026.5.16
+            args:
+              - gateway
+              - --config
+              - /etc/hermes/config.yaml
+            env:
+              API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes
+                    key: API_KEY
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 100m
+                memory: 2Gi
+              limits:
+                memory: 4Gi
+
+          dashboard:
+            image:
+              repository: nousresearch/hermes-agent
+              tag: v2026.5.16
+            args:
+              - dashboard
+              - --config
+              - /etc/hermes/config.yaml
+            env:
+              API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes
+                    key: API_KEY
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 50m
+                memory: 1Gi
+              limits:
+                memory: 2Gi
+
+      codeserver:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.118.0
+            resources:
+              requests:
+                cpu: 10m
+                memory: 1Gi
+              limits:
+                memory: 2Gi
+
+    serviceAccount:
+      create: true
+      name: hermes
+
+    service:
+      gateway:
+        controller: hermes
+        ports:
+          http:
+            port: &gatewayPort 8642
+      dashboard:
+        controller: hermes
+        ports:
+          http:
+            port: &dashboardPort 9119
+      codeserver:
+        controller: codeserver
+        ports:
+          http:
+            port: &codeserverPort 12321
+
+    persistence:
+      config:
+        type: configMap
+        name: hermes-config
+        advancedMounts:
+          hermes:
+            gateway:
+              - path: /etc/hermes
+                readOnly: true
+            dashboard:
+              - path: /etc/hermes
+                readOnly: true
+      data:
+        existingClaim: hermes
+        advancedMounts:
+          hermes:
+            gateway:
+              - path: /opt/data
+            dashboard:
+              - path: /opt/data
+          codeserver:
+            app:
+              - path: /opt/data
+
+    route:
+      dashboard:
+        hostnames:
+          - hermes.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: dashboard
+                port: *dashboardPort
+      codeserver:
+        hostnames:
+          - hermes-code.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: codeserver
+                port: *codeserverPort
+
+    configMaps:
+      config:
+        data:
+          config.yaml: |
+            model:
+              default: haiku
+              provider: custom:kubernetes
+              base_url: http://litellm.ai.svc.cluster.local:4000/v1
+            fallback_providers:
+              - provider: custom:kubernetes
+                model: sonnet
+            providers:
+              kubernetes:
+                base_url: http://litellm.ai.svc.cluster.local:4000/v1
+            mcp_servers:
+              toolhive:
+                url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
+            toolsets:
+              - hermes-cli
+            terminal:
+              backend: local
+              cwd: /opt/data/workspace
+              persistent_shell: true
+            memory:
+              auto_migrate: true
+            compression:
+              enabled: true
+              threshold: 0.50
+              target_ratio: 0.20
+              protect_last_n: 20
+            agent:
+              max_turns: 90
+              gateway_timeout: 1800
+              reasoning_effort: medium
+            security:
+              redact_secrets: true
+
