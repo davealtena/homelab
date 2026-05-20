@@ -264,6 +264,8 @@ spec:
               toolhive:
                 url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
             discord:
+              bot_token: $${DISCORD_BOT_TOKEN}
+              allowed_users: $${DISCORD_ALLOWED_USERS}
               require_mention: true
               auto_thread: true
               reactions: true
