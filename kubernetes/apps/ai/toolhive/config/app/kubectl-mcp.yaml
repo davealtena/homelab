@@ -6,7 +6,33 @@ metadata:
 spec:
   image: docker.io/rohitghumare64/kubectl-mcp-server:1.24.0
   transport: streamable-http
+  proxyMode: streamable-http
+  proxyPort: 8080
+  mcpPort: 8000
   serviceAccount: kubectl-mcp-readonly
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: mcp
+          args:
+            - --transport
+            - streamable-http
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8000"
+            - --read-only
+          env:
+            - name: MCP_K8S_PROVIDER
+              value: in-cluster
+            - name: PYTHONUNBUFFERED
+              value: "1"
   groupRef:
     name: mcp-tools
 ---
@@ -23,6 +49,7 @@ rules:
   - apiGroups: [""]
     resources:
       - pods
+      - pods/log
       - services
       - configmaps
       - events
