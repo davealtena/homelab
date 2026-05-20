@@ -12,6 +12,6 @@ spec:
       conflictResolutionConfig:
         prefixFormat: "{workload}_"
   incomingAuth:
-    type: none
+    type: anonymous
   outgoingAuth:
-    type: discovered
+    source: discovered
