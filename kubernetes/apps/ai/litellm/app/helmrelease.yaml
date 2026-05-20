@@ -39,14 +39,22 @@ spec:
               - secretRef:
                   name: litellm
             probes:
-              liveness:
+              startup:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     path: /
                     port: &port 4000
-                  initialDelaySeconds: 5
+                  periodSeconds: 5
+                  failureThreshold: 30
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: *port
                   periodSeconds: 10
                   failureThreshold: 3
               readiness:
@@ -56,15 +64,14 @@ spec:
                   httpGet:
                     path: /
                     port: *port
-                  initialDelaySeconds: 5
                   periodSeconds: 10
                   failureThreshold: 3
             resources:
               requests:
-                cpu: 50m
+                cpu: 100m
                 memory: 256Mi
               limits:
-                memory: 1Gi
+                memory: 2Gi
 
       redis:
         containers:
