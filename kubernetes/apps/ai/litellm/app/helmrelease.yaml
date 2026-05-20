@@ -105,7 +105,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: litellm-config
+        name: litellm
         advancedMounts:
           litellm:
             app:

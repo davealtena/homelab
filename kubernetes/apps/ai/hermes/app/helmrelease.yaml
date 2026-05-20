@@ -117,7 +117,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: hermes-config
+        name: hermes
         advancedMounts:
           hermes:
             gateway:
