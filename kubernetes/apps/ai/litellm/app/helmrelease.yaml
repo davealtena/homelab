@@ -30,26 +30,14 @@ spec:
             image:
               repository: ghcr.io/berriai/litellm
               tag: v1.83.14-stable
+            args:
+              - --config=/app/config.yaml
             env:
               LITELLM_LOG: INFO
               LITELLM_MODE: PRODUCTION
-              LITELLM_MASTER_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: litellm
-                    key: LITELLM_MASTER_KEY
-              ANTHROPIC_API_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: litellm
-                    key: ANTHROPIC_API_KEY
-              DATABASE_URL:
-                valueFrom:
-                  secretKeyRef:
-                    name: litellm
-                    key: DATABASE_URL
-            args:
-              - --config=/app/config.yaml
+            envFrom:
+              - secretRef:
+                  name: litellm
             probes:
               liveness:
                 enabled: true
@@ -153,6 +141,13 @@ spec:
                   model: anthropic/claude-sonnet-4-20250514
                   api_key: os.environ/ANTHROPIC_API_KEY
 
+            general_settings:
+              health_check_endpoint: /v1/health
+
+            router_settings:
+              redis_host: litellm-redis.ai.svc.cluster.local
+              redis_port: 6379
+
             litellm_settings:
               drop_params: true
               cache: true
@@ -161,7 +156,3 @@ spec:
                 host: litellm-redis.ai.svc.cluster.local
                 port: 6379
               num_retries: 2
-
-            general_settings:
-              master_key: os.environ/LITELLM_MASTER_KEY
-              database_url: os.environ/DATABASE_URL
