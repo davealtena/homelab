@@ -156,7 +156,7 @@ spec:
           - path: /opt/data
       configmap:
         type: configMap
-        name: hermes-config
+        name: hermes
         defaultMode: 0755
         globalMounts:
           - path: /tmp/config.yaml
