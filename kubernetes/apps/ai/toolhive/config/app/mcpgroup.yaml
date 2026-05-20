@@ -1,0 +1,11 @@
+---
+apiVersion: toolhive.stacklok.com/v1alpha1
+kind: MCPGroup
+metadata:
+  name: mcp-tools
+spec:
+  mcpServers:
+    - name: kubectl-mcp
+    - name: github-mcp
+    - name: garmin-connect-mcp
+    - name: memory-mcp

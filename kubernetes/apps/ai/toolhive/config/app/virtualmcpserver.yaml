@@ -1,0 +1,16 @@
+---
+apiVersion: toolhive.stacklok.com/v1alpha1
+kind: VirtualMCPServer
+metadata:
+  name: mcp-gateway-internal
+spec:
+  mcpGroupRef:
+    name: mcp-tools
+  conflictResolution:
+    type: Prefix
+    prefix:
+      format: "{workload}_"
+  incomingAuth:
+    type: Anonymous
+  outgoingAuth:
+    type: Discovered
