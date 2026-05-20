@@ -1,11 +1,16 @@
 ---
-apiVersion: toolhive.stacklok.com/v1alpha1
+apiVersion: toolhive.stacklok.dev/v1alpha1
 kind: MCPServer
 metadata:
   name: garmin-connect-mcp
 spec:
   image: docker.io/node:24-alpine
   transport: stdio
-  command: ["npx", "@nicolasvegam/garmin-connect-mcp@1.1.1"]
-  secretRef:
-    name: toolhive-garmin
+  args: ["npx", "@nicolasvegam/garmin-connect-mcp@1.1.1"]
+  groupRef:
+    name: mcp-tools
+  secrets:
+    - name: toolhive-garmin
+      key: GARMIN_EMAIL
+    - name: toolhive-garmin
+      key: GARMIN_PASSWORD

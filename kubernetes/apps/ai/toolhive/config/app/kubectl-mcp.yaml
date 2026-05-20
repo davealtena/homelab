@@ -1,12 +1,14 @@
 ---
-apiVersion: toolhive.stacklok.com/v1alpha1
+apiVersion: toolhive.stacklok.dev/v1alpha1
 kind: MCPServer
 metadata:
   name: kubectl-mcp
 spec:
   image: docker.io/rohitghumare64/kubectl-mcp-server:1.24.0
   transport: streamable-http
-  serviceAccountName: kubectl-mcp-readonly
+  serviceAccount: kubectl-mcp-readonly
+  groupRef:
+    name: mcp-tools
 ---
 apiVersion: v1
 kind: ServiceAccount
