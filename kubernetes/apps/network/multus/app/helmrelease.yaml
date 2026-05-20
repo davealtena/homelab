@@ -31,6 +31,18 @@ spec:
             image:
               repository: ghcr.io/home-operations/cni-plugins
               tag: 1.9.1
+          vlan-setup:
+            image:
+              repository: ghcr.io/home-operations/cni-plugins
+              tag: 1.9.1
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                ip link show enp1s0.20 >/dev/null 2>&1 || \
+                  ip link add link enp1s0 name enp1s0.20 type vlan id 20
+                ip link set enp1s0.20 up
+            securityContext:
+              privileged: true
 
         containers:
           multus:
