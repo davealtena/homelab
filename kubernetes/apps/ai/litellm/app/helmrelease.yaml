@@ -15,13 +15,6 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
 
-        pod:
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: "OnRootMismatch"
-
         initContainers:
           init-db:
             image:
@@ -38,6 +31,8 @@ spec:
               repository: ghcr.io/berriai/litellm
               tag: v1.83.14-stable
             env:
+              LITELLM_LOG: INFO
+              LITELLM_MODE: PRODUCTION
               LITELLM_MASTER_KEY:
                 valueFrom:
                   secretKeyRef:
@@ -54,20 +49,28 @@ spec:
                     name: litellm
                     key: DATABASE_URL
             args:
-              - --config
-              - /etc/litellm/config.yaml
-              - --port
-              - "4000"
+              - --config=/app/config.yaml
             probes:
               liveness:
                 enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: &port 4000
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                  failureThreshold: 3
               readiness:
                 enabled: true
-              startup:
-                enabled: true
+                custom: true
                 spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
+                  httpGet:
+                    path: /
+                    port: *port
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                  failureThreshold: 3
             resources:
               requests:
                 cpu: 50m
@@ -95,7 +98,7 @@ spec:
         controller: litellm
         ports:
           http:
-            port: &port 4000
+            port: *port
       redis:
         controller: redis
         ports:
@@ -106,11 +109,16 @@ spec:
       config:
         type: configMap
         name: litellm
+        globalMounts:
+          - path: /app/config.yaml
+            subPath: config.yaml
+            readOnly: true
+      cache:
+        type: emptyDir
         advancedMounts:
           litellm:
             app:
-              - path: /etc/litellm
-                readOnly: true
+              - path: /app/cache
       data:
         existingClaim: litellm
         advancedMounts:

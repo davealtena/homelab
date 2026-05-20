@@ -10,7 +10,7 @@ spec:
   groupRef:
     name: mcp-tools
   secrets:
-    - name: toolhive-garmin
+    - name: toolhive-garmin-email
       key: GARMIN_EMAIL
-    - name: toolhive-garmin
+    - name: toolhive-garmin-password
       key: GARMIN_PASSWORD
