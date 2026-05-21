@@ -18,6 +18,9 @@ spec:
   trigger:
     schedule: "30 3,15 * * *"
   cacheStorageClassName: ceph-block
+  cacheCapacity: 10Gi
+  metadataCacheSizeLimitMB: 4096
+  contentCacheSizeLimitMB: 4096
   podSecurityContext:
     fsGroup: 1000
     runAsGroup: 1000
