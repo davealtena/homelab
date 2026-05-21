@@ -139,6 +139,17 @@ spec:
         data:
           config.yaml: |
             model_list:
+              - model_name: minimax
+                model_info:
+                  mode: chat
+                  max_input_tokens: 204800
+                  max_output_tokens: 131072
+                  supports_function_calling: true
+                litellm_params:
+                  model: minimax/MiniMax-M2.7
+                  api_base: https://api.minimax.io/v1
+                  api_key: os.environ/MINIMAX_API_KEY
+                  drop_params: true
               - model_name: gpt-4.1-mini
                 litellm_params:
                   model: openai/gpt-4.1-mini

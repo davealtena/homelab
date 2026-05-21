@@ -249,13 +249,13 @@ spec:
         data:
           config.yaml: |
             model:
-              default: gpt-4.1-mini
+              default: minimax
               provider: custom:kubernetes
               base_url: http://litellm.ai.svc.cluster.local:4000/v1
               api_key: $${LITELLM_API_KEY}
             fallback_providers:
               - provider: custom:kubernetes
-                model: gpt-4.1
+                model: gpt-4.1-mini
             providers:
               kubernetes:
                 base_url: http://litellm.ai.svc.cluster.local:4000/v1
