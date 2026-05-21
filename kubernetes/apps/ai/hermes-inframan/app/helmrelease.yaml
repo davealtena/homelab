@@ -261,8 +261,10 @@ spec:
                 base_url: http://litellm.ai.svc.cluster.local:4000/v1
                 api_key: $${LITELLM_API_KEY}
             mcp_servers:
-              toolhive:
-                url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
+              kubectl:
+                url: http://mcp-kubectl-mcp-proxy.ai.svc.cluster.local:8080/mcp
+              github:
+                url: http://mcp-github-mcp-proxy.ai.svc.cluster.local:8080/mcp
             discord:
               bot_token: $${DISCORD_BOT_TOKEN}
               allowed_users: $${DISCORD_ALLOWED_USERS}
@@ -270,12 +272,6 @@ spec:
               auto_thread: true
               reactions: true
               thread_require_mention: true
-            toolsets:
-              - hermes-cli
-            terminal:
-              backend: local
-              cwd: /opt/data/workspace
-              persistent_shell: true
             memory:
               auto_migrate: true
             compression:
