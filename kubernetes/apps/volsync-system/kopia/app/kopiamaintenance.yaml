@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/kopiamaintenance_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: KopiaMaintenance
+metadata:
+  name: kopia-maintenance
+spec:
+  enabled: true
+  moverVolumes:
+    - mountPath: repository
+      volumeSource:
+        nfs:
+          path: /volume1/kopia
+          server: 192.168.1.200
+  repository:
+    repository: kopia-maintenance-secret
+    repositoryType: filesystem
+  trigger:
+    schedule: "30 3,15 * * *"
+  cacheStorageClassName: ceph-block
+  podSecurityContext:
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
