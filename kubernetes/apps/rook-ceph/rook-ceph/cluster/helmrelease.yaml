@@ -10,6 +10,16 @@ spec:
     name: rook-ceph-cluster
   interval: 30m
   timeout: 15m
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: PrometheusRule
+              name: prometheus-ceph-rules
+            patch: |-
+              - op: replace
+                path: /spec/groups/6/rules/4/expr
+                value: '(predict_linear(node_filesystem_free_bytes{device=~"/.*"}[2d], 3600 * 24 * 5) *on(instance) group_left(nodename) node_uname_info < 0) and on(device, instance, mountpoint) (node_filesystem_avail_bytes{device=~"/.*"} / node_filesystem_size_bytes{device=~"/.*"} < 0.25)'
   values:
     monitoring:
       enabled: true
