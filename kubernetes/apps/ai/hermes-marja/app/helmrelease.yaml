@@ -41,7 +41,7 @@ spec:
           app:
             image: &image
               repository: nousresearch/hermes-agent
-              tag: v2026.5.16
+              tag: v2026.5.29
             args: ["gateway", "run"]
             env:
               HERMES_HOME: /opt/data
