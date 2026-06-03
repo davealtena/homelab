@@ -48,15 +48,17 @@ spec:
             env:
               DOT: "off"
               DNS_ADDRESS: "10.2.0.1"
-              # custom (not protonvpn): with the protonvpn provider gluetun
-              # validates WIREGUARD_ENDPOINT_IP against its bundled server list,
-              # which goes stale as ProtonVPN rotates servers -> "target IP not
-              # found" crash. custom uses the pinned endpoint directly. (matches
-              # bjw-s-labs/home-ops gluetun era)
-              VPN_SERVICE_PROVIDER: custom
+              # protonvpn provider: gluetun supplies the server endpoint + public
+              # key from its own list, so we must NOT pin WIREGUARD_ENDPOINT_IP/
+              # PUBLIC_KEY (those are dropped from the externalsecret). Only
+              # WIREGUARD_PRIVATE_KEY (+ ADDRESSES) is required. Select a port-
+              # forward-capable NL server dynamically so ProtonVPN server
+              # rotations don't break the tunnel. (per gluetun ProtonVPN docs)
+              VPN_SERVICE_PROVIDER: protonvpn
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
-              WIREGUARD_ENDPOINT_PORT: 51820
+              SERVER_COUNTRIES: Netherlands
+              PORT_FORWARD_ONLY: "on"
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: 8080
