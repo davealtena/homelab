@@ -20,7 +20,9 @@ spec:
         enabled: true
         name: rook-ceph.cephfs.csi.ceph.com
         # preserved from the old rook-ceph csi.cephFSKernelMountOptions setting
-        kernelMountOptions: ms_mode=prefer-crc
+        # (Driver CR expects a map, not a string)
+        kernelMountOptions:
+          ms_mode: prefer-crc
       nfs:
         enabled: false
       nvmeof:
