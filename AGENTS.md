@@ -57,7 +57,6 @@ Each app: `kubernetes/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrel
 Non-obvious "why is it like this" facts you can't infer from a single file:
 
 - **CSI driver RBAC** comes from the separate `ceph-csi-drivers` HelmRelease (`apps/rook-ceph/ceph-csi-drivers`), not the rook chart — required since rook 1.20. Don't remove it.
-- **`downloads/qbittorrent` VPN:** gluetun runs the ProtonVPN provider with *dynamic* server selection — only `WIREGUARD_PRIVATE_KEY` (+ `WIREGUARD_ADDRESSES`) in the secret, plus `SERVER_COUNTRIES` + `PORT_FORWARD_ONLY`. Do **not** pin `WIREGUARD_ENDPOINT_IP`/`WIREGUARD_PUBLIC_KEY` — it breaks on ProtonVPN server rotation (also noted inline).
 
 ## Conventions reminder
 
