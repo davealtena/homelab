@@ -16,9 +16,13 @@ spec:
       rbd:
         enabled: true
         name: rook-ceph.rbd.csi.ceph.com
+        # required for VolumeSnapshots (VolSync backups); the chart defaults rbd
+        # to "none", which omits the csi-snapshotter sidecar.
+        snapshotPolicy: volumeSnapshot
       cephfs:
         enabled: true
         name: rook-ceph.cephfs.csi.ceph.com
+        snapshotPolicy: volumeSnapshot
         # preserved from the old rook-ceph csi.cephFSKernelMountOptions setting
         # (Driver CR expects a map, not a string)
         kernelMountOptions:
