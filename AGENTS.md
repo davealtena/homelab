@@ -52,14 +52,12 @@ Each app: `kubernetes/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrel
 - go-task: `task flux:*`, `task kubernetes:*`, `task sops:*`, `task talos:*`.
 - Prefer GitOps over live `kubectl` changes; if a live change is needed for triage, reconcile it back into Git.
 
-## Known gotchas (hard-won — don't relearn these)
+## Repo-specific notes
 
-- **rook-ceph 1.20.0 CSI regression (rook#17644):** the bundled ceph-csi-operator stopped rendering the per-driver ServiceAccounts/RBAC → `*-ctrlplugin` Deployments stuck at 0 (`serviceaccount "rbd-ctrlplugin-sa" not found`) → CSI attach broken cluster-wide *while Flux stayed green*. Fixed by the separate `ceph-csi-drivers` HelmRelease at `apps/rook-ceph/ceph-csi-drivers`. Keep it.
-- **Never `kubectl delete` a pod backed by an RWO `ceph-block` volume to "restart" it** — it can strand the volume (multi-attach / stuck VolumeAttachment) across nodes. Use `kubectl rollout restart` or change it in Git.
-- **gluetun + ProtonVPN (`downloads/qbittorrent`):** with `VPN_SERVICE_PROVIDER: protonvpn`, do NOT pin `WIREGUARD_ENDPOINT_IP`/`WIREGUARD_PUBLIC_KEY` — gluetun supplies them from its own server list and pinning breaks on ProtonVPN server rotation (`target IP address not found`). Provide only `WIREGUARD_PRIVATE_KEY` (+ `WIREGUARD_ADDRESSES`) and select with `SERVER_COUNTRIES` + `PORT_FORWARD_ONLY: "on"`.
-- **Zigbee coordinator** is a SMLIGHT SLZB-06 at `tcp://192.168.20.2:6638` (`adapter: zstack`, 115200). If zigbee2mqtt can't connect, verify the SLZB runs **Z-Stack Coordinator** firmware (not OpenThread RCP) — the wrong firmware type presents exactly like a dead radio (TCP connects, no SYS ping).
-- **VictoriaMetrics rule compatibility:** some upstream PromQL rules (e.g. ceph `predict_linear` + `group_right` joins) fail on VM with "duplicate time series". Fix via a HelmRelease `postRenderers` JSON6902 patch guarded with a `test` op — see `apps/rook-ceph/rook-ceph/cluster/helmrelease.yaml`.
-- **Renovate can auto-merge dependency bumps.** Treat infra-critical chart bumps (rook-ceph, cilium, flux) with extra care; a green Flux reconcile does not mean the workload is healthy.
+Non-obvious "why is it like this" facts you can't infer from a single file:
+
+- **CSI driver RBAC** comes from the separate `ceph-csi-drivers` HelmRelease (`apps/rook-ceph/ceph-csi-drivers`), not the rook chart — required since rook 1.20. Don't remove it.
+- **`downloads/qbittorrent` VPN:** gluetun runs the ProtonVPN provider with *dynamic* server selection — only `WIREGUARD_PRIVATE_KEY` (+ `WIREGUARD_ADDRESSES`) in the secret, plus `SERVER_COUNTRIES` + `PORT_FORWARD_ONLY`. Do **not** pin `WIREGUARD_ENDPOINT_IP`/`WIREGUARD_PUBLIC_KEY` — it breaks on ProtonVPN server rotation (also noted inline).
 
 ## Conventions reminder
 
