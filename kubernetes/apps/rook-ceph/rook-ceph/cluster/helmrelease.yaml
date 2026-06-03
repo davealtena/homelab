@@ -20,6 +20,21 @@ spec:
               - op: replace
                 path: /spec/groups/6/rules/4/expr
                 value: '(predict_linear(node_filesystem_free_bytes{device=~"/.*"}[2d], 3600 * 24 * 5) *on(instance) group_left(nodename) node_uname_info < 0) and on(device, instance, mountpoint) (node_filesystem_avail_bytes{device=~"/.*"} / node_filesystem_size_bytes{device=~"/.*"} < 0.25)'
+          # CephPoolGrowthWarning: a mgr pod restart (upgrade/failover) leaves the old
+          # pod's ceph_pool_percent_used series in the [2d] window, so the join hits
+          # "duplicate time series on the left side of group_right" and the rule errors
+          # for ~2 days (cascading into AlertingRulesError/RequestErrorsToAPI/TooManyLogs).
+          # `max by(...)` collapses the duplicate series. test op guards the index.
+          - target:
+              kind: PrometheusRule
+              name: prometheus-ceph-rules
+            patch: |-
+              - op: test
+                path: /spec/groups/7/rules/0/alert
+                value: CephPoolGrowthWarning
+              - op: replace
+                path: /spec/groups/7/rules/0/expr
+                value: '(max by (cluster,pool_id,instance) (predict_linear(ceph_pool_percent_used[2d], 3600 * 24 * 5)) * on(cluster,pool_id,instance) group_right() ceph_pool_metadata) >= 95'
   values:
     monitoring:
       enabled: true
