@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ceph-csi-drivers
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: ceph-csi-drivers
+  interval: 1h
+  # rook-ceph 1.20.0 ships ceph-csi-operator 1.0.1 but no longer renders the
+  # per-driver ServiceAccounts/RBAC. This chart supplies them (rook/rook#17644).
+  values:
+    drivers:
+      rbd:
+        enabled: true
+        name: rook-ceph.rbd.csi.ceph.com
+      cephfs:
+        enabled: true
+        name: rook-ceph.cephfs.csi.ceph.com
+        # preserved from the old rook-ceph csi.cephFSKernelMountOptions setting
+        kernelMountOptions: ms_mode=prefer-crc
+      nfs:
+        enabled: false
+      nvmeof:
+        enabled: false
