@@ -40,12 +40,13 @@ spec:
       enabled: true
       createPrometheusRules: true
     toolbox:
-      enabled: false
+      enabled: true
     cephClusterSpec:
       cephConfig:
         global:
-          bdev_enable_discard: "true"
-          bdev_async_discard_threads: "1"
+          # discard disabled: inline TRIM to the (DRAM-less consumer) SSDs caused
+          # rotating BLUESTORE_SLOW_OP warnings + occasional RBD stalls.
+          bdev_enable_discard: "false"
           osd_class_update_on_start: "false"
           mon_clock_drift_allowed: "0.1"
       crashCollector:
@@ -109,8 +110,8 @@ spec:
           reclaimPolicy: Delete
           allowVolumeExpansion: true
           volumeBindingMode: Immediate
-          mountOptions:
-            - discard
+          # no fs-level `discard` mount option: avoids inline TRIM per delete to
+          # the consumer SSDs (slow-op stalls). Rely on Ceph reclaim instead.
           parameters:
             imageFormat: "2"
             imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
