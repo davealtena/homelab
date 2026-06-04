@@ -66,10 +66,12 @@ Non-obvious "why is it like this" facts you can't infer from a single file:
 
 ## PR Review Standards
 
-Instructions for the AI PR reviewer. It sees **only the PR diff plus this file** — no
-tool access, so don't reason about changelogs or upstream release notes it can't fetch.
-Renovate/bot PRs are out of scope (the workflow skips them). Be quiet unless there's a
-real problem; only `critical`/`high` fail the check. Default to silence over nitpicking.
+Instructions for the AI PR reviewer. It sees the **PR diff, the PR description, and this
+file**. For dependency-bot PRs (Renovate) the description embeds upstream release
+notes/changelogs — use them to judge whether a bump is breaking. Routine bumps
+auto-merge and are skipped; only **gated** bot PRs reach the reviewer (majors +
+cluster-critical charts, labeled `review/required`). Be quiet unless there's a real
+problem; only `critical`/`high` fail the check. Default to silence over nitpicking.
 
 **Flag (high-value, evaluable from the diff):**
 
