@@ -3,15 +3,19 @@ name: AI PR Review
 on:
   pull_request:
     branches: ["main"]
-    types: ["opened", "reopened", "synchronize", "ready_for_review"]
+    types: ["opened", "reopened", "synchronize", "ready_for_review", "labeled"]
 permissions:
   contents: read
   pull-requests: write
 jobs:
   review:
-    # Skip Renovate/bot PRs — without tool access the reviewer can't read changelogs,
-    # so reviewing version bumps is just noise. Only review human (your) PRs.
-    if: ${{ !endsWith(github.event.pull_request.user.login, '[bot]') }}
+    # Review human PRs, plus the gated Renovate PRs (majors + cluster-critical infra,
+    # labeled review/required by Renovate). Trivial bumps auto-merge silently and are
+    # skipped — without tool access the reviewer can't read changelogs, so reviewing
+    # routine version bumps is just noise.
+    if: >-
+      ${{ !endsWith(github.event.pull_request.user.login, '[bot]')
+          || contains(github.event.pull_request.labels.*.name, 'review/required') }}
     runs-on: homelab-runner
     steps:
       - name: Checkout

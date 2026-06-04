@@ -20,7 +20,41 @@
         "Force manual review so upgrades land in a known maintenance window."
       ],
       "matchPackageNames": ["ghcr.io/siderolabs/installer"],
-      "automerge": false
+      "automerge": false,
+      "reviewers": ["davealtena"],
+      "addLabels": ["review/required"]
+    },
+    {
+      "description": [
+        "All major bumps: never auto-merge (the default, made explicit) and pull",
+        "me in — request review + label so the AI reviewer runs and GitHub",
+        "notifies me. Trivial minor/patch/digest stay silently auto-merged."
+      ],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "reviewers": ["davealtena"],
+      "addLabels": ["review/required"]
+    },
+    {
+      "description": [
+        "Cluster-critical charts: a semver-MINOR here can be breaking (rook-ceph",
+        "1.19->1.20 changed CSI RBAC and broke storage). Don't auto-merge their",
+        "minors — request review + label so I approve in a maintenance window."
+      ],
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": [
+        "rook/rook-ceph",
+        "cilium/charts/cilium",
+        "cloudnative-pg/charts",
+        "external-secrets/charts",
+        "envoyproxy/gateway-helm",
+        "jetstack/charts/cert-manager",
+        "controlplaneio-fluxcd/charts"
+      ],
+      "matchUpdateTypes": ["minor"],
+      "automerge": false,
+      "reviewers": ["davealtena"],
+      "addLabels": ["review/required"]
     }
   ]
 }
