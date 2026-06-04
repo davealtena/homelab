@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: AI review
-        uses: davealtena/pr-reviewer@v1.0.0
+        uses: davealtena/pr-reviewer@v1.1.0
         with:
           ai_base_url: http://litellm.ai.svc.cluster.local:4000/v1
           ai_model: gpt-4.1-mini
