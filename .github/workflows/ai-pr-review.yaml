@@ -9,6 +9,9 @@ permissions:
   pull-requests: write
 jobs:
   review:
+    # Skip Renovate/bot PRs — without tool access the reviewer can't read changelogs,
+    # so reviewing version bumps is just noise. Only review human (your) PRs.
+    if: ${{ !endsWith(github.event.pull_request.user.login, '[bot]') }}
     runs-on: homelab-runner
     steps:
       - name: Checkout
