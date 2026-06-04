@@ -63,3 +63,36 @@ Non-obvious "why is it like this" facts you can't infer from a single file:
 - Conventional commits + `--signoff` (`-s`).
 - When adding/changing an app, copy the structure and schema headers of a nearby existing app rather than inventing fields.
 - Verify against authoritative docs / proven references before hand-rolling config; cite the source.
+
+## PR Review Standards
+
+Instructions for the AI PR reviewer. It sees **only the PR diff plus this file** — no
+tool access, so don't reason about changelogs or upstream release notes it can't fetch.
+Renovate/bot PRs are out of scope (the workflow skips them). Be quiet unless there's a
+real problem; only `critical`/`high` fail the check. Default to silence over nitpicking.
+
+**Flag (high-value, evaluable from the diff):**
+
+- **Leaked secrets** → `critical`. Any plaintext credential/token/key/password added
+  inline. Secrets MUST be `external-secrets` (1Password) or SOPS-encrypted. A SOPS
+  ciphertext blob or an `ExternalSecret`/`*SecretStore` reference is correct, not a leak.
+- **Security/privilege relaxations** → `high`. `privileged: true`, `hostNetwork`/`hostPID`,
+  dropping a `securityContext`/`readOnlyRootFilesystem`, loosening a Pod Security
+  Admission label (e.g. `restricted` → `privileged`), or broad RBAC (`cluster-admin`,
+  `*` verbs/resources) — unless the diff/commit gives a clear reason.
+- **Broken GitOps structure** → `high`. A new app missing its `ks.yaml` (or not wired
+  into the namespace `kustomization.yaml`), a HelmRelease/OCIRepository with an unpinned
+  version/tag, or a missing/wrong schema header.
+- **Breaking / data-loss changes** → `high` (or `critical` for data loss). Removing or
+  renaming a resource others depend on, API-version or CRD changes, deleting a PVC, or
+  changing a StorageClass / reclaim policy.
+- **Correctness bugs in changed lines** → severity to taste. YAML that won't parse,
+  wrong namespace/selector, typo'd image ref.
+
+**Do NOT flag (known-good here — avoids false positives):**
+
+- Internal `*.svc.cluster.local` URLs, ClusterIP endpoints, or private RFC1918 IPs. CI
+  runs on the in-cluster `homelab-runner`, so these ARE reachable — never say "internal
+  URL not reachable from CI/GitHub".
+- "This won't take effect" — changes apply via Flux after merge; that's expected.
+- Missing CPU/memory limits or requests — a style preference here, not a blocker.
