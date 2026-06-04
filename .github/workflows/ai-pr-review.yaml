@@ -1,0 +1,22 @@
+---
+name: AI PR Review
+on:
+  pull_request:
+    branches: ["main"]
+    types: ["opened", "reopened", "synchronize", "ready_for_review"]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  review:
+    runs-on: homelab-runner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: AI review
+        uses: davealtena/pr-reviewer@main
+        with:
+          ai_base_url: http://litellm.ai.svc.cluster.local:4000/v1
+          ai_model: gpt-4.1-mini
+          ai_api_key: ${{ secrets.LITELLM_API_KEY }}
+          standards_file: AGENTS.md
