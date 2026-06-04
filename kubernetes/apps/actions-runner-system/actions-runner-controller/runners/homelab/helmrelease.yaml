@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
@@ -10,14 +10,14 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.12.1
+    tag: 0.14.2
   url: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name home-ops-runner
+  name: &name homelab-runner
 spec:
   interval: 1h
   chartRef:
@@ -34,8 +34,6 @@ spec:
   dependsOn:
     - name: actions-runner-controller
       namespace: actions-runner-system
-    - name: openebs
-      namespace: openebs-system
   valuesFrom:
     - targetPath: githubConfigSecret.github_app_id
       kind: Secret
@@ -53,6 +51,10 @@ spec:
     githubConfigUrl: https://github.com/davealtena/homelab
     minRunners: 1
     maxRunners: 3
+    # kubernetes container mode: each job runs in its own work pod; the chart
+    # creates the runner ServiceAccount + a namespaced Role to manage those pods.
+    # No cluster-admin / talos access (PR-review/CI only). Widen later if the
+    # runner needs to drive cluster ops.
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
@@ -73,16 +75,3 @@ spec:
             env:
               - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                 value: "false"
-              - name: NODE
-                valueFrom:
-                  fieldRef:
-                    fieldPath: status.hostIP
-            volumeMounts:
-              - mountPath: /var/run/secrets/talos.dev
-                name: talos
-                readOnly: true
-        serviceAccountName: *name
-        volumes:
-          - name: talos
-            secret:
-              secretName: *name
