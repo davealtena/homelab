@@ -1,4 +1,0 @@
----
-resources:
-  - ./http-redirect.yaml
-  - ./internal-gateway.yaml

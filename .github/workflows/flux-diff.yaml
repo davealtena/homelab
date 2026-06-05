@@ -5,7 +5,7 @@ name: "Flux Diff"
 on:
   pull_request:
     branches: ["main"]
-    paths: ["kubernetes//**"]
+    paths: ["kubernetes/**"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -18,49 +18,30 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    strategy:
-      matrix:
-        paths: ["kubernetes/"]
-        resources: ["helmrelease", "kustomization"]
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
-          path: pull
+          fetch-depth: 0
 
-      - name: Checkout Default Branch
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - name: Setup flate
+        uses: home-operations/flate/action@13917764cfe2966e22510118ccf2f77d3c4d74ba # 0.2.12
         with:
-          ref: "${{ github.event.repository.default_branch }}"
-          path: default
+          cache: "true"
 
-      - name: Diff Resources
-        uses: docker://ghcr.io/allenporter/flux-local:v8.0.1
-        with:
-          args: >-
-            diff ${{ matrix.resources }}
-            --unified 6
-            --path /github/workspace/pull/kubernetes//flux/config
-            --path-orig /github/workspace/default/kubernetes//flux/config
-            --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
-            --limit-bytes 10000
-            --all-namespaces
-            --sources "flux-system"
-            --output-file diff.patch
-
-      - name: Generate Diff
+      - name: Diff
         id: diff
         run: |
-          cat diff.patch
+          output=$(flate diff all --path ./kubernetes 2>&1 || true)
           echo "diff<<EOF" >> $GITHUB_OUTPUT
-          cat diff.patch >> $GITHUB_OUTPUT
+          echo "${output}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Add comment
         uses: mshick/add-pr-comment@8e4927817251f1ff60c001f04568532b38e0b4a0 # v3
         with:
-          message-id: "${{ github.event.pull_request.number }}/${{ matrix.paths }}/${{ matrix.resources }}"
+          message-id: "${{ github.event.pull_request.number }}/flux-diff"
           message-failure: Diff was not successful
           message: |
             ```diff
