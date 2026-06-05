@@ -9,6 +9,10 @@ spec:
   proxyMode: streamable-http
   proxyPort: 8080
   env:
+    # The image's entrypoint runs /app/src/main.py without /app on the path,
+    # so `import src...` fails (ModuleNotFoundError). Put /app on PYTHONPATH.
+    - name: PYTHONPATH
+      value: /app
     - name: UNIFI_HOST
       value: "192.168.1.1"
     - name: UNIFI_PORT
