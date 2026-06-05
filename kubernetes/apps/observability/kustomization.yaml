@@ -7,4 +7,4 @@ resources:
   - ./grafana-operator/ks.yaml
   - ./kromgo/ks.yaml
   - ./victoria-logs/ks.yaml
-  - ./victoria-metrics/ks.yaml
+  - ./kube-prometheus-stack/ks.yaml
