@@ -6,7 +6,7 @@ metadata:
   name: homelab
 spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:16.9-22
-  instances: 1
+  instances: 2
   primaryUpdateStrategy: unsupervised
   storage:
     size: 10Gi
