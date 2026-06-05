@@ -100,3 +100,17 @@ problem; only `critical`/`high` fail the check. Default to silence over nitpicki
   URL not reachable from CI/GitHub".
 - "This won't take effect" — changes apply via Flux after merge; that's expected.
 - Missing CPU/memory limits or requests — a style preference here, not a blocker.
+- `install.crds: CreateReplace` or `upgrade.crds: CreateReplace` on a HelmRelease — this
+  is the standard pattern here for charts that ship CRDs (kube-prometheus-stack, cert-manager,
+  etc.). Do not flag it as a downtime or conflict risk.
+- CRD availability concerns when a chart installs its own CRDs (`crds.enabled: true` or
+  `install.crds: CreateReplace`). If the chart itself brings the CRD, it is always present
+  by the time the CR is applied.
+- Removing stale configuration (old paths, unused references, obsolete keys) — this is
+  cleanup, not a security or correctness issue. Specifically: removing a `key_file` pointing
+  to a non-existent path is safe cleanup, not secret exposure.
+- Soft runtime dependencies between services (e.g. "X needs Y to be running first"). Flux
+  `dependsOn` handles hard ordering; soft dependencies like a metrics scrape endpoint being
+  unavailable temporarily are not blocking issues.
+- A finding you immediately contradict in the same sentence (e.g. "X is missing — but the
+  PR already adds it"). If the diff fixes the issue, do not raise it as a finding.
