@@ -17,6 +17,8 @@ spec:
       value: "192.168.1.1"
     - name: UNIFI_PORT
       value: "443"
+    - name: UNIFI_SITE
+      value: default
     # UniFi controller uses a self-signed cert
     - name: UNIFI_VERIFY_SSL
       value: "false"
