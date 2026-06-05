@@ -70,7 +70,7 @@ spec:
           sound: gamelan
           title: >-
             [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
-          apiToken:
+          token:
             name: alertmanager-secret
             key: ALERTMANAGER_TOKEN
           userKey:
