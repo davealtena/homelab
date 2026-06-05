@@ -33,6 +33,8 @@ jobs:
         id: diff
         run: |
           output=$(flate diff all --path ./kubernetes 2>&1 || true)
+          # Truncate to stay within GitHub output and comment size limits
+          output=$(echo "${output}" | head -c 60000)
           echo "diff<<EOF" >> $GITHUB_OUTPUT
           echo "${output}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
