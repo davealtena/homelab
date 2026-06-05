@@ -84,7 +84,9 @@ problem; only `critical`/`high` fail the check. Default to silence over nitpicki
   `*` verbs/resources) — unless the diff/commit gives a clear reason.
 - **Broken GitOps structure** → `high`. A new app missing its `ks.yaml` (or not wired
   into the namespace `kustomization.yaml`), a HelmRelease/OCIRepository with an unpinned
-  version/tag, or a missing/wrong schema header.
+  version/tag, or a missing/wrong schema header. Note: GitHub Actions pinned by commit
+  SHA (e.g. `uses: actions/foo@abc1234 # v2`) is correct and intentional — Renovate is
+  configured with `helpers:pinGitHubActionDigests`. Never flag SHA-pinned Actions.
 - **Breaking / data-loss changes** → `high` (or `critical` for data loss). Removing or
   renaming a resource others depend on, API-version or CRD changes, deleting a PVC, or
   changing a StorageClass / reclaim policy.
