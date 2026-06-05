@@ -31,7 +31,7 @@ age.key                       # SOPS age key (do not commit secrets in plaintext
 | Storage       | Rook/Ceph — `ceph-block` (RWO, default), `ceph-filesystem` (RWX) |
 | Backups       | VolSync + Kopia                                                 |
 | Secrets       | External Secrets + 1Password (ClusterSecretStore `onepassword-connect`); SOPS (age) for in-git secrets |
-| Observability | VictoriaMetrics (vmsingle/vmagent/vmalert/vmalertmanager) + VictoriaLogs; alerts via VMRule → Pushover |
+| Observability | Metrics: kube-prometheus-stack (Prometheus/Alertmanager); Logs: VictoriaLogs; alerts via PrometheusRule → Alertmanager → Pushover |
 | Network       | Cilium, Envoy Gateway, external-dns                            |
 
 ## App conventions
