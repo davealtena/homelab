@@ -1,0 +1,31 @@
+---
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: unifi-network-mcp
+spec:
+  image: ghcr.io/sirkirby/unifi-network-mcp:sha-b716164
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  env:
+    - name: UNIFI_HOST
+      value: "192.168.1.1"
+    - name: UNIFI_PORT
+      value: "443"
+    # UniFi controller uses a self-signed cert
+    - name: UNIFI_VERIFY_SSL
+      value: "false"
+  secrets:
+    - name: toolhive-unifi
+      key: UNIFI_USERNAME
+    - name: toolhive-unifi
+      key: UNIFI_PASSWORD
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 384Mi
+  groupRef:
+    name: mcp-tools
