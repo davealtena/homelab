@@ -39,7 +39,7 @@ jobs:
           fi
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           # Bot token so the draft PR triggers the AI review workflow.
           token: ${{ secrets.AGENT_GITHUB_TOKEN }}

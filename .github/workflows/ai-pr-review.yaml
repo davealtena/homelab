@@ -19,9 +19,9 @@ jobs:
     runs-on: homelab-runner
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: AI review
-        uses: davealtena/pr-reviewer@v1.3.0
+        uses: davealtena/pr-reviewer@c82df116586ce0ccb781a1b1ea3c8e63f28f3a7f # v1.3.0
         with:
           ai_base_url: http://litellm.ai.svc.cluster.local:4000/v1
           ai_model: gpt-4.1-mini
