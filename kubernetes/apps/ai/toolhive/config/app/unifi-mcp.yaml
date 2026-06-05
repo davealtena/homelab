@@ -17,9 +17,9 @@ spec:
     - name: UNIFI_VERIFY_SSL
       value: "false"
   secrets:
-    - name: toolhive-unifi
+    - name: toolhive-unifi-username
       key: UNIFI_USERNAME
-    - name: toolhive-unifi
+    - name: toolhive-unifi-password
       key: UNIFI_PASSWORD
   resources:
     requests:
