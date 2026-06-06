@@ -264,6 +264,8 @@ spec:
                 url: http://mcp-github-mcp-proxy.ai.svc.cluster.local:8080/mcp
               hass:
                 url: http://mcp-hass-mcp-proxy.ai.svc.cluster.local:8080/mcp
+              unifi:
+                url: http://mcp-unifi-network-mcp-proxy.ai.svc.cluster.local:8080/mcp
             discord:
               bot_token: $${DISCORD_BOT_TOKEN}
               allowed_users: $${DISCORD_ALLOWED_USERS}
