@@ -39,7 +39,7 @@ spec:
           app:
             image: &image
               repository: nousresearch/hermes-agent
-              tag: v2026.5.29
+              tag: v2026.6.5
             # --no-supervise runs the gateway directly instead of via the s6
             # gateway-default supervise tree. Without it the dashboard container
             # (same image, shared /opt/data) also supervises the gateway profile,
