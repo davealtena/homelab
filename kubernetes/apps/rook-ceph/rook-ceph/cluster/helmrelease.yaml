@@ -49,6 +49,14 @@ spec:
           bdev_enable_discard: "false"
           osd_class_update_on_start: "false"
           mon_clock_drift_allowed: "0.1"
+          # BLUESTORE_SLOW_OP_ALERT defaults are very aggressive (threshold=1 op,
+          # lifetime=24h), so a single transient slow op on the DRAM-less BX500s
+          # parks the cluster in HEALTH_WARN for a day → constant alert flapping
+          # with zero client impact (no blocked requests, PGs clean). Widen to
+          # warn only on *sustained* slowness and clear quickly. The real fix is
+          # enterprise PLP SSDs; blocked-IO/OSD-down have their own checks.
+          bluestore_slow_ops_warn_threshold: "10"
+          bluestore_slow_ops_warn_lifetime: "1800"
       crashCollector:
         disable: false
       dashboard:
