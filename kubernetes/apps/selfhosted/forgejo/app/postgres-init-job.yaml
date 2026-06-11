@@ -18,4 +18,4 @@ spec:
           image: ghcr.io/onedr0p/postgres-init:17.4
           envFrom:
             - secretRef:
-                name: forgejo
+                name: forgejo-secret

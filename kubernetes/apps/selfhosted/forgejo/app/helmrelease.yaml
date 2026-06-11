@@ -36,12 +36,12 @@ spec:
 
     gitea:
       admin:
-        existingSecret: forgejo
+        existingSecret: forgejo-secret
       additionalConfigFromEnvs:
         - name: FORGEJO__DATABASE__PASSWD
           valueFrom:
             secretKeyRef:
-              name: forgejo
+              name: forgejo-secret
               key: INIT_POSTGRES_PASS
       metrics:
         enabled: true
