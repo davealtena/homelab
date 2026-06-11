@@ -60,6 +60,26 @@ spec:
                 memory: 512Mi
               limits:
                 memory: 2Gi
+          git-sync:
+            image:
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2026.6.2@sha256:124cfd97bf15112d770cd60d1ded0eb8739fb3123b9a32bf85978d4cfa27b1a3
+            command: ["bash", "/scripts/git-sync.sh"]
+            env:
+              SYNC_INTERVAL: "60"
+            envFrom:
+              - secretRef:
+                  name: home-assistant-git-sync
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
           code-server:
             image:
               repository: ghcr.io/coder/code-server
@@ -146,3 +166,12 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+      git-sync-script:
+        type: configMap
+        name: home-assistant-git-sync-script
+        defaultMode: 0755
+        advancedMounts:
+          home-assistant:
+            git-sync:
+              - path: /scripts/git-sync.sh
+                subPath: git-sync.sh
