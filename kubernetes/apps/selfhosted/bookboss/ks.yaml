@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname bookboss
+  namespace: flux-system
+spec:
+  targetNamespace: selfhosted
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: external-secrets-stores
+    - name: volsync
+    - name: rook-ceph-cluster
+    - name: cnpg-cluster
+  interval: 30m
+  timeout: 5m
+  path: "./kubernetes/apps/selfhosted/bookboss/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: false
+  postBuild:
+    substitute:
+      APP: *appname
+      APP_UID: "1000"
+      APP_GID: "1000"
+      VOLSYNC_CAPACITY: 25Gi
+      VOLSYNC_STORAGECLASS: ceph-block
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-blockpool
