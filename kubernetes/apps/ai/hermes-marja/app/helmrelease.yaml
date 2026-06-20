@@ -39,7 +39,7 @@ spec:
           app:
             image: &image
               repository: nousresearch/hermes-agent
-              tag: v2026.6.5
+              tag: v2026.6.19
             args: ["gateway", "run"]
             env:
               HERMES_HOME: /opt/data
