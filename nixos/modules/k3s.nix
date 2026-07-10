@@ -31,6 +31,13 @@
     options edns0
   '';
 
+  # Base directory for OpenEBS LocalPV hostpath (local NVMe cache/scratch tier;
+  # the default StorageClass is Synology NFS). The provisioner creates per-PV
+  # subdirectories here.
+  systemd.tmpfiles.rules = [
+    "d /var/mnt/local-hostpath 0755 root root -"
+  ];
+
   # ---------------------------------------------------------------------------
   # k3s — single combined control-plane + worker node.
   #
