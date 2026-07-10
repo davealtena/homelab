@@ -3,6 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./namespace.yaml
-  - ./jellyseerr/ks.yaml
-  - ./plex/ks.yaml
+  - ./pvc.yaml
+  - ./pvc-cache.yaml
+  - ./helmrelease.yaml
+  - ./ocirepository.yaml

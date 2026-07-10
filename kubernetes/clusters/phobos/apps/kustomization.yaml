@@ -11,3 +11,5 @@ resources:
   - ./selfhosted
   - ./media
   - ./volsync-system
+  - ./downloads
+  - ./home-automation
