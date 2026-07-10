@@ -1,0 +1,37 @@
+---
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: unifi-network-mcp
+spec:
+  image: ghcr.io/sirkirby/unifi-network-mcp:sha-b716164
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  env:
+    # The image's entrypoint runs /app/src/main.py without /app on the path,
+    # so `import src...` fails (ModuleNotFoundError). Put /app on PYTHONPATH.
+    - name: PYTHONPATH
+      value: /app
+    - name: UNIFI_HOST
+      value: "192.168.1.1"
+    - name: UNIFI_PORT
+      value: "443"
+    - name: UNIFI_SITE
+      value: default
+    # UniFi controller uses a self-signed cert
+    - name: UNIFI_VERIFY_SSL
+      value: "false"
+  secrets:
+    - name: toolhive-unifi-username
+      key: UNIFI_USERNAME
+    - name: toolhive-unifi-password
+      key: UNIFI_PASSWORD
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 384Mi
+  groupRef:
+    name: mcp-tools
