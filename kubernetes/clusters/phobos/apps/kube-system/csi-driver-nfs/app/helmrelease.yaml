@@ -31,7 +31,7 @@ spec:
       reclaimPolicy: Retain
       volumeBindingMode: Immediate
       mountOptions:
-        - nfsvers=4.2
+        - nfsvers=4.1 # Synology DSM max supported NFS version (4.2 -> "Protocol not supported")
         - nconnect=16
         - hard
         - noatime

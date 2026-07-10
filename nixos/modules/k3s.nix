@@ -38,6 +38,10 @@
     "d /var/mnt/local-hostpath 0755 root root -"
   ];
 
+  # NFS client support (mount.nfs + kernel modules) so csi-driver-nfs can mount
+  # the Synology exports via the host mount namespace.
+  boot.supportedFilesystems = [ "nfs" ];
+
   # ---------------------------------------------------------------------------
   # k3s — single combined control-plane + worker node.
   #
