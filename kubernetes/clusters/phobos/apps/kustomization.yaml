@@ -8,6 +8,7 @@ resources:
   - ./kube-system
   - ./openebs-system
   - ./security
+  - ./databases
   - ./selfhosted
   - ./media
   - ./volsync-system
