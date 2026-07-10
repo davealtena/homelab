@@ -46,7 +46,7 @@ spec:
       metrics:
         enabled: true
         serviceMonitor:
-          enabled: true
+          enabled: false # no Prometheus CRD on phobos yet
       config:
         APP_NAME: Forgejo
         server:
