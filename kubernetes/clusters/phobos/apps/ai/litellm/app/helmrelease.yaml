@@ -1,0 +1,176 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: litellm
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: litellm
+  interval: 30m
+  values:
+    controllers:
+      litellm:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 17.4
+              pullPolicy: IfNotPresent
+            envFrom:
+              - secretRef:
+                  name: litellm
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/berriai/litellm
+              tag: v1.83.14-stable
+            args:
+              - --config=/app/config.yaml
+            env:
+              LITELLM_LOG: INFO
+              LITELLM_MODE: PRODUCTION
+            envFrom:
+              - secretRef:
+                  name: litellm
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: &port 4000
+                  periodSeconds: 5
+                  failureThreshold: 30
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: *port
+                  periodSeconds: 10
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: *port
+                  periodSeconds: 10
+                  failureThreshold: 3
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+
+      redis:
+        containers:
+          redis:
+            image:
+              repository: ghcr.io/valkey-io/valkey
+              tag: 9.1.0
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+
+    service:
+      app:
+        forceRename: litellm
+        primary: true
+        controller: litellm
+        ports:
+          http:
+            port: *port
+      redis:
+        controller: redis
+        ports:
+          http:
+            port: 6379
+
+    persistence:
+      config:
+        type: configMap
+        name: litellm
+        globalMounts:
+          - path: /app/config.yaml
+            subPath: config.yaml
+            readOnly: true
+      cache:
+        type: emptyDir
+        advancedMounts:
+          litellm:
+            app:
+              - path: /app/cache
+      data:
+        existingClaim: litellm
+        advancedMounts:
+          litellm:
+            app:
+              - path: /data
+
+    route:
+      app:
+        hostnames:
+          - litellm.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+
+    configMaps:
+      config:
+        data:
+          config.yaml: |
+            model_list:
+              - model_name: minimax
+                model_info:
+                  mode: chat
+                  max_input_tokens: 204800
+                  max_output_tokens: 131072
+                  supports_function_calling: true
+                litellm_params:
+                  model: minimax/MiniMax-M2.7
+                  api_base: https://api.minimax.io/v1
+                  api_key: os.environ/MINIMAX_API_KEY
+                  drop_params: true
+              - model_name: gpt-4.1-mini
+                litellm_params:
+                  model: openai/gpt-4.1-mini
+                  api_key: os.environ/OPENAI_API_KEY
+              - model_name: gpt-4.1
+                litellm_params:
+                  model: openai/gpt-4.1
+                  api_key: os.environ/OPENAI_API_KEY
+
+            general_settings:
+              health_check_endpoint: /v1/health
+
+            router_settings:
+              redis_host: litellm-redis.ai.svc.cluster.local
+              redis_port: 6379
+
+            litellm_settings:
+              drop_params: true
+              cache: true
+              cache_params:
+                type: redis
+                host: litellm-redis.ai.svc.cluster.local
+                port: 6379
+              num_retries: 2

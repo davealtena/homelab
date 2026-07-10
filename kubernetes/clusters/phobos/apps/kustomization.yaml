@@ -9,6 +9,7 @@ resources:
   - ./openebs-system
   - ./security
   - ./databases
+  - ./ai
   - ./selfhosted
   - ./media
   - ./volsync-system

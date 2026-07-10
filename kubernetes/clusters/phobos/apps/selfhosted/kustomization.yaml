@@ -5,3 +5,7 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./actual-finance/ks.yaml
+  - ./n8n/ks.yaml
+  - ./bookboss/ks.yaml
+  - ./forgejo/ks.yaml
+  - ./mealie/ks.yaml
