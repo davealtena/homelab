@@ -12,19 +12,13 @@ includes:
   kubernetes: .taskfiles/kubernetes/Taskfile.yaml
   bootstrap: .taskfiles/bootstrap/Taskfile.yaml
   sops: .taskfiles/sops/Taskfile.yaml
-  talos: .taskfiles/talos/Taskfile.yaml
 
 vars:
-  BOOTSTRAP_DIR: "{{.ROOT_DIR}}/kubernetes/bootstrap"
   KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
-  TALOSCONFIG: "talos/clusterconfig/talosconfig"
-  TALHELPER_CLUSTER_DIR: "talos/clusterconfig"
-  TALHELPER_SECRET_FILE: "talos/talsecret.sops.yaml"
-  TALHELPER_CONFIG_FILE: "talos/talconfig.yaml"
+  NIXOS_DIR: "{{.ROOT_DIR}}/nixos"
 
 env:
   KUBECONFIG: "{{.KUBECONFIG}}"
-  TALOSCONFIG: "{{.TALOSCONFIG}}"
   MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
 
 tasks:
