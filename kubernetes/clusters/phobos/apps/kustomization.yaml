@@ -11,6 +11,7 @@ resources:
   - ./databases
   - ./ai
   - ./observability
+  - ./network
   - ./selfhosted
   - ./media
   - ./volsync-system
