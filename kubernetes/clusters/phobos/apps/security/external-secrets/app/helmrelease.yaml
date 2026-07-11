@@ -22,12 +22,11 @@ spec:
       namespace: security
   values:
     installCRDs: true
-    # ServiceMonitors disabled until kube-prometheus-stack is migrated to phobos.
     serviceMonitor:
-      enabled: false
+      enabled: true
     webhook:
       serviceMonitor:
-        enabled: false
+        enabled: true
     certController:
       serviceMonitor:
-        enabled: false
+        enabled: true

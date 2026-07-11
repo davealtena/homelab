@@ -25,4 +25,4 @@ spec:
     limits:
       memory: 1Gi
   monitoring:
-    enablePodMonitor: false
+    enablePodMonitor: true

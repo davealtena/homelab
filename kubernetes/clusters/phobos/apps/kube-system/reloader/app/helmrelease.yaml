@@ -20,4 +20,4 @@ spec:
     reloader:
       readOnlyRootFileSystem: true
       podMonitor:
-        enabled: false
+        enabled: true

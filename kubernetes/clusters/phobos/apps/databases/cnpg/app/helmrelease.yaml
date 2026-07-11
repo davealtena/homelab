@@ -18,6 +18,6 @@ spec:
       retries: 3
   values:
     monitoring:
-      podMonitorEnabled: false
+      podMonitorEnabled: true
       grafanaDashboard:
-        create: false
+        create: true

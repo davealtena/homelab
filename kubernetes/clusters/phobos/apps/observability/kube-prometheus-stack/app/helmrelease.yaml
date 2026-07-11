@@ -53,8 +53,9 @@ spec:
       enabled: true
     kubeApiServer:
       enabled: true
-    # kube-scheduler / kube-controller-manager / etcd / proxy are bound to
-    # localhost on Talos — scraping would always fail and generate TargetDown noise.
+    # On k3s the scheduler / controller-manager / etcd are embedded in the k3s
+    # server process (bound to localhost) and kube-proxy is replaced by Cilium,
+    # so scraping them would always fail and generate TargetDown noise.
     kubeControllerManager:
       enabled: false
     kubeEtcd:
