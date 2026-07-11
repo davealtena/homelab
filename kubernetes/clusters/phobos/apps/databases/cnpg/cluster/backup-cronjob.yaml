@@ -1,0 +1,69 @@
+---
+# Nightly logical backup of the CNPG "homelab" cluster.
+#
+# The DB lives on local NVMe (openebs-hostpath, no CSI snapshots) and there is
+# no object store, so CNPG-native barman/volumeSnapshot backups aren't an
+# option here. Instead this dumps globals + every database (custom format) to
+# the Synology NFS PVC; the Synology's own backup handles retention/off-site.
+# Runs as root so it can always write to the NFS export (no_root_squash).
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+spec:
+  schedule: "30 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          containers:
+            - name: pg-dump
+              image: ghcr.io/cloudnative-pg/postgresql:16.9-22
+              env:
+                - name: PGHOST
+                  value: homelab-rw.databases.svc.cluster.local
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef:
+                      name: cloudnative-pg-secret
+                      key: username
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: cloudnative-pg-secret
+                      key: password
+                - name: RETENTION_DAYS
+                  value: "14"
+              command: ["/bin/bash", "-c"]
+              args:
+                - |
+                  set -euo pipefail
+                  ts="$(date +%Y-%m-%d_%H%M%S)"
+                  dir="/backup/${ts}"
+                  mkdir -p "${dir}"
+                  echo "==> Dumping globals (roles/tablespaces)"
+                  pg_dumpall -g > "${dir}/globals.sql"
+                  dbs="$(psql -Atc "SELECT datname FROM pg_database WHERE datistemplate=false AND datname<>'postgres';")"
+                  for db in ${dbs}; do
+                    echo "==> Dumping ${db}"
+                    pg_dump -Fc -d "${db}" -f "${dir}/${db}.dump"
+                  done
+                  echo "==> Backup complete:"
+                  ls -lh "${dir}"
+                  echo "==> Pruning backups older than ${RETENTION_DAYS} days"
+                  find /backup -mindepth 1 -maxdepth 1 -type d -mtime "+${RETENTION_DAYS}" -print -exec rm -rf {} +
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+          volumes:
+            - name: backup
+              persistentVolumeClaim:
+                claimName: postgres-backup
