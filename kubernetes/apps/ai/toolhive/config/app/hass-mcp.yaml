@@ -4,7 +4,7 @@ kind: MCPServer
 metadata:
   name: hass-mcp
 spec:
-  image: docker.io/voska/hass-mcp:0.4.1
+  image: docker.io/voska/hass-mcp:0.5.0
   transport: stdio
   proxyMode: streamable-http
   proxyPort: 8080

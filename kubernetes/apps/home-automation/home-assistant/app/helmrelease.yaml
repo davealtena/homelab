@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2026.6.3@sha256:82db7a297c96a0288559c5f2849878168c14a06557edc114084d874268c92a9a
+              tag: 2026.7.2@sha256:547d0fcb67ceb2c2d3adf22db37c7ea79d9ff9e91f3e3c536c6aebd998083f0f
             env:
               TZ: Europe/Amsterdam
               HASS_HTTP_TRUSTED_PROXY_1: 192.168.20.0/24
@@ -63,7 +63,7 @@ spec:
           git-sync:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2026.6.3@sha256:82db7a297c96a0288559c5f2849878168c14a06557edc114084d874268c92a9a
+              tag: 2026.7.2@sha256:547d0fcb67ceb2c2d3adf22db37c7ea79d9ff9e91f3e3c536c6aebd998083f0f
             command: ["bash", "/scripts/git-sync.sh"]
             env:
               SYNC_INTERVAL: "60"
@@ -83,7 +83,7 @@ spec:
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.125.0@sha256:9a7848dd2627158e3873f88bd8743807a4168e4d580f26ec0cbc132a9d9ee78e
+              tag: 4.127.0@sha256:4193b3a0c2661bce87b3cafede59e7d50e1e99e35f7c10bece7c2a7e0660c0a8
             args:
               - --auth
               - none
