@@ -17,6 +17,10 @@ spec:
     remediation:
       retries: 3
   values:
+    # NFS + fsGroup don't mix (kubelet recursively chowns the volume on mount,
+    # which chokes on special files like .vscode-server / git/.ssh). Disable it
+    # -> CSIDriver fsGroupPolicy: None. Restored files already own the right UID.
+    enableFSGroupPolicy: false
     # Primary storage for phobos: PVCs live on the Synology over NFS.
     # NFS_SERVER_ADDRESS / NFS_SERVER_PATH come from the SOPS cluster-secrets.
     storageClass:
