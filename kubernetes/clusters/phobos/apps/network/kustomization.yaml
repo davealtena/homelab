@@ -5,3 +5,5 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./envoy-gateway/ks.yaml
+  - ./cloudflared/ks.yaml
+  - ./external-dns/ks.yaml
