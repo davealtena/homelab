@@ -19,7 +19,6 @@ vars:
 
 env:
   KUBECONFIG: "{{.KUBECONFIG}}"
-  MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
 
 tasks:
   default:
