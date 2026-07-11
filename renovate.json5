@@ -45,5 +45,10 @@
   },
   "pip_requirements": {
     "fileMatch": ["(^|/)[\\w-]*requirements(-\\w+)?\\.(txt|pip)(?:\\.j2)?$"]
+  },
+  // Update Nix flake inputs (nixpkgs) in nixos/flake.lock
+  "nix": {
+    "enabled": true,
+    "fileMatch": ["(^|/)flake\\.nix$"]
   }
 }

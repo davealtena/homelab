@@ -12,20 +12,6 @@
       "separateMinorPatch": true
     },
     {
-      "description": ["Talos Group"],
-      "groupName": "Talos",
-      "matchPackagePatterns": [
-        "siderolabs/talosctl",
-        "siderolabs/installer",
-        "ghcr.io/siderolabs/installer"
-      ],
-      "matchDatasources": ["docker", "github-releases"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "separateMinorPatch": true
-    },
-    {
       "description": ["Cert-Manager Group"],
       "groupName": "Cert-Manager",
       "matchPackagePatterns": ["cert-manager"],
@@ -56,16 +42,6 @@
       "separateMinorPatch": true
     },
     {
-      "description": ["Ingress Nginx Group"],
-      "groupName": "Ingress Nginx",
-      "matchPackagePatterns": ["ingress-nginx"],
-      "matchDatasources": ["docker", "helm"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "separateMinorPatch": true
-    },
-    {
       "description": ["Monitoring Stack"],
       "groupName": "Monitoring Stack",
       "matchPackagePatterns": [
@@ -81,23 +57,12 @@
       "separateMinorPatch": true
     },
     {
-      "description": ["Tuppr"],
-      "groupName": "Tuppr",
-      "matchPackagePatterns": ["tuppr"],
-      "matchDatasources": ["docker"],
+      "description": ["Nix flake inputs (nixpkgs)"],
+      "groupName": "Nixpkgs",
+      "matchManagers": ["nix"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
-    },
-    {
-      "description": ["Rook-Ceph Group"],
-      "groupName": "Rook-Ceph",
-      "matchPackagePatterns": ["rook.*ceph"],
-      "matchDatasources": ["docker", "helm"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "separateMinorPatch": true
     }
   ]
 }
