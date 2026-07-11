@@ -46,12 +46,8 @@ all the way up to the applications — so the whole thing can be rebuilt from Gi
   [`kubernetes/`](./kubernetes). Everything you see here is deployed and kept in
   sync automatically from this repo.
 
-> [!NOTE]
-> This lab is mid-migration from a 3-node Talos cluster (`valhalla`) to the new
-> single-node NixOS host (`phobos`, cluster `society`). The Talos tree still lives
-> under [`kubernetes/apps/`](./kubernetes/apps) until the old nodes are fully
-> decommissioned; the live cluster is defined under
-> [`kubernetes/clusters/phobos/`](./kubernetes/clusters/phobos).
+The live cluster (`society`) runs on a single NixOS node, **phobos**, and is
+defined under [`kubernetes/clusters/phobos/`](./kubernetes/clusters/phobos).
 
 ---
 
@@ -142,9 +138,6 @@ the RTX once GPU support lands).
 
 - **GPU workloads**: Enable the NVIDIA container stack on the RTX 5060 Ti for local
   LLM inference and hardware transcoding
-- **Decommission Talos**: Finish the migration and retire the old `valhalla` nodes
-- **Offsite backups**: Sync the Synology backups to cloud object storage as a
-  backup-of-the-backup
 - **More Services**: Always looking for interesting self-hosted applications to add!
 
 ---
