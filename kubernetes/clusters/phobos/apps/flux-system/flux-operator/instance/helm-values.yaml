@@ -14,7 +14,7 @@ instance:
   sync:
     kind: GitRepository
     url: https://github.com/davealtena/homelab
-    ref: refs/heads/feat/phobos
+    ref: refs/heads/main
     path: kubernetes/clusters/phobos/flux
   kustomize:
     patches:
