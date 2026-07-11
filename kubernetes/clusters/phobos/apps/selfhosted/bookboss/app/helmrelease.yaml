@@ -1,0 +1,133 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: bookboss
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: bookboss
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    defaultPodOptions:
+      # Resolve externe namen (sso/metadata) direct i.p.v. via de search-suffixes
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+    controllers:
+      bookboss:
+        strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 17.4
+              pullPolicy: IfNotPresent
+            envFrom:
+              - secretRef:
+                  name: bookboss-secret
+        containers:
+          app:
+            image:
+              repository: ghcr.io/szinn/bookboss
+              tag: v0.8.31@sha256:3bed78dabd1b2b33ee0ac039fce22e49adf1bbfeaa39b40f1e9bf7d4122c989d
+            env:
+              BOOKBOSS__FRONTEND__BASE_URL: "https://bookboss.${CLUSTER_DOMAIN}"
+              BOOKBOSS__LIBRARY__LIBRARY_PATH: "/library/books"
+              BOOKBOSS__IMPORT__BOOKDROP_PATH: "/library/bookdrop"
+              BOOKBOSS__OIDC__DISCOVERY_URL: "https://sso.${CLUSTER_DOMAIN}/realms/master/.well-known/openid-configuration"
+              BOOKBOSS__OIDC__CLIENT_ID: bookboss
+              BOOKBOSS__OIDC__BUTTON_LABEL: Keycloak
+              TZ: Europe/Amsterdam
+            envFrom:
+              - secretRef:
+                  name: bookboss-secret
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: &port 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /readyz
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+
+    service:
+      app:
+        controller: bookboss
+        ports:
+          http:
+            port: *port
+            primary: true
+
+    route:
+      app:
+        hostnames:
+          - "bookboss.${CLUSTER_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: bookboss
+                port: *port
+
+    persistence:
+      # PVC (claim = app-naam); books + bookdrop als subPaths zodat
+      # de mappen gegarandeerd bestaan.
+      library:
+        existingClaim: bookboss
+        advancedMounts:
+          bookboss:
+            app:
+              - path: /library/books
+                subPath: books
+              - path: /library/bookdrop
+                subPath: bookdrop
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

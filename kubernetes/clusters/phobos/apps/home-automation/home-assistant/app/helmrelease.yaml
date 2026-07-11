@@ -1,0 +1,169 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: home-assistant
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: home-assistant
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      home-assistant:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2026.7.2@sha256:547d0fcb67ceb2c2d3adf22db37c7ea79d9ff9e91f3e3c536c6aebd998083f0f
+            env:
+              TZ: Europe/Amsterdam
+              # NOTE: HA reads trusted_proxies from configuration.yaml on the
+              # config PVC (192.168.20.0/24 + the phobos pod CIDR 10.42.0.0/16 so
+              # the in-cluster Envoy Gateway pod is trusted), not from env vars.
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+          git-sync:
+            image:
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2026.7.2@sha256:547d0fcb67ceb2c2d3adf22db37c7ea79d9ff9e91f3e3c536c6aebd998083f0f
+            command: ["bash", "/scripts/git-sync.sh"]
+            env:
+              SYNC_INTERVAL: "60"
+            envFrom:
+              - secretRef:
+                  name: home-assistant-git-sync
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.127.0@sha256:4193b3a0c2661bce87b3cafede59e7d50e1e99e35f7c10bece7c2a7e0660c0a8
+            args:
+              - --auth
+              - none
+              - --disable-telemetry
+              - --disable-update-check
+              - --user-data-dir
+              - /config/.vscode-server
+              - --extensions-dir
+              - /config/.vscode-server/extensions
+              - --port
+              - "12321"
+              - /config
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+
+    service:
+      app:
+        controller: home-assistant
+        ports:
+          http:
+            primary: true
+            port: 8123
+          code-server:
+            port: 12321
+
+    route:
+      app:
+        hostnames:
+          - hass.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: home-assistant
+                port: 8123
+      code:
+        hostnames:
+          - hass-code.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: home-assistant
+                port: 12321
+
+    persistence:
+      config:
+        existingClaim: home-assistant
+        globalMounts:
+          - path: /config
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/logs
+      tts:
+        type: emptyDir
+        globalMounts:
+          - path: /config/tts
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+      git-sync-script:
+        type: configMap
+        name: home-assistant-git-sync-script
+        defaultMode: 0755
+        advancedMounts:
+          home-assistant:
+            git-sync:
+              - path: /scripts/git-sync.sh
+                subPath: git-sync.sh

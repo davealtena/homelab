@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./docs/assets/talos.svg" alt="Talos Linux logo" width="150" height="150">
+  <img src="./docs/assets/nixos.svg" alt="NixOS logo" width="150" height="150">
   <img src="./docs/assets/kubernetes.png" alt="Kubernetes logo" width="150" height="150">
 </div>
 
@@ -7,13 +7,13 @@
 
 ### My Home-ops Repository <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4a5/512.gif" alt="⚡" width="16" height="16">
 
-_... powered by Talos Linux and Kubernetes_
+_... powered by NixOS and Kubernetes_
 
 </div>
 
 <div align="center">
 
-[![Talos](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Ftalos_version&style=for-the-badge&logo=talos&logoColor=white&color=blue&label=%20)](https://talos.dev)&nbsp;
+[![NixOS](https://img.shields.io/badge/NixOS-26.05-blue?style=for-the-badge&logo=nixos&logoColor=white)](https://nixos.org)&nbsp;
 [![Kubernetes](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fkubernetes_version&style=for-the-badge&logo=kubernetes&logoColor=white&color=blue&label=%20)](https://kubernetes.io)&nbsp;
 [![Flux](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.altena.io%2Fflux_version&style=for-the-badge&logo=flux&logoColor=white&color=blue&label=%20)](https://fluxcd.io)&nbsp;
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/davealtena/homelab?logo=github&color=blue&logoColor=white&style=for-the-badge&label=%20)](https://github.com/davealtena/homelab/pulls)
@@ -33,63 +33,122 @@ _... powered by Talos Linux and Kubernetes_
 
 ---
 
+## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4d6/512.gif" alt="📖" width="20" height="20"> Overview
+
+This repository is the single source of truth for my home lab. It declaratively
+describes an entire self-hosted Kubernetes platform — from the bare-metal host OS
+all the way up to the applications — so the whole thing can be rebuilt from Git:
+
+- **Host**: [NixOS](https://nixos.org) defines the machine itself (kernel, drivers,
+  networking, k3s) as a reproducible flake under [`nixos/`](./nixos).
+- **Cluster**: a single-node [k3s](https://k3s.io) Kubernetes cluster, with the
+  in-cluster state managed by [FluxCD](https://fluxcd.io) GitOps under
+  [`kubernetes/`](./kubernetes). Everything you see here is deployed and kept in
+  sync automatically from this repo.
+
+The live cluster (`society`) runs on a single NixOS node, **phobos**, and is
+defined under [`kubernetes/clusters/phobos/`](./kubernetes/clusters/phobos).
+
+---
+
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f3d7_fe0f/512.gif" alt="🏗️" width="20" height="20"> Infrastructure
 
 ### Hardware
 
-The Valhalla cluster runs on 3 dedicated bare-metal Dell Optiplex nodes, all control planes pulling double duty as workers:
+The `society` cluster runs on a single beefy node, **phobos**, doing double duty
+as control plane and worker:
 
-| Node | Role | Hardware |
-|------|------|----------|
-| **Baldur** | Control Plane | Dell Optiplex (256GB SSD + 1TB storage) |
-| **Freya** | Control Plane | Dell Optiplex (256GB SSD + 1TB storage) |
-| **Heimdall** | Control Plane | Dell Optiplex (256GB SSD + 1TB storage) |
+| Component | Spec |
+|-----------|------|
+| **CPU** | AMD Ryzen 9 9900X (12c / 24t) |
+| **Memory** | 96 GB DDR5 |
+| **Board** | ASRock B850M Pro RS WiFi |
+| **Storage** | Samsung 980 1 TB NVMe (Btrfs root, no swap) |
+| **GPU** | NVIDIA RTX 5060 Ti 16 GB |
+| **OS** | NixOS 26.05 |
+
+> [!NOTE]
+> The RTX 5060 Ti is installed for future GPU workloads (local LLM inference and
+> transcoding). GPU passthrough / the NVIDIA container stack isn't wired up yet —
+> that's a follow-up once the migration settles.
 
 ### Storage
 
-Persistent volumes run on **rook-ceph** distributed storage, with one 1TB SSD per node providing 3-way replication and ~1TB usable. Application backups are pushed hourly via **volsync** to a **Synology DS925+** (2x 12TB WD RED, SHR/Btrfs) over NFS, with kopia handling deduplication. The Synology is the off-cluster restore point if anything goes south.
+Persistent volumes live on a **Synology DS925+** (2x 12TB WD RED, SHR/Btrfs)
+exported over NFS and provisioned by **csi-driver-nfs** — this is the default
+StorageClass. **OpenEBS** hostpath provides a fast local-NVMe tier for latency-
+sensitive workloads (databases, Prometheus). Because the app data physically
+lives on the NAS, the Synology's own backups are the primary restore point;
+PostgreSQL additionally gets a nightly logical dump onto the NAS.
 
 ---
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1fa87/512.gif" alt="🪇" width="20" height="20"> Kubernetes
 
-This is a [Talos Linux](https://www.talos.dev)-powered Kubernetes cluster managed with [FluxCD](https://fluxcd.io/) for GitOps. Everything you see here is automatically deployed and kept in sync from this Git repository.
+A single-node [k3s](https://k3s.io) cluster running on **NixOS** and managed with
+[FluxCD](https://fluxcd.io/) for GitOps. k3s is stripped of its stock networking
+(flannel, kube-proxy, servicelb, traefik, local-storage) so the components below
+can take over.
 
 ### Core Components
 
-**Networking**: Cilium provides eBPF-based networking and security, with ingress handled by NGINX. External DNS automatically manages Cloudflare records, and Cloudflare Tunnel enables secure external access.
+**Networking**: [Cilium](https://cilium.io) provides eBPF-based networking as a
+full kube-proxy replacement, with L2 announcements advertising LoadBalancer IPs
+on the LAN. Ingress is handled by **Envoy Gateway** (Gateway API) via an internal
+and an external gateway. **external-dns** manages Cloudflare and UniFi records,
+and **Cloudflare Tunnel** provides secure external access.
 
-**Security**: Certificates are automatically provisioned via cert-manager and Let's Encrypt. Secrets are managed through 1Password Connect (via external-secrets) and SOPS for Git-stored secrets.
+**Security**: Certificates are provisioned automatically via cert-manager and
+Let's Encrypt. Secrets come from 1Password Connect (via external-secrets), with
+SOPS/age encrypting the handful of secrets stored in Git.
 
-**Storage**: rook-ceph for distributed block + filesystem PVs across all nodes; OpenEBS for hot-path local volumes. Volsync replicates application data hourly to a Synology NAS via kopia.
+**Storage**: csi-driver-nfs backs PVCs on the Synology NAS (default class);
+OpenEBS provides local hostpath volumes for the hot path.
 
-**Observability**: Full **VictoriaMetrics** stack — vmsingle for metrics, VictoriaLogs for logs, vmagent + victoria-logs-collector as shippers, vmalert + vmalertmanager for alerting, all glued together by the vm-operator. Grafana renders the dashboards. Alerts route to Pushover. Kromgo powers the cluster metrics badges at the top of this README.
+**Databases**: PostgreSQL is managed by [CloudNative-PG](https://cloudnative-pg.io),
+with a nightly logical backup CronJob dumping to the NAS.
+
+**Observability**: [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts)
+handles metrics and alerting (Prometheus + Alertmanager), **VictoriaLogs**
+collects logs, and **Grafana** (via grafana-operator) renders the dashboards.
+**blackbox-exporter** runs external probes, and **Kromgo** powers the cluster
+metrics badges at the top of this README.
 
 ---
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4fa/512.gif" alt="📺" width="20" height="20"> What's Running
 
-**Media Automation**: Complete media management setup with Plex as the streaming platform, automated downloads via the *arr stack (Sonarr, Radarr, Prowlarr, Bazarr), and both torrent and usenet support.
+**Media Automation**: Plex as the streaming platform, with automated downloads via
+the *arr stack (Sonarr, Radarr, Prowlarr, Bazarr) and jellyseerr for requests —
+both torrent and usenet supported.
 
-**Home Automation**: Home Assistant handles all smart home devices and automations, with Zigbee devices connected via Zigbee2MQTT and EMQX as the MQTT broker.
+**Home Automation**: Home Assistant drives all smart-home devices and automations,
+with Zigbee devices connected via Zigbee2MQTT over a Mosquitto MQTT broker, plus
+ESPHome for DIY devices.
 
-**Productivity**: Actual Budget for personal finance tracking, and n8n for workflow automation.
+**Productivity & Self-hosted**: Actual Budget (finance), Mealie (recipes), Forgejo
+(Git), Paperless (documents), Bookboss, and n8n for workflow automation.
 
-**Infrastructure**: PostgreSQL clusters managed by CloudNative-PG for application databases.
+**AI**: LiteLLM as an LLM gateway plus assorted assistant workloads (destined for
+the RTX once GPU support lands).
 
 ---
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.gif" alt="🚀" width="20" height="20"> Future Plans
 
-- **Offsite backups**: Sync the Synology kopia repo to Cloudflare R2 as a backup-of-the-backup
-- **Monitoring**: More custom Grafana dashboards now that VictoriaMetrics is in place
+- **GPU workloads**: Enable the NVIDIA container stack on the RTX 5060 Ti for local
+  LLM inference and hardware transcoding
 - **More Services**: Always looking for interesting self-hosted applications to add!
 
 ---
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f38a/512.gif" alt="🎊" width="20" height="20"> Credits
 
-Credits are where credits are due. When I started implementing Talos on my own, a lot of studying went in. Bumping into the cluster-template made life so much easier on many fronts. If you're just like me and like to "FAFO" your way forward, this is a perfect place to start the Talos/Flux journey. You can check out the example setup at [onedr0p/cluster-template](https://github.com/onedr0p/cluster-template).
+Credits are where credits are due. This lab started life on Talos Linux, and the
+[onedr0p/cluster-template](https://github.com/onedr0p/cluster-template) made that
+journey enormously easier — its structure still shapes the GitOps layout here even
+after the move to NixOS + k3s. If you like to "FAFO" your way forward, it's a
+perfect place to start.
 
 Also make sure to hop in at the [Home Operations Discord server](https://discord.gg/home-operations) for an amazing community of homelabbers!
 

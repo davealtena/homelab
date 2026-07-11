@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: csi-driver-nfs
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: csi-driver-nfs
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    # NFS + fsGroup don't mix (kubelet recursively chowns the volume on mount,
+    # which chokes on special files like .vscode-server / git/.ssh). Disable it
+    # -> CSIDriver fsGroupPolicy: None. Restored files already own the right UID.
+    feature:
+      enableFSGroupPolicy: false
+    # Primary storage for phobos: PVCs live on the Synology over NFS.
+    # NFS_SERVER_ADDRESS / NFS_SERVER_PATH come from the SOPS cluster-secrets.
+    storageClass:
+      create: true
+      name: nfs-csi-sc
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+      parameters:
+        server: ${NFS_SERVER_ADDRESS}
+        share: ${NFS_SERVER_PATH}
+        subDir: "$${pvc.metadata.namespace}/$${pvc.metadata.name}"
+      reclaimPolicy: Retain
+      volumeBindingMode: Immediate
+      mountOptions:
+        - nfsvers=4.1 # Synology DSM max supported NFS version (4.2 -> "Protocol not supported")
+        - nconnect=16
+        - hard
+        - noatime

@@ -1,0 +1,14 @@
+---
+# Logical backup target on the Synology (NFS). The CronJob writes date-stamped
+# pg_dump archives here; the Synology's own backup then covers off-site/retention.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-backup
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: nfs-csi-sc
+  resources:
+    requests:
+      storage: 20Gi

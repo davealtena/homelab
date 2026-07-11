@@ -1,0 +1,31 @@
+---
+instance:
+  distribution:
+    # renovate: datasource=github-releases depName=fluxcd/flux2
+    version: 2.8.8
+  cluster:
+    networkPolicy: false
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
+  # Public repo -> Flux pulls read-only over HTTPS, no credentials needed.
+  sync:
+    kind: GitRepository
+    url: https://github.com/davealtena/homelab
+    ref: refs/heads/feat/phobos
+    path: kubernetes/clusters/phobos/flux
+  kustomize:
+    patches:
+      # Modest worker counts for a single node.
+      - patch: |
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --concurrent=4
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --requeue-dependency=5s
+        target:
+          kind: Deployment
+          name: (kustomize-controller|helm-controller|source-controller)

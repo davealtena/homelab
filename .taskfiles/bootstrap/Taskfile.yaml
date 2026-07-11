@@ -1,42 +1,57 @@
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
-version: '3'
+version: "3"
 
-env:
-  TALOSCONFIG: '{{.TALHELPER_CLUSTER_DIR}}/talosconfig'
+# Bootstrap the phobos (society) node from scratch.
+#
+# Order matters: NixOS host -> Cilium CNI -> Flux. Cilium and Flux are installed
+# imperatively here because they must exist before Flux can manage anything;
+# once running, Flux adopts both from Git (see the cilium + flux-operator
+# HelmReleases in the phobos tree), so these values match what's in Git.
+
+vars:
+  NIXOS_HOST: '{{.NIXOS_HOST | default "phobos"}}'
+  CILIUM_VALUES: "{{.KUBERNETES_DIR}}/clusters/phobos/apps/kube-system/cilium/app/helm-values.yaml"
+  FLUX_INSTANCE_VALUES: "{{.KUBERNETES_DIR}}/clusters/phobos/apps/flux-system/flux-operator/instance/helm-values.yaml"
+  SOPS_AGE_KEY_FILE: '{{.SOPS_AGE_KEY_FILE | default "${HOME}/.config/sops/age/phobos.key"}}'
 
 tasks:
 
-  bootstrap:
-    desc: Bootstrap the Talos cluster
+  nixos:
+    desc: Build & switch the phobos NixOS host from the flake in ./nixos
     cmds:
-      - '{{if eq .TALHELPER_SECRET_EXISTS "false"}}talhelper gensecret > {{.TALHELPER_SECRET_FILE}}{{end}}'
-      - '{{if eq .TALHELPER_SECRET_EXISTS "false"}}sops --encrypt --in-place {{.TALHELPER_SECRET_FILE}}{{end}}'
-      - talhelper genconfig --config-file {{.TALHELPER_CONFIG_FILE}} --secret-file {{.TALHELPER_SECRET_FILE}} --out-dir {{.TALHELPER_CLUSTER_DIR}}
-      - talhelper gencommand apply --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.TALHELPER_CLUSTER_DIR}} --extra-flags="--insecure" | bash
-      - until talhelper gencommand bootstrap --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.TALHELPER_CLUSTER_DIR}} | bash; do sleep 10; done
-      - until talhelper gencommand kubeconfig --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.TALHELPER_CLUSTER_DIR}} --extra-flags="{{.KUBERNETES_DIR}} --force" | bash; do sleep 10; done
-      - talosctl health --server=false
-    vars:
-      TALHELPER_SECRET_EXISTS:
-        sh: test -f {{.TALHELPER_SECRET_FILE}} && echo true || echo false
+      - rsync -az --delete {{.NIXOS_DIR}}/ {{.NIXOS_HOST}}:/home/dave/nixos/
+      - ssh {{.NIXOS_HOST}} "cd ~/nixos && NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild switch --flake .#{{.NIXOS_HOST}} --sudo"
     preconditions:
-      - msg: Missing talhelper config file
-        sh: test -f {{.TALHELPER_CONFIG_FILE}}
-      - msg: Missing Sops config file
-        sh: test -f {{.SOPS_CONFIG_FILE}}
-      - msg: Missing Sops Age key file
-        sh: test -f {{.SOPS_AGE_KEY_FILE}}
+      - { msg: Missing flake, sh: "test -f {{.NIXOS_DIR}}/flake.nix" }
+      - { msg: Missing rsync/ssh, sh: "which rsync ssh" }
 
-  apps:
-    cmds:
-      - until kubectl wait --for=condition=Ready=False nodes --all --timeout=600s; do sleep 10; done
-      - op run --env-file {{.BOOTSTRAP_DIR}}/apps/.secrets.env --no-masking -- minijinja-cli {{.BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2 | kubectl apply --server-side --filename -
-      - helmfile --file {{.KUBERNETES_DIR}}/bootstrap/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
-      - until kubectl wait --for=condition=Ready nodes --all --timeout=600s; do sleep 10; done
+  cilium:
+    desc: Install the Cilium CNI (kube-proxy replacement + L2) before Flux exists
+    cmd: >-
+      helm upgrade --install cilium cilium
+      --repo https://helm.cilium.io --version 1.19.5
+      --namespace kube-system
+      --values {{.CILIUM_VALUES}} --wait
     preconditions:
-      - op user get --me
-      - talosctl config info
-      - test -f {{.BOOTSTRAP_DIR}}/apps/helmfile.yaml
-      - test -f {{.BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2
-      - which curl jq helmfile kubectl op talosctl minijinja-cli
+      - { msg: Missing cilium values, sh: "test -f {{.CILIUM_VALUES}}" }
+      - { msg: Missing helm/kubectl, sh: "which helm kubectl" }
+
+  flux:
+    desc: Bootstrap Flux (sops-age secret + flux-operator + flux-instance)
+    cmds:
+      - kubectl create namespace flux-system --dry-run=client -o yaml | kubectl apply -f -
+      - kubectl -n flux-system create secret generic sops-age --from-file=age.agekey={{.SOPS_AGE_KEY_FILE}} --dry-run=client -o yaml | kubectl apply -f -
+      - helm upgrade --install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator --version 0.52.0 --namespace flux-system --wait
+      - helm upgrade --install flux-instance oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance --version 0.52.0 --namespace flux-system --values {{.FLUX_INSTANCE_VALUES}} --wait
+    preconditions:
+      - { msg: Missing sops age key, sh: "test -f {{.SOPS_AGE_KEY_FILE}}" }
+      - { msg: Missing flux-instance values, sh: "test -f {{.FLUX_INSTANCE_VALUES}}" }
+      - { msg: Missing helm/kubectl, sh: "which helm kubectl" }
+
+  all:
+    desc: Full phobos bootstrap (nixos -> cilium -> flux)
+    cmds:
+      - task: nixos
+      - task: cilium
+      - task: flux
