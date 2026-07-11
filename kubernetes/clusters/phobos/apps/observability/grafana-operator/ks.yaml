@@ -34,7 +34,6 @@ spec:
   dependsOn:
     - name: grafana-operator
     - name: prometheus-operator-crds
-    - name: external-secrets-stores
   interval: 10m
   path: ./kubernetes/clusters/phobos/apps/observability/grafana-operator/instance
   prune: true
