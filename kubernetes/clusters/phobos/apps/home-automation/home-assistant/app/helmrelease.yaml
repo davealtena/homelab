@@ -29,11 +29,11 @@ spec:
               tag: 2026.7.2@sha256:547d0fcb67ceb2c2d3adf22db37c7ea79d9ff9e91f3e3c536c6aebd998083f0f
             env:
               TZ: Europe/Amsterdam
-              # NOTE: trusted proxies carried over as source from Talos. The IoT
-              # VLAN (192.168.20.0/24) was reachable via multus on Talos; the
-              # second entry is the Talos pod CIDR and likely differs on phobos.
+              # Trusted proxies: the IoT VLAN plus the phobos pod CIDR — Envoy
+              # Gateway runs in-cluster, so its pod IP (10.42.0.0/16) must be
+              # trusted for HA to honour the forwarded client IP.
               HASS_HTTP_TRUSTED_PROXY_1: 192.168.20.0/24
-              HASS_HTTP_TRUSTED_PROXY_2: 10.69.0.0/16
+              HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
             probes:
               liveness:
                 enabled: true
