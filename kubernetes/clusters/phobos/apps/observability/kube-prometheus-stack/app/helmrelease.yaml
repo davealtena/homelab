@@ -1,0 +1,134 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+spec:
+  interval: 30m
+  timeout: 15m
+  chartRef:
+    kind: OCIRepository
+    name: kube-prometheus-stack
+  install:
+    # CRDs are owned by the separate prometheus-operator-crds app on phobos.
+    crds: Skip
+  upgrade:
+    crds: Skip
+  values:
+    crds:
+      # CRDs are managed by the dedicated prometheus-operator-crds HelmRelease.
+      enabled: false
+    cleanPrometheusOperatorObjectNames: true
+
+    defaultRules:
+      rules:
+        kubeApiserverBurnrate: false
+        kubeApiserverSlos: false
+
+    alertmanager:
+      route:
+        main:
+          enabled: true
+          hostnames: ["alertmanager.${CLUSTER_DOMAIN}"]
+          parentRefs:
+            - name: envoy-internal
+              namespace: network
+              sectionName: https
+      alertmanagerSpec:
+        alertmanagerConfiguration:
+          name: alertmanager
+          global:
+            resolveTimeout: 5m
+        externalUrl: https://alertmanager.${CLUSTER_DOMAIN}
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: openebs-hostpath
+              resources:
+                requests:
+                  storage: 1Gi
+
+    kubelet:
+      enabled: true
+    kubeApiServer:
+      enabled: true
+    # kube-scheduler / kube-controller-manager / etcd / proxy are bound to
+    # localhost on Talos — scraping would always fail and generate TargetDown noise.
+    kubeControllerManager:
+      enabled: false
+    kubeEtcd:
+      enabled: false
+    kubeScheduler:
+      enabled: false
+    kubeProxy:
+      enabled: false
+
+    prometheus:
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - prometheus.${CLUSTER_DOMAIN}
+          parentRefs:
+            - name: envoy-internal
+              namespace: network
+              sectionName: https
+      prometheusSpec:
+        externalUrl: https://prometheus.${CLUSTER_DOMAIN}
+        alertingEndpoints:
+          - namespace: observability
+            name: alertmanager-operated
+            port: 9093
+            apiVersion: v2
+        scrapeInterval: 1m
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        podMonitorSelectorNilUsesHelmValues: false
+        probeSelectorNilUsesHelmValues: false
+        scrapeConfigSelectorNilUsesHelmValues: false
+        enableAdminAPI: true
+        walCompression: true
+        enableFeatures:
+          - auto-gomemlimit
+          - memory-snapshot-on-shutdown
+          - new-service-discovery-manager
+        retention: 7d
+        retentionSize: 25GB
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            memory: 1500Mi
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: openebs-hostpath
+              resources:
+                requests:
+                  storage: 75Gi
+
+    nodeExporter:
+      enabled: true
+    kubeStateMetrics:
+      enabled: true
+    kube-state-metrics:
+      fullnameOverride: kube-state-metrics
+      metricLabelsAllowlist:
+        - pods=[*]
+        - deployments=[*]
+        - persistentvolumeclaims=[*]
+      prometheus:
+        monitor:
+          enabled: true
+          relabelings:
+            - action: replace
+              regex: (.*)
+              replacement: $1
+              sourceLabels: ["__meta_kubernetes_pod_node_name"]
+              targetLabel: kubernetes_node
+
+    grafana:
+      enabled: false
+      forceDeployDashboards: false

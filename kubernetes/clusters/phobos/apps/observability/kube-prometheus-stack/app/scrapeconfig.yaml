@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: synology
+spec:
+  scrapeInterval: 1m
+  staticConfigs:
+    - targets:
+        - 192.168.1.200:9100
+      labels:
+        job: node-exporter
+        instance: synology
+    - targets:
+        - 192.168.1.200:9633
+      labels:
+        job: smartctl-exporter
+        instance: synology

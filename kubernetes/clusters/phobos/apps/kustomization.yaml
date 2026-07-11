@@ -10,6 +10,7 @@ resources:
   - ./security
   - ./databases
   - ./ai
+  - ./observability
   - ./selfhosted
   - ./media
   - ./volsync-system
