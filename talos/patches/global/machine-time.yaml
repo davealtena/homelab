@@ -1,8 +1,0 @@
----
-machine:
-  time:
-    disabled: false
-    servers:
-      - ntp.time.nl
-      - time.cloudflare.com
-      - time.google.com

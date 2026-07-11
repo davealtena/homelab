@@ -5,7 +5,7 @@
 - { name: "area/kubernetes",         color: "0e8a16" }
 - { name: "area/taskfile",           color: "0e8a16" }
 # Distro
-- { name: "distro/talos",            color: "ffc300" }
+- { name: "distro/nixos",            color: "ffc300" }
 # Renovate
 - { name: "renovate/container",      color: "027fa0" }
 - { name: "renovate/github-action",  color: "027fa0" }

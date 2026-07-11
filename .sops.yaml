@@ -1,18 +1,14 @@
 ---
 creation_rules:
-  - # IMPORTANT: This rule MUST be above the others
-    path_regex: kubernetes/talos/.*\.sops\.ya?ml
-    key_groups:
-      - age:
-          - "age1yrzd67uvapjjawwjgfc7drkyu8pk2m800w4knjzrg69jxkm0afcqnr9qfz"
-  - # phobos cluster (society) — separate age key, must be above the generic rule
+  - # phobos cluster (society)
     path_regex: kubernetes/clusters/phobos/.*\.sops\.ya?ml
     encrypted_regex: "^(data|stringData)$"
     key_groups:
       - age:
           - "age1rk7l90pf4vavjlkxzf5v678fj9g5l09ar7wz9kj2v5q5la4fapeqvc38vk"
-  - path_regex: kubernetes/.*\.sops\.ya?ml
+  - # fallback for any other sops file in the repo
+    path_regex: .*\.sops\.ya?ml
     encrypted_regex: "^(data|stringData)$"
     key_groups:
       - age:
-          - "age1yrzd67uvapjjawwjgfc7drkyu8pk2m800w4knjzrg69jxkm0afcqnr9qfz"
+          - "age1rk7l90pf4vavjlkxzf5v678fj9g5l09ar7wz9kj2v5q5la4fapeqvc38vk"

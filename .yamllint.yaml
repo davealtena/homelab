@@ -3,7 +3,6 @@ ignore: |
   .vscode/
   *.sops.*
   .github/labels.yaml
-  kubernetes/talos/clusterconfig/*
 
 extends: default
 
