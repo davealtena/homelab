@@ -44,22 +44,24 @@ spec:
                   value: "14"
               command: ["/bin/bash", "-c"]
               args:
+                # NOTE: shell variables are escaped as $${VAR} so Flux postBuild
+                # substituteFrom leaves them intact (single $ would be replaced).
                 - |
                   set -euo pipefail
-                  ts="$(date +%Y-%m-%d_%H%M%S)"
-                  dir="/backup/${ts}"
-                  mkdir -p "${dir}"
+                  ts="$$(date +%Y-%m-%d_%H%M%S)"
+                  dir="/backup/$${ts}"
+                  mkdir -p "$${dir}"
                   echo "==> Dumping globals (roles/tablespaces)"
-                  pg_dumpall -g > "${dir}/globals.sql"
-                  dbs="$(psql -Atc "SELECT datname FROM pg_database WHERE datistemplate=false AND datname<>'postgres';")"
-                  for db in ${dbs}; do
-                    echo "==> Dumping ${db}"
-                    pg_dump -Fc -d "${db}" -f "${dir}/${db}.dump"
+                  pg_dumpall -g > "$${dir}/globals.sql"
+                  dbs="$$(psql -Atc "SELECT datname FROM pg_database WHERE datistemplate=false AND datname<>'postgres';")"
+                  for db in $${dbs}; do
+                    echo "==> Dumping $${db}"
+                    pg_dump -Fc -d "$${db}" -f "$${dir}/$${db}.dump"
                   done
                   echo "==> Backup complete:"
-                  ls -lh "${dir}"
-                  echo "==> Pruning backups older than ${RETENTION_DAYS} days"
-                  find /backup -mindepth 1 -maxdepth 1 -type d -mtime "+${RETENTION_DAYS}" -print -exec rm -rf {} +
+                  ls -lh "$${dir}"
+                  echo "==> Pruning backups older than $${RETENTION_DAYS} days"
+                  find /backup -mindepth 1 -maxdepth 1 -type d -mtime "+$${RETENTION_DAYS}" -print -exec rm -rf {} +
               volumeMounts:
                 - name: backup
                   mountPath: /backup
