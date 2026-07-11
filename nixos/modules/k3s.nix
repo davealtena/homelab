@@ -65,6 +65,8 @@
       "--disable=local-storage"
       "--write-kubeconfig-mode=0644"
       "--tls-san=phobos"
+      "--tls-san=phobos.altena.io"
+      "--tls-san=192.168.1.100"
       "--tls-san=192.168.1.246"
       "--cluster-cidr=10.42.0.0/16"
       "--service-cidr=10.43.0.0/16"
