@@ -5,5 +5,4 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./litellm/ks.yaml
-  - ./hermes-marja/ks.yaml
   - ./toolhive/ks.yaml
