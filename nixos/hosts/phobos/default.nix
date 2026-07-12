@@ -12,10 +12,11 @@
 
   networking.hostName = "phobos";
 
-  # NVIDIA: currently DISABLED — the RTX 5060 Ti is not yet visible on the PCIe
-  # bus (only the AMD iGPU enumerates). Once `lspci | grep -i nvidia` shows the
-  # card, flip this to true and rebuild (Phase 3). See docs/architecture.md.
-  homelab.nvidia.enable = false;
+  # NVIDIA RTX 5060 Ti (Blackwell/GB206) — now seated and enumerating on the
+  # PCIe bus (01:00.0 [10de:2d04]). Enables the open kernel modules + Container
+  # Toolkit (see modules/nvidia.nix). Adding the card shifted PCI addressing:
+  # WiFi is now wlp5s0 (was wlp4s0), ethernet enp6s0 (was enp5s0).
+  homelab.nvidia.enable = true;
 
   # Primary user. The SSH public key below is public by design (safe in Git).
   users.users.dave = {
