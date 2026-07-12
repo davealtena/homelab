@@ -74,6 +74,13 @@
     ];
   };
 
+  # Put the NVIDIA Container Toolkit on k3s's PATH so k3s auto-detects the
+  # nvidia-container-runtime at startup and wires it into its managed containerd
+  # config (+ creates the `nvidia` RuntimeClass). Avoids hand-crafting a
+  # containerd config.toml.tmpl. GPU pods then use runtimeClassName: nvidia.
+  # `.tools` holds nvidia-container-runtime (the main output only ships nvidia-ctk).
+  systemd.services.k3s.path = [ pkgs.nvidia-container-toolkit pkgs.nvidia-container-toolkit.tools ];
+
   # k3s CLI helpers (crictl, ctr) alongside the standalone kubectl in base.nix.
   environment.systemPackages = [ pkgs.k3s ];
 
