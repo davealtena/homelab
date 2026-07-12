@@ -7,3 +7,4 @@ resources:
   - ./csi-driver-nfs/ks.yaml
   - ./cilium-l2/ks.yaml
   - ./reloader/ks.yaml
+  - ./nvidia-device-plugin/ks.yaml
