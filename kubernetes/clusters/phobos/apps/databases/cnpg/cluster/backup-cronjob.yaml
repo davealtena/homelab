@@ -26,7 +26,7 @@ spec:
             runAsGroup: 0
           containers:
             - name: pg-dump
-              image: ghcr.io/cloudnative-pg/postgresql:16.9-22
+              image: ghcr.io/cloudnative-pg/postgresql:17.5-22
               env:
                 - name: PGHOST
                   value: homelab-rw.databases.svc.cluster.local
