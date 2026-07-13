@@ -34,7 +34,7 @@ spec:
           effect: NoSchedule
       containers:
         - name: nvidia-device-plugin
-          image: nvcr.io/nvidia/k8s-device-plugin:v0.17.1
+          image: nvcr.io/nvidia/k8s-device-plugin:v0.19.3
           env:
             - name: NVIDIA_VISIBLE_DEVICES
               value: all
