@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup flate
-        uses: home-operations/flate/action@bf3405a189626478b0aa6ec98dc4d6f7d419df17 # v0.4.12
+        uses: home-operations/flate/action@c2544f569380e766ef665abc7af685331c881117 # v0.4.11
         with:
           cache: "true"
 
