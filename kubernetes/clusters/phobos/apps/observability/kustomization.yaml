@@ -7,6 +7,5 @@ resources:
   - ./prometheus-operator-crds/ks.yaml
   - ./blackbox-exporter/ks.yaml
   - ./grafana-operator/ks.yaml
-  - ./kromgo/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./victoria-logs/ks.yaml
