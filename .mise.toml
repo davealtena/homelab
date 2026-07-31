@@ -1,2 +1,3 @@
 [env]
 KUBERNETES_DIR = '{{config_root}}/kubernetes'
+KUBECONFIG = '{{config_root}}/kubernetes/kubeconfig'
