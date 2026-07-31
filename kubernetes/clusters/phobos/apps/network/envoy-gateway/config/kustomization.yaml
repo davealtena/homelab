@@ -6,5 +6,4 @@ resources:
   - ./certificate.yaml
   - ./envoy.yaml
   - ./internal.yaml
-  - ./external.yaml
   - ./podmonitor.yaml
