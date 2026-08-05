@@ -4,24 +4,23 @@ kind: MCPServer
 metadata:
   name: unifi-network-mcp
 spec:
-  image: ghcr.io/sirkirby/unifi-network-mcp:sha-608aceb
-  # The image serves streamable-http on :3000, not stdio.
-  transport: streamable-http
+  # Run the published stdio server via uvx (the Docker image serves HTTP and
+  # trips the MCP SDK's Host-header/DNS-rebinding check behind ToolHive's proxy).
+  image: ghcr.io/astral-sh/uv:python3.13-bookworm-slim
+  transport: stdio
   proxyMode: streamable-http
   proxyPort: 8080
-  mcpPort: 3000
   env:
-    # The image's entrypoint runs /app/src/main.py without /app on the path,
-    # so `import src...` fails (ModuleNotFoundError). Put /app on PYTHONPATH.
-    - name: PYTHONPATH
-      value: /app
+    - name: HOME
+      value: /tmp
+    - name: UV_CACHE_DIR
+      value: /tmp/.uv-cache
     - name: UNIFI_HOST
       value: "192.168.1.1"
     - name: UNIFI_PORT
       value: "443"
     - name: UNIFI_SITE
       value: default
-    # UniFi controller uses a self-signed cert
     - name: UNIFI_VERIFY_SSL
       value: "false"
   secrets:
@@ -32,8 +31,24 @@ spec:
   resources:
     requests:
       cpu: 50m
-      memory: 128Mi
+      memory: 256Mi
     limits:
-      memory: 384Mi
+      memory: 768Mi
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: mcp
+          image: ghcr.io/astral-sh/uv:python3.13-bookworm-slim
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - uvx unifi-network-mcp@0.25.1
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
   groupRef:
     name: mcp-tools
