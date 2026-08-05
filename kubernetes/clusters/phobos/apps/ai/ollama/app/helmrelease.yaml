@@ -28,7 +28,7 @@ spec:
                   command:
                     - /bin/sh
                     - -c
-                    - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull nomic-embed-text || true
+                    - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull bge-m3 || true
             resources:
               requests:
                 cpu: 200m
