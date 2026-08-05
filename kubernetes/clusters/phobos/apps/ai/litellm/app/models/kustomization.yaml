@@ -3,7 +3,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./namespace.yaml
-  - ./litellm-operator/ks.yaml
-  - ./litellm/ks.yaml
-  - ./toolhive/ks.yaml
+  - ./minimax.yaml
+  - ./gpt-4-1.yaml
+  - ./gpt-4-1-mini.yaml

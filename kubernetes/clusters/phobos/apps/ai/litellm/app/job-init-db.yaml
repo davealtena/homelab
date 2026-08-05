@@ -1,0 +1,30 @@
+---
+# Idempotently provisions the litellm database + role in the shared CNPG
+# cluster. Runs as a Job because the operator-managed LiteLLMProxy Deployment
+# cannot host an init container.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: litellm-init-db
+spec:
+  backoffLimit: 10
+  template:
+    spec:
+      restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: init-db
+          image: ghcr.io/onedr0p/postgres-init:17.4
+          envFrom:
+            - secretRef:
+                name: litellm
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

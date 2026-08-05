@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: gpt-4-1
+spec:
+  modelName: gpt-4.1
+  params:
+    model: openai/gpt-4.1
+    apiKeyRef:
+      name: litellm
+      key: OPENAI_API_KEY
