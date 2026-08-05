@@ -9,6 +9,7 @@ spec:
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
+  # Held at 0.0.9: 0.0.10 crash-loops (missing RBAC for its new CRDs).
   ref:
-    tag: 0.0.10
+    tag: 0.0.9
   url: oci://ghcr.io/home-operations/charts/litellm-operator
