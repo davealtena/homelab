@@ -1,0 +1,71 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: open-webui
+  interval: 30m
+  values:
+    controllers:
+      open-webui:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/open-webui/open-webui
+              tag: v0.11.0
+            env:
+              # Models come exclusively from the litellm gateway (OpenAI-compatible).
+              ENABLE_OLLAMA_API: false
+              ENABLE_OPENAI_API: true
+              OPENAI_API_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
+              WEBUI_URL: https://chat.${CLUSTER_DOMAIN}
+              # First visit → sign up to create the admin account. Flip to false
+              # afterwards (VPN-only, single user) if you want to lock it down.
+              ENABLE_SIGNUP: true
+              # Native MCP tool server: point Open WebUI straight at the ToolHive
+              # VirtualMCPServer (aggregates garmin/home-assistant/unifi/kubectl/
+              # github). Streamable-HTTP is natively supported since v0.6.31 — no
+              # mcpo, no routing tools through litellm. Anonymous in-cluster auth.
+              # Seeds the DB on first boot (PersistentConfig); manage later in the
+              # admin UI (Admin Settings → External Tools).
+              TOOL_SERVER_CONNECTIONS: >-
+                [{"type":"mcp","url":"http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp","path":"","auth_type":"none","config":{"enable":true},"info":{"id":"toolhive-vmcp","name":"ToolHive VMCP","description":"garmin, home-assistant, unifi, kubectl, github"}}]
+            envFrom:
+              - secretRef:
+                  name: open-webui
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 2Gi
+
+    persistence:
+      config:
+        existingClaim: open-webui
+        globalMounts:
+          - path: /app/backend/data
+
+    route:
+      app:
+        hostnames:
+          - chat.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 8080
+
+    service:
+      app:
+        ports:
+          http:
+            port: 8080
