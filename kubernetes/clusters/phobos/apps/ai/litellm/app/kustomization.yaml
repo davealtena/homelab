@@ -9,4 +9,5 @@ resources:
   - ./job-init-db.yaml
   - ./litellmproxy.yaml
   - ./mcpserver-toolhive.yaml
+  - ./servicemonitor.yaml
   - ./models/
