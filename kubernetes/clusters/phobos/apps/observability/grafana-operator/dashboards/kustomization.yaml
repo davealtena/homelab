@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: observability
 resources:
   - ./grafanadashboard.yaml
+  - ./litellm.yaml
   - ./kubernetes.yaml
   - ./node-prometheus.yaml
   - ./networking.yaml

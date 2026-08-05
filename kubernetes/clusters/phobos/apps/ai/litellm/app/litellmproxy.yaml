@@ -17,6 +17,8 @@ spec:
     num_retries: 2
   litellmSettings:
     drop_params: true
+    success_callback:
+      - prometheus
     cache: true
     cache_params:
       type: redis
