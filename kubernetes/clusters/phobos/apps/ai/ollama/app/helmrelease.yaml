@@ -1,0 +1,48 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ollama
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: ollama
+  interval: 30m
+  values:
+    defaultPodOptions:
+      runtimeClassName: nvidia-cdi
+    controllers:
+      ollama:
+        containers:
+          app:
+            image:
+              repository: docker.io/ollama/ollama
+              tag: 0.32.5
+            env:
+              OLLAMA_HOST: 0.0.0.0
+              OLLAMA_KEEP_ALIVE: "24h"
+            lifecycle:
+              postStart:
+                exec:
+                  command:
+                    - /bin/sh
+                    - -c
+                    - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull nomic-embed-text || true
+            resources:
+              requests:
+                cpu: 200m
+                memory: 1Gi
+              limits:
+                nvidia.com/gpu: 1
+                memory: 8Gi
+    service:
+      app:
+        ports:
+          http:
+            port: 11434
+    persistence:
+      models:
+        existingClaim: ollama
+        globalMounts:
+          - path: /root/.ollama
