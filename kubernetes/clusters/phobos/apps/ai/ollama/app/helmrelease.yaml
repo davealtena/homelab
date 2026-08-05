@@ -21,14 +21,15 @@ spec:
               tag: 0.32.5
             env:
               OLLAMA_HOST: 0.0.0.0
-              OLLAMA_KEEP_ALIVE: "24h"
+              # Keep models resident so memini's embeddings never cold-start.
+              OLLAMA_KEEP_ALIVE: "-1"
             lifecycle:
               postStart:
                 exec:
                   command:
                     - /bin/sh
                     - -c
-                    - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull bge-m3 || true
+                    - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull bge-m3 && ollama run bge-m3 warmup >/dev/null 2>&1 || true
             resources:
               requests:
                 cpu: 200m
