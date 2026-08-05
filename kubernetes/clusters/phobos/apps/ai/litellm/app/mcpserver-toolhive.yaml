@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: toolhive
+spec:
+  # Exposes the ToolHive VirtualMCPServer (which aggregates the kubectl/github/
+  # garmin/hass/unifi MCP servers) as a single MCP endpoint on the LiteLLM
+  # gateway, so any OpenAI-compatible client of litellm gets the tools.
+  # ToolHive stays the hosting/isolation/aggregation layer; litellm only exposes
+  # its aggregated endpoint. The VirtualMCPServer uses anonymous incoming auth,
+  # so no auth is configured here.
+  alias: toolhive
+  url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
+  transport: http

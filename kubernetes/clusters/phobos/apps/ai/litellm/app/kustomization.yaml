@@ -8,4 +8,5 @@ resources:
   - ./cache.yaml
   - ./job-init-db.yaml
   - ./litellmproxy.yaml
+  - ./mcpserver-toolhive.yaml
   - ./models/
