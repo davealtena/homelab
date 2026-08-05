@@ -49,6 +49,11 @@ spec:
               env:
                 - name: GF_INSTALL_PLUGINS
                   value: "grafana-clock-panel,grafana-piechart-panel,grafana-worldmap-panel,natel-discrete-panel,pr0ps-trackmap-panel,vonage-status-panel"
+                - name: GF_SECURITY_ADMIN_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin-credentials
+                      key: GF_SECURITY_ADMIN_USER
                 - name: GF_SECURITY_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
@@ -90,4 +95,7 @@ spec:
         requests:
           storage: 10Gi
       storageClassName: openebs-hostpath
+  # Admin creds come from 1Password via the grafana-admin-credentials
+  # ExternalSecret; stop the operator from generating its own.
+  disableDefaultAdminSecret: true
   disableDefaultSecurityContext: All
