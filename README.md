@@ -47,7 +47,7 @@ all the way up to the applications — so the whole thing can be rebuilt from Gi
   sync automatically from this repo.
 
 The live cluster (`society`) runs on a single NixOS node, **phobos**, and is
-defined under [`kubernetes/clusters/phobos/`](./kubernetes/clusters/phobos).
+defined under [`kubernetes/`](./kubernetes).
 
 ---
 

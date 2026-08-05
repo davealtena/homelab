@@ -9,7 +9,7 @@ also apply.
 ## Layout
 
 ```
-kubernetes/clusters/phobos/
+kubernetes/
 ├── apps/<namespace>/<app>/   # applications (Flux-managed)
 └── flux/                     # Flux entrypoint; flux/ks.yaml defines the
 │                             #   `phobos-apps` Kustomization (path ./apps,
@@ -35,7 +35,7 @@ nixos/                        # NixOS flake for the phobos host (k3s, Cilium, ne
 
 ## App conventions
 
-Each app: `kubernetes/clusters/phobos/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrelease,kustomization}.yaml` (+ `externalsecret.yaml` when secrets are needed; optional `app/resources/`).
+Each app: `kubernetes/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrelease,kustomization}.yaml` (+ `externalsecret.yaml` when secrets are needed; optional `app/resources/`).
 
 - YAML LSP schema header right under `---`, e.g. `# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/...`.
 - `OCIRepository.spec.ref.tag` pinned to an explicit version (Renovate bumps via PR).
