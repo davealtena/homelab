@@ -5,9 +5,11 @@ metadata:
   name: unifi-network-mcp
 spec:
   image: ghcr.io/sirkirby/unifi-network-mcp:sha-608aceb
-  transport: stdio
+  # The image serves streamable-http on :3000, not stdio.
+  transport: streamable-http
   proxyMode: streamable-http
   proxyPort: 8080
+  mcpPort: 3000
   env:
     # The image's entrypoint runs /app/src/main.py without /app on the path,
     # so `import src...` fails (ModuleNotFoundError). Put /app on PYTHONPATH.
