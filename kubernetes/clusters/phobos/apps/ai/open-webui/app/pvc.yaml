@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: open-webui
+spec:
+  accessModes: ["ReadWriteOnce"]
+  # Local NVMe: Open WebUI stores its state in a SQLite DB, which is unreliable
+  # over NFS (file locking). Keep it on local-hostpath instead of nfs-csi-sc.
+  storageClassName: openebs-hostpath
+  resources:
+    requests:
+      storage: 5Gi
