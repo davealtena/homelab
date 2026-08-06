@@ -20,6 +20,16 @@
     },
     {
       "description": [
+        "Hold litellm-operator at 0.0.9: the 0.0.10/0.0.11 chart ClusterRole",
+        "omits RBAC for its new LiteLLMTeam/VirtualKey CRDs, so the manager",
+        "crash-loops. Remove this rule once upstream fixes the chart RBAC."
+      ],
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/home-operations/charts/litellm-operator"],
+      "enabled": false
+    },
+    {
+      "description": [
         "Cluster-critical charts: a semver-MINOR here can be breaking (e.g. a",
         "Cilium CSI/RBAC change). Don't auto-merge their minors — request review",
         "+ label so I approve in a maintenance window."
