@@ -29,7 +29,7 @@ spec:
                   command:
                     - /bin/sh
                     - -c
-                    - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull bge-m3 && ollama run bge-m3 warmup >/dev/null 2>&1 || true
+                    - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull bge-m3 && ollama pull qwen3:14b && ollama run bge-m3 warmup >/dev/null 2>&1 || true
             resources:
               requests:
                 cpu: 200m

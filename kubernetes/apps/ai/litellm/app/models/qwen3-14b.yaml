@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: qwen3-14b
+spec:
+  modelName: qwen3-14b
+  params:
+    # Local Ollama via its OpenAI-compatible endpoint.
+    model: openai/qwen3:14b
+    apiBase: http://ollama.ai.svc.cluster.local:11434/v1
+    apiKey: ollama
+  info:
+    mode: chat
+    supportsFunctionCalling: true
