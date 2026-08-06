@@ -25,6 +25,9 @@ spec:
               ENABLE_OPENAI_API: true
               OPENAI_API_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
               WEBUI_URL: https://chat.${CLUSTER_DOMAIN}
+              # Seeds the memini memory filter's base_url valve (MEMINI_API_KEY
+              # comes from the secret via envFrom).
+              MEMINI_BASE_URL: http://memini.ai.svc.cluster.local:8080
               # First visit → sign up to create the admin account. Flip to false
               # afterwards (VPN-only, single user) if you want to lock it down.
               ENABLE_SIGNUP: true
