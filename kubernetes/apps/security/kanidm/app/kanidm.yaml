@@ -1,0 +1,42 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: Kanidm
+metadata:
+  name: kanidm
+spec:
+  domain: idm.${CLUSTER_DOMAIN}
+  origin: https://idm.${CLUSTER_DOMAIN}
+  tlsSecretName: kanidm-tls
+  # Let OAuth2Client/Group/Person CRs live in the app namespaces they belong to.
+  oauth2ClientNamespaceSelector: {}
+  groupNamespaceSelector: {}
+  personNamespaceSelector: {}
+  replicaGroups:
+    - name: default
+      replicas: 1
+      resources:
+        requests:
+          cpu: 50m
+          memory: 128Mi
+        limits:
+          memory: 512Mi
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: openebs-hostpath
+        resources:
+          requests:
+            storage: 2Gi
+  # Native Gateway API: the operator creates the HTTPRoute + BackendTLSPolicy.
+  gateway:
+    parentRefs:
+      - name: envoy-internal
+        namespace: network
+        sectionName: https
+    hostnames:
+      - idm.${CLUSTER_DOMAIN}
+    backendTlsPolicy:
+      validation:
+        hostname: idm.${CLUSTER_DOMAIN}
+        wellKnownCaCertificates: System
