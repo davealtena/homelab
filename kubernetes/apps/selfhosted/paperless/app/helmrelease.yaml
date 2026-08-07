@@ -51,8 +51,9 @@ spec:
               USERMAP_GID: "100"
               # SSO via Kanidm (OIDC, public client + PKCE via allauth)
               PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
-              PAPERLESS_SOCIAL_AUTO_SIGNUP: "true"
-              PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: "true"
+              # Signups off: the dave account is already linked; avoids stray duplicate SSO users.
+              PAPERLESS_SOCIAL_AUTO_SIGNUP: "false"
+              PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: "false"
               PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"kanidm","name":"Kanidm","client_id":"paperless","secret":"","settings":{"server_url":"https://idm.${CLUSTER_DOMAIN}/oauth2/openid/paperless/.well-known/openid-configuration"}}],"SCOPE":["openid","email","profile"]}}'
               # Configure admin user
               PAPERLESS_ADMIN_USER:
