@@ -1,0 +1,21 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: actual
+spec:
+  kanidmRef:
+    name: kanidm
+    namespace: security
+  displayname: Actual
+  origin: https://finance.${CLUSTER_DOMAIN}
+  redirectUrl:
+    - https://finance.${CLUSTER_DOMAIN}/openid/callback
+  scopeMap:
+    - group: actual-users
+      scopes:
+        - openid
+        - email
+        - profile
+  # Actual's openid-client only accepts RS256; Kanidm signs ES256 by default.
+  jwtLegacyCryptoEnable: true
