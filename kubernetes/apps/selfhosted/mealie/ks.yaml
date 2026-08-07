@@ -13,8 +13,18 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: cnpg-cluster
+    - name: kanidm
+  components:
+    - ../../../../components/kanidm-oauth2
   path: ./kubernetes/apps/selfhosted/mealie/app
   prune: true
+  postBuild:
+    substitute:
+      APP: mealie
+      OAUTH2_DISPLAYNAME: Mealie
+      OAUTH2_HOST: mealie
+      OAUTH2_REDIRECT_PATH: /login
+      OAUTH2_GROUP: mealie-users
   sourceRef:
     kind: GitRepository
     name: flux-system

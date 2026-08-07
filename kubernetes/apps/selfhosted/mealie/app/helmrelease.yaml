@@ -61,6 +61,22 @@ spec:
               SMTP_AUTH_STRATEGY: TLS
               SMTP_USER: mealie@${CLUSTER_DOMAIN}
               # OPENAI_BASE_URL: https://openrouter.ai/api/v1
+              # SSO via Kanidm (OIDC, confidential client + PKCE)
+              OIDC_AUTH_ENABLED: "true"
+              OIDC_PROVIDER_NAME: Kanidm
+              OIDC_CONFIGURATION_URL: https://idm.${CLUSTER_DOMAIN}/oauth2/openid/mealie/.well-known/openid-configuration
+              OIDC_SIGNUP_ENABLED: "true"
+              OIDC_USER_CLAIM: email
+              OIDC_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: mealie-kanidm-oauth2-credentials
+                    key: CLIENT_ID
+              OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: mealie-kanidm-oauth2-credentials
+                    key: CLIENT_SECRET
             envFrom: *envFrom
             resources:
               requests:

@@ -50,3 +50,43 @@ spec:
     name: kanidm
   members:
     - dave
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmGroup
+metadata:
+  name: mealie-users
+spec:
+  kanidmRef:
+    name: kanidm
+  members:
+    - dave
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmGroup
+metadata:
+  name: actual-users
+spec:
+  kanidmRef:
+    name: kanidm
+  members:
+    - dave
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmGroup
+metadata:
+  name: forgejo-users
+spec:
+  kanidmRef:
+    name: kanidm
+  members:
+    - dave
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmGroup
+metadata:
+  name: paperless-users
+spec:
+  kanidmRef:
+    name: kanidm
+  members:
+    - dave

@@ -1,0 +1,26 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: forgejo
+spec:
+  kanidmRef:
+    name: kanidm
+    namespace: security
+  displayname: Forgejo
+  origin: https://git.${CLUSTER_DOMAIN}
+  redirectUrl:
+    - https://git.${CLUSTER_DOMAIN}/user/oauth2/Kanidm/callback
+  scopeMap:
+    - group: forgejo-users
+      scopes:
+        - openid
+        - email
+        - profile
+  # Forgejo's goth OIDC client does not send PKCE; the chart reads key/secret.
+  allowInsecureClientDisablePkce: true
+  secretKeyAliases:
+    clientId:
+      - key
+    clientSecret:
+      - secret
