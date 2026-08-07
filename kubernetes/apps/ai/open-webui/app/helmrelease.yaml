@@ -32,6 +32,7 @@ spec:
               OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
               OAUTH_PROVIDER_NAME: Kanidm
               OAUTH_SCOPES: openid email profile
+              OAUTH_CODE_CHALLENGE_METHOD: S256
               OPENID_PROVIDER_URL: https://idm.${CLUSTER_DOMAIN}/oauth2/openid/open-webui/.well-known/openid-configuration
               OPENID_REDIRECT_URI: https://chat.${CLUSTER_DOMAIN}/oauth/oidc/callback
               OAUTH_CLIENT_ID:
