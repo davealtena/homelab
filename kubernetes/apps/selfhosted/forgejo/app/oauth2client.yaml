@@ -19,6 +19,9 @@ spec:
         - profile
   # Forgejo's goth OIDC client does not send PKCE; the chart reads key/secret.
   allowInsecureClientDisablePkce: true
+  # preferred_username = "dave" (short name), not the spn "dave@idm..." —
+  # Forgejo usernames may not contain "@".
+  preferShortUsername: true
   secretKeyAliases:
     clientId:
       - key
