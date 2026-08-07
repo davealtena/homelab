@@ -1,7 +1,6 @@
 ---
-# Idempotently provisions the litellm database + role in the shared CNPG
-# cluster. Runs as a Job because the operator-managed LiteLLMProxy Deployment
-# cannot host an init container.
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/batch/job_v1.json
+# Idempotent DB/role provisioning (operator Deployment has no init container).
 apiVersion: batch/v1
 kind: Job
 metadata:

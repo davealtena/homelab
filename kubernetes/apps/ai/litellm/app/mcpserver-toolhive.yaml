@@ -5,12 +5,7 @@ kind: LiteLLMMCPServer
 metadata:
   name: toolhive
 spec:
-  # Exposes the ToolHive VirtualMCPServer (which aggregates the kubectl/github/
-  # garmin/hass/unifi MCP servers) as a single MCP endpoint on the LiteLLM
-  # gateway, so any OpenAI-compatible client of litellm gets the tools.
-  # ToolHive stays the hosting/isolation/aggregation layer; litellm only exposes
-  # its aggregated endpoint. The VirtualMCPServer uses anonymous incoming auth,
-  # so no auth is configured here.
+  # Exposes the ToolHive VirtualMCPServer aggregate to litellm clients (anonymous in-cluster auth).
   alias: toolhive
   url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
   transport: http

@@ -1,12 +1,12 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/persistentvolumeclaim-v1.json
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: open-webui
 spec:
   accessModes: ["ReadWriteOnce"]
-  # Local NVMe: Open WebUI stores its state in a SQLite DB, which is unreliable
-  # over NFS (file locking). Keep it on local-hostpath instead of nfs-csi-sc.
+  # local NVMe: SQLite over NFS is unreliable (file locking)
   storageClassName: openebs-hostpath
   resources:
     requests:
