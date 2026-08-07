@@ -27,6 +27,23 @@ spec:
               WEBUI_URL: https://chat.${CLUSTER_DOMAIN}
               MEMINI_BASE_URL: http://memini.ai.svc.cluster.local:8080
               ENABLE_SIGNUP: true
+              # SSO via Kanidm (OIDC); client id/secret from the KanidmOAuth2Client secret.
+              ENABLE_OAUTH_SIGNUP: true
+              OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
+              OAUTH_PROVIDER_NAME: Kanidm
+              OAUTH_SCOPES: openid email profile
+              OPENID_PROVIDER_URL: https://idm.${CLUSTER_DOMAIN}/oauth2/openid/open-webui/.well-known/openid-configuration
+              OPENID_REDIRECT_URI: https://chat.${CLUSTER_DOMAIN}/oauth/oidc/callback
+              OAUTH_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-kanidm-oauth2-credentials
+                    key: CLIENT_ID
+              OAUTH_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-kanidm-oauth2-credentials
+                    key: CLIENT_SECRET
               # Native MCP tool server pointed at the ToolHive VMCP (seeds DB on first boot).
               TOOL_SERVER_CONNECTIONS: >-
                 [{"type":"mcp","url":"http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp","path":"","auth_type":"none","config":{"enable":true},"info":{"id":"toolhive-vmcp","name":"ToolHive VMCP","description":"garmin, home-assistant, unifi, kubectl, github"}}]

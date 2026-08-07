@@ -20,6 +20,17 @@ spec:
       org_id: "1"
       org_name: "Main Org."
       org_role: "Viewer"
+    auth.generic_oauth:
+      enabled: "true"
+      name: Kanidm
+      scopes: "openid email profile groups"
+      auth_url: https://idm.${CLUSTER_DOMAIN}/ui/oauth2
+      token_url: https://idm.${CLUSTER_DOMAIN}/oauth2/token
+      api_url: https://idm.${CLUSTER_DOMAIN}/oauth2/openid/grafana/userinfo
+      use_pkce: "true"
+      role_attribute_path: "contains(grafana_role[*], 'Admin') && 'Admin' || 'Viewer'"
+      role_attribute_strict: "false"
+      allow_assign_grafana_admin: "true"
     date_formats:
       use_browser_locale: "true"
     explore:
@@ -59,6 +70,16 @@ spec:
                     secretKeyRef:
                       name: grafana-admin-credentials
                       key: GF_SECURITY_ADMIN_PASSWORD
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-kanidm-oauth2-credentials
+                      key: CLIENT_ID
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-kanidm-oauth2-credentials
+                      key: CLIENT_SECRET
               resources:
                 requests:
                   cpu: 10m

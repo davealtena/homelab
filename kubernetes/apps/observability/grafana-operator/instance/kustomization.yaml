@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: observability
 resources:
   - ./externalsecret.yaml
+  - ./oauth2client.yaml
   - ./grafana.yaml
   - ./grafanadatasource.yaml
   - ./servicemonitor.yaml
