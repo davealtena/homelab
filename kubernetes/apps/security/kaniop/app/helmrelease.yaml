@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kaniop
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: kaniop
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    replicas: 1
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true

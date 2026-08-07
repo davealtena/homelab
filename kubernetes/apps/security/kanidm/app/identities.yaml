@@ -1,0 +1,22 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmPersonAccount
+metadata:
+  name: dave
+spec:
+  kanidmRef:
+    name: kanidm
+  personAttributes:
+    displayname: Dave Altena
+    mail:
+      - daltena@schubergphilis.com
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmGroup
+metadata:
+  name: idm-admins
+spec:
+  kanidmRef:
+    name: kanidm
+  members:
+    - dave
