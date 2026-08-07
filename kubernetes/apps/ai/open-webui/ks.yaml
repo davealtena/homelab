@@ -13,8 +13,18 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: litellm
+    - name: kanidm
+  components:
+    - ../../../../components/kanidm-oauth2
   path: ./kubernetes/apps/ai/open-webui/app
   prune: true
+  postBuild:
+    substitute:
+      APP: open-webui
+      OAUTH2_DISPLAYNAME: Open WebUI
+      OAUTH2_HOST: chat
+      OAUTH2_REDIRECT_PATH: /oauth/oidc/callback
+      OAUTH2_GROUP: open-webui-users
   sourceRef:
     kind: GitRepository
     name: flux-system
