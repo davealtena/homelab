@@ -4,4 +4,4 @@ kind: MCPGroup
 metadata:
   name: mcp-tools
 spec:
-  description: Aggregated MCP tools for Hermes agent
+  description: Aggregated MCP tools for LLM clients (open-webui, litellm)

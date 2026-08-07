@@ -20,23 +20,14 @@ spec:
               repository: ghcr.io/open-webui/open-webui
               tag: v0.11.0
             env:
-              # Models come exclusively from the litellm gateway (OpenAI-compatible).
+              # Models come exclusively from the litellm gateway.
               ENABLE_OLLAMA_API: false
               ENABLE_OPENAI_API: true
               OPENAI_API_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
               WEBUI_URL: https://chat.${CLUSTER_DOMAIN}
-              # Seeds the memini memory filter's base_url valve (MEMINI_API_KEY
-              # comes from the secret via envFrom).
               MEMINI_BASE_URL: http://memini.ai.svc.cluster.local:8080
-              # First visit → sign up to create the admin account. Flip to false
-              # afterwards (VPN-only, single user) if you want to lock it down.
               ENABLE_SIGNUP: true
-              # Native MCP tool server: point Open WebUI straight at the ToolHive
-              # VirtualMCPServer (aggregates garmin/home-assistant/unifi/kubectl/
-              # github). Streamable-HTTP is natively supported since v0.6.31 — no
-              # mcpo, no routing tools through litellm. Anonymous in-cluster auth.
-              # Seeds the DB on first boot (PersistentConfig); manage later in the
-              # admin UI (Admin Settings → External Tools).
+              # Native MCP tool server pointed at the ToolHive VMCP (seeds DB on first boot).
               TOOL_SERVER_CONNECTIONS: >-
                 [{"type":"mcp","url":"http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp","path":"","auth_type":"none","config":{"enable":true},"info":{"id":"toolhive-vmcp","name":"ToolHive VMCP","description":"garmin, home-assistant, unifi, kubectl, github"}}]
             envFrom:
