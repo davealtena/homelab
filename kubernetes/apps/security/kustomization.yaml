@@ -8,4 +8,3 @@ resources:
   - ./external-secrets/ks.yaml
   - ./kaniop/ks.yaml
   - ./kanidm/ks.yaml
-  - ./keycloak/ks.yaml
