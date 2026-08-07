@@ -54,9 +54,6 @@ spec:
               BOOKBOSS__FRONTEND__BASE_URL: "https://bookboss.${CLUSTER_DOMAIN}"
               BOOKBOSS__LIBRARY__LIBRARY_PATH: "/library/books"
               BOOKBOSS__IMPORT__BOOKDROP_PATH: "/library/bookdrop"
-              BOOKBOSS__OIDC__DISCOVERY_URL: "https://sso.${CLUSTER_DOMAIN}/realms/master/.well-known/openid-configuration"
-              BOOKBOSS__OIDC__CLIENT_ID: bookboss
-              BOOKBOSS__OIDC__BUTTON_LABEL: Keycloak
               TZ: Europe/Amsterdam
             envFrom:
               - secretRef:
