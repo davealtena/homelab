@@ -1,0 +1,22 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: paperless
+spec:
+  kanidmRef:
+    name: kanidm
+    namespace: security
+  displayname: Paperless
+  # Public client: allauth uses PKCE with no client secret; client_id is
+  # inlined in PAPERLESS_SOCIALACCOUNT_PROVIDERS (client_id == client name).
+  public: true
+  origin: https://paperless.${CLUSTER_DOMAIN}
+  redirectUrl:
+    - https://paperless.${CLUSTER_DOMAIN}/accounts/oidc/kanidm/login/callback/
+  scopeMap:
+    - group: paperless-users
+      scopes:
+        - openid
+        - email
+        - profile

@@ -43,6 +43,14 @@ spec:
             secretKeyRef:
               name: forgejo-secret
               key: INIT_POSTGRES_PASS
+      # SSO via Kanidm; client id/secret from the KanidmOAuth2Client secret
+      # (aliased to key/secret). Provider name "Kanidm" → callback /user/oauth2/Kanidm/callback.
+      oauth:
+        - name: Kanidm
+          provider: openidConnect
+          autoDiscoverUrl: https://idm.${CLUSTER_DOMAIN}/oauth2/openid/forgejo/.well-known/openid-configuration
+          scopes: openid email profile
+          existingSecret: forgejo-kanidm-oauth2-credentials
       metrics:
         enabled: true
         serviceMonitor:
@@ -67,6 +75,10 @@ spec:
           TYPE: level
         service:
           DISABLE_REGISTRATION: true
+        oauth2_client:
+          ENABLE_AUTO_REGISTRATION: true
+          ACCOUNT_LINKING: auto
+          UPDATE_AVATAR: true
         actions:
           ENABLED: true
         mirror:

@@ -13,6 +13,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: cnpg-cluster
+    - name: kanidm
   path: ./kubernetes/apps/selfhosted/forgejo/app
   prune: true
   sourceRef:

@@ -28,6 +28,19 @@ spec:
               tag: 26.8.0
             env:
               ACTUAL_PORT: &httpPort 5006
+              # SSO via Kanidm (OIDC, confidential client + PKCE)
+              ACTUAL_OPENID_DISCOVERY_URL: https://idm.${CLUSTER_DOMAIN}/oauth2/openid/actual/.well-known/openid-configuration
+              ACTUAL_OPENID_SERVER_HOSTNAME: https://finance.${CLUSTER_DOMAIN}
+              ACTUAL_OPENID_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: actual-kanidm-oauth2-credentials
+                    key: CLIENT_ID
+              ACTUAL_OPENID_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: actual-kanidm-oauth2-credentials
+                    key: CLIENT_SECRET
             probes:
               liveness:
                 enabled: true

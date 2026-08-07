@@ -10,8 +10,19 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: kanidm
+  components:
+    - ../../../../components/kanidm-oauth2
   path: ./kubernetes/apps/selfhosted/actual-finance/app
   prune: true
+  postBuild:
+    substitute:
+      APP: actual
+      OAUTH2_DISPLAYNAME: Actual
+      OAUTH2_HOST: finance
+      OAUTH2_REDIRECT_PATH: /openid/callback
+      OAUTH2_GROUP: actual-users
   sourceRef:
     kind: GitRepository
     name: flux-system

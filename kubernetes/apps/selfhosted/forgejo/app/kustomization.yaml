@@ -9,3 +9,4 @@ resources:
   - ./ocirepository.yaml
   - ./httproute.yaml
   - ./postgres-init-job.yaml
+  - ./oauth2client.yaml
