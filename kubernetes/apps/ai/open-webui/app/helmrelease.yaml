@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/open-webui/open-webui
-              tag: v0.11.1
+              tag: v0.11.3
             env:
               # Models come exclusively from the litellm gateway.
               ENABLE_OLLAMA_API: false
