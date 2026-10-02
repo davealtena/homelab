@@ -13,7 +13,5 @@ talosconfig
 # Private
 .private
 .bin
-# Taskfile
-.task
 # Brew
 Brewfile.lock.json

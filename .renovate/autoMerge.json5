@@ -20,6 +20,15 @@
       "ignoreTests": true
     },
     {
+      "description": ["Auto-merge mise-pinned CLI tools (yq, flate) - local tooling only"],
+      "matchManagers": ["mise"],
+      "automerge": true,
+      "automergeType": "branch",
+      "matchUpdateTypes": ["minor", "patch"],
+      "minimumReleaseAge": "3 days",
+      "ignoreTests": true
+    },
+    {
       "description": ["Auto-merge GitHub Actions"],
       "matchManagers": ["github-actions"],
       "automerge": true,
