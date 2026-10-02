@@ -4,7 +4,8 @@ Single-node home Kubernetes cluster, GitOps with Flux. Node: `phobos`, cluster
 `society`, running on NixOS + k3s. This file is the source of truth for AI agents
 working in this repo (Claude Code reads it via `CLAUDE.md`, which imports it).
 General, stack-agnostic working standards live in the user's global config and
-also apply.
+also apply. For a system-level overview (hardware, GitOps flow, what runs where)
+see `docs/architecture.md`.
 
 ## Layout
 
@@ -15,6 +16,7 @@ kubernetes/
 │                             #   `phobos-apps` Kustomization (path ./apps,
 │                             #   SOPS-decrypted, substituteFrom cluster-settings + cluster-secrets)
 nixos/                        # NixOS flake for the phobos host (k3s, Cilium, networking)
+infrastructure/hetzner/       # OpenTofu: edge VPS + Object Storage (ADR-0002/0003); secrets via `op run`
 .mise.toml                    # mise: pinned tools (yq, flate) + ops tasks (bootstrap, flux, kubernetes, sops)
 .sops.yaml                    # SOPS age creation rules (phobos key)
 ```
@@ -49,6 +51,7 @@ Each app: `kubernetes/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrel
 - Reconcile: `flux reconcile source git flux-system` then `flux reconcile kustomization <name>` or `flux reconcile hr <name> -n <ns>`.
 - Status: `flux get kustomizations -A`, `flux get hr -A`.
 - mise tasks (`mise tasks` lists them): `mise run bootstrap:*` (nixos/cilium/flux), `flux:*` (reconcile, diff, build/apply/delete-ks), `kubernetes:*`, `sops:*`. Bootstrap reads chart versions from the OCIRepository manifests, so it never drifts from Flux.
+- Hetzner infra: `mise run tofu:plan` / `tofu:apply` (1Password `op run` supplies creds); `tofu:fmt` validates without creds.
 - Local render/diff: `mise run flux:diff` (same `flate` check as CI) or `mise run flux:build-ks <ks-name>`.
 - Host changes: edit `nixos/`, then `mise run bootstrap:nixos` (rsync + `nixos-rebuild switch --flake .#phobos`).
 - Prefer GitOps over live `kubectl` changes; if a live change is needed for triage, reconcile it back into Git.
