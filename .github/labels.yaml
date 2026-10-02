@@ -2,6 +2,7 @@
 # Area
 - { name: "area/bootstrap",          color: "0e8a16" }
 - { name: "area/github",             color: "0e8a16" }
+- { name: "area/infrastructure",     color: "0e8a16" }
 - { name: "area/kubernetes",         color: "0e8a16" }
 - { name: "area/mise",               color: "0e8a16" }
 # Distro

@@ -15,3 +15,10 @@ talosconfig
 .bin
 # Brew
 Brewfile.lock.json
+# OpenTofu
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log

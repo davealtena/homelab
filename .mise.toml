@@ -7,12 +7,14 @@
 [tools]
 yq = "4.54.1"
 "ubi:home-operations/flate" = "0.6.5"
+opentofu = "1.13.1"
 
 [env]
 KUBERNETES_DIR = '{{config_root}}/kubernetes'
 NIXOS_DIR = '{{config_root}}/nixos'
 KUBECONFIG = '{{config_root}}/kubernetes/kubeconfig'
 SOPS_AGE_KEY_FILE = '{{env.HOME}}/.config/sops/age/phobos.key'
+TOFU_DIR = '{{config_root}}/infrastructure/hetzner'
 
 [settings]
 # Fail fast on any error inside multi-line task scripts.
@@ -147,3 +149,34 @@ find "$KUBERNETES_DIR" -type f -name '*.sops.*' -exec grep -L 'ENC\[AES256_GCM' 
       sops --encrypt --in-place "$file"
     done
 '''
+
+# ---------------------------------------------------------------------------
+# tofu: Hetzner infrastructure (infrastructure/hetzner, ADR-0002/0003).
+# Secrets come from 1Password at runtime via `op run`; see .env.op there.
+# Extra args pass through: `mise run tofu:plan -- -target=hcloud_server.edge`.
+# ---------------------------------------------------------------------------
+
+[tasks."tofu:init"]
+description = 'tofu init for infrastructure/hetzner'
+dir = '{{env.TOFU_DIR}}'
+run = 'op run --env-file=.env.op -- tofu init "$@"'
+
+[tasks."tofu:plan"]
+description = 'tofu plan for infrastructure/hetzner'
+dir = '{{env.TOFU_DIR}}'
+run = 'op run --env-file=.env.op -- tofu plan "$@"'
+
+[tasks."tofu:apply"]
+description = 'tofu apply for infrastructure/hetzner (interactive approval)'
+dir = '{{env.TOFU_DIR}}'
+run = 'op run --env-file=.env.op -- tofu apply "$@"'
+
+[tasks."tofu:output"]
+description = 'Show tofu outputs (edge IPs, S3 endpoint, bucket names)'
+dir = '{{env.TOFU_DIR}}'
+run = 'op run --env-file=.env.op -- tofu output "$@"'
+
+[tasks."tofu:fmt"]
+description = 'Format + validate the Hetzner tofu code (no credentials needed)'
+dir = '{{env.TOFU_DIR}}'
+run = ['tofu fmt -recursive -check -diff', 'tofu init -backend=false -input=false >/dev/null', 'tofu validate']
