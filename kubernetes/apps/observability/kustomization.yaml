@@ -6,6 +6,8 @@ resources:
   - ./namespace.yaml
   - ./prometheus-operator-crds/ks.yaml
   - ./blackbox-exporter/ks.yaml
+  - ./gatus/ks.yaml
+  - ./smartctl-exporter/ks.yaml
   - ./grafana-operator/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./victoria-logs/ks.yaml

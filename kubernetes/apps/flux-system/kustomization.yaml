@@ -6,3 +6,4 @@ resources:
   - ./cluster-settings.yaml
   - ./cluster-secrets.sops.yaml
   - ./flux-operator/ks.yaml
+  - ./flux-alerts

@@ -1,0 +1,41 @@
+---
+# Static endpoints. Everything behind envoy-internal is added automatically by
+# gatus-sidecar (one endpoint per HTTPRoute, group "httproute").
+connectivity:
+  checker:
+    target: 1.1.1.1:53
+    interval: 1m
+
+endpoints:
+  - name: Cloudflare DNS
+    group: connectivity
+    url: icmp://1.1.1.1
+    interval: 1m
+    conditions: ["[CONNECTED] == true"]
+
+  - name: Quad9 DNS
+    group: connectivity
+    url: icmp://9.9.9.9
+    interval: 1m
+    conditions: ["[CONNECTED] == true"]
+
+  - name: Synology NAS
+    group: infrastructure
+    url: icmp://192.168.1.200
+    interval: 1m
+    conditions: ["[CONNECTED] == true"]
+
+metrics: true
+
+storage:
+  type: sqlite
+  caching: true
+  path: ${GATUS_CONFIG_PATH}/gatus.db
+
+ui:
+  title: Status | society
+  header: society
+  link: https://github.com/davealtena/homelab
+
+web:
+  port: ${GATUS_WEB_PORT}

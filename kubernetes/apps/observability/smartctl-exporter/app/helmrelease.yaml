@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: smartctl-exporter
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: smartctl-exporter
+  values:
+    fullnameOverride: smartctl-exporter
+    # Needs raw device access (hostPath /dev + SYS_RAWIO); the chart sets this
+    # up. With one NVMe holding all app state (ADR-0002) SMART is the early
+    # warning we actually want.
+    serviceMonitor:
+      enabled: true
+      relabelings:
+        - action: labeldrop
+          regex: (pod)
+        - action: replace
+          sourceLabels: [__meta_kubernetes_endpoint_node_name]
+          targetLabel: instance
+    prometheusRules:
+      enabled: false # own rules below
