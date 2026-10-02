@@ -15,6 +15,10 @@ spec:
     crds: Skip
   upgrade:
     crds: Skip
+  valuesFrom:
+    - kind: ConfigMap
+      name: kube-prometheus-stack-ksm-flux-values
+      valuesKey: values.yaml
   values:
     crds:
       # CRDs are managed by the dedicated prometheus-operator-crds HelmRelease.

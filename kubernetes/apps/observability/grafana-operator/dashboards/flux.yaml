@@ -3,14 +3,13 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: node-exporter-full
+  name: flux-cluster
 spec:
+  folder: Flux
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  # renovate: depName="Node Exporter Full"
-  grafanaCom:
-    id: 1860
+  url: https://raw.githubusercontent.com/fluxcd/flux2-monitoring-example/main/monitoring/configs/dashboards/cluster.json
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
@@ -19,28 +18,13 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: prometheus
+  name: flux-control-plane
 spec:
+  folder: Flux
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  # renovate: depName="Prometheus"
-  grafanaCom:
-    id: 19105
-  datasources:
-    - inputName: DS_PROMETHEUS
-      datasourceName: Prometheus
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: node-feature-discovery
-spec:
-  instanceSelector:
-    matchLabels:
-      grafana.internal/instance: grafana
-  url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
+  url: https://raw.githubusercontent.com/fluxcd/flux2-monitoring-example/main/monitoring/configs/dashboards/control-plane.json
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus

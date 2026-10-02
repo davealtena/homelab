@@ -5,6 +5,7 @@ kind: GrafanaDashboard
 metadata:
   name: litellm
 spec:
+  folder: AI
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
