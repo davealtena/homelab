@@ -15,7 +15,7 @@ kubernetes/
 │                             #   `phobos-apps` Kustomization (path ./apps,
 │                             #   SOPS-decrypted, substituteFrom cluster-settings + cluster-secrets)
 nixos/                        # NixOS flake for the phobos host (k3s, Cilium, networking)
-.taskfiles/ + Taskfile.yaml   # go-task ops (bootstrap, flux, kubernetes, sops)
+.mise.toml                    # mise: pinned tools (yq, flate) + ops tasks (bootstrap, flux, kubernetes, sops)
 .sops.yaml                    # SOPS age creation rules (phobos key)
 ```
 
@@ -48,15 +48,16 @@ Each app: `kubernetes/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrel
 
 - Reconcile: `flux reconcile source git flux-system` then `flux reconcile kustomization <name>` or `flux reconcile hr <name> -n <ns>`.
 - Status: `flux get kustomizations -A`, `flux get hr -A`.
-- go-task: `task bootstrap:*` (nixos/cilium/flux), `task flux:*`, `task kubernetes:*`, `task sops:*`.
-- Host changes: edit `nixos/`, then `task bootstrap:nixos` (rsync + `nixos-rebuild switch --flake .#phobos`).
+- mise tasks (`mise tasks` lists them): `mise run bootstrap:*` (nixos/cilium/flux), `flux:*` (reconcile, diff, build/apply/delete-ks), `kubernetes:*`, `sops:*`. Bootstrap reads chart versions from the OCIRepository manifests, so it never drifts from Flux.
+- Local render/diff: `mise run flux:diff` (same `flate` check as CI) or `mise run flux:build-ks <ks-name>`.
+- Host changes: edit `nixos/`, then `mise run bootstrap:nixos` (rsync + `nixos-rebuild switch --flake .#phobos`).
 - Prefer GitOps over live `kubectl` changes; if a live change is needed for triage, reconcile it back into Git.
 
 ## Repo-specific notes
 
 Non-obvious "why is it like this" facts you can't infer from a single file:
 
-- **Cilium is bootstrapped imperatively then adopted by Flux.** CNI must exist before Flux; the running values live in `apps/kube-system/cilium/app/helm-values.yaml` and are re-installed by `task bootstrap:cilium`. L2 announcements advertise the Envoy gateway LB IPs (.130/.131) on the LAN.
+- **Cilium is bootstrapped imperatively then adopted by Flux.** CNI must exist before Flux; the running values live in `apps/kube-system/cilium/app/helm-values.yaml` and are re-installed by `mise run bootstrap:cilium`. L2 announcements advertise the Envoy gateway LB IPs (.130/.131) on the LAN.
 - **csi-driver-nfs has fsGroupPolicy disabled** (`feature.enableFSGroupPolicy: false`). NFS + kubelet's recursive fsGroup chown chokes on special files; apps run as their own UID and the restored data already owns the right UID. The CSIDriver object is immutable — changing this needs a delete + recreate.
 - **Flux postBuild `substituteFrom`** (cluster-settings + cluster-secrets) runs envsubst over every manifest. Shell `${VAR}` in a manifest (e.g. a CronJob script) must be escaped as `$${VAR}` or Flux replaces it with an empty string.
 - **DB backups**: the CNPG cluster has no object store, so a nightly CronJob dumps globals + per-db (`apps/databases/cnpg/cluster/backup-cronjob.yaml`) to a Synology NFS PVC.

@@ -1,3 +1,149 @@
+#:schema https://mise.jdx.dev/schema/mise.json
+#
+# Repo tasks: `mise tasks` lists them, `mise run <task>` runs them.
+# Grouped by prefix: bootstrap:*, flux:*, kubernetes:*, sops:*.
+
+# Tools the tasks need that aren't assumed to be on the host (helm/kubectl/flux/sops are).
+[tools]
+yq = "4.54.1"
+"ubi:home-operations/flate" = "0.6.5"
+
 [env]
 KUBERNETES_DIR = '{{config_root}}/kubernetes'
+NIXOS_DIR = '{{config_root}}/nixos'
 KUBECONFIG = '{{config_root}}/kubernetes/kubeconfig'
+SOPS_AGE_KEY_FILE = '{{env.HOME}}/.config/sops/age/phobos.key'
+
+[settings]
+# Fail fast on any error inside multi-line task scripts.
+unix_default_inline_shell_args = 'bash -euo pipefail -c'
+
+# ---------------------------------------------------------------------------
+# bootstrap: phobos (society) from scratch. Order matters: NixOS -> Cilium -> Flux.
+# Cilium and Flux are installed imperatively because they must exist before
+# Flux can manage anything; once running Flux adopts them from Git. Chart
+# versions are read from the OCIRepository manifests so bootstrap always
+# matches what Flux reconciles.
+# ---------------------------------------------------------------------------
+
+[tasks."bootstrap:nixos"]
+description = 'Build & switch the phobos NixOS host from the flake in ./nixos'
+usage = 'flag "--host <host>" help="SSH host / flake output" default="phobos"'
+run = '''
+test -f "$NIXOS_DIR/flake.nix" || { echo "Missing flake: $NIXOS_DIR/flake.nix" >&2; exit 1; }
+rsync -az --delete "$NIXOS_DIR/" "${usage_host}:/home/dave/nixos/"
+ssh "${usage_host}" "cd ~/nixos && NIX_CONFIG='experimental-features = nix-command flakes' nixos-rebuild switch --flake .#${usage_host} --sudo"
+'''
+
+[tasks."bootstrap:cilium"]
+description = 'Install the Cilium CNI (kube-proxy replacement + L2) before Flux exists'
+run = '''
+app="$KUBERNETES_DIR/apps/kube-system/cilium/app"
+version="$(yq '.spec.ref.tag' "$app/ocirepository.yaml")"
+echo "Installing cilium $version"
+helm upgrade --install cilium cilium \
+  --repo https://helm.cilium.io --version "$version" \
+  --namespace kube-system \
+  --values "$app/helm-values.yaml" --wait
+'''
+
+[tasks."bootstrap:flux"]
+description = 'Bootstrap Flux (sops-age secret + flux-operator + flux-instance)'
+run = '''
+test -f "$SOPS_AGE_KEY_FILE" || { echo "Missing sops age key: $SOPS_AGE_KEY_FILE" >&2; exit 1; }
+app="$KUBERNETES_DIR/apps/flux-system/flux-operator"
+op_version="$(yq '.spec.ref.tag' "$app/app/ocirepository.yaml")"
+inst_version="$(yq 'select(.kind == "OCIRepository") | .spec.ref.tag' "$app/instance/helmrelease.yaml")"
+kubectl create namespace flux-system --dry-run=client -o yaml | kubectl apply -f -
+kubectl -n flux-system create secret generic sops-age \
+  --from-file=age.agekey="$SOPS_AGE_KEY_FILE" --dry-run=client -o yaml | kubectl apply -f -
+echo "Installing flux-operator $op_version"
+helm upgrade --install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
+  --version "$op_version" --namespace flux-system --wait
+echo "Installing flux-instance $inst_version"
+helm upgrade --install flux-instance oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance \
+  --version "$inst_version" --namespace flux-system \
+  --values "$app/instance/helm-values.yaml" --wait
+'''
+
+[tasks."bootstrap:all"]
+description = 'Full phobos bootstrap (nixos -> cilium -> flux)'
+depends = ['bootstrap:nixos', 'bootstrap:cilium', 'bootstrap:flux']
+
+# ---------------------------------------------------------------------------
+# flux
+# ---------------------------------------------------------------------------
+
+[tasks."flux:reconcile"]
+description = 'Force Flux to pull Git and reconcile the phobos-apps Kustomization'
+run = 'flux --namespace flux-system reconcile kustomization phobos-apps --with-source'
+
+[tasks."flux:diff"]
+description = 'Diff rendered Flux output against origin/main (same check as the flux-diff CI workflow)'
+run = 'flate diff all --path "$KUBERNETES_DIR" --base origin/main'
+
+[tasks."flux:build-ks"]
+description = 'Render a Flux Kustomization (all of them when no name is given) with flate'
+usage = 'arg "[name]" help="Kustomization name, e.g. paperless (see ks.yaml metadata.name)"'
+run = 'flate build ks ${usage_name:-} --path "$KUBERNETES_DIR" --no-progress'
+
+[tasks."flux:apply-ks"]
+description = 'Render a Flux Kustomization and server-side apply it (triage only; reconcile back into Git)'
+usage = 'arg "<name>" help="Kustomization name, e.g. paperless"'
+run = '''
+flate build ks "${usage_name}" --path "$KUBERNETES_DIR" --no-progress \
+  | kubectl apply --server-side --field-manager=kustomize-controller --filename -
+'''
+
+[tasks."flux:delete-ks"]
+description = 'Render a Flux Kustomization and delete every resource in it'
+usage = 'arg "<name>" help="Kustomization name, e.g. paperless"'
+confirm = 'This deletes every resource rendered for the Kustomization. Continue?'
+run = '''
+flate build ks "${usage_name}" --path "$KUBERNETES_DIR" --no-progress \
+  | kubectl delete --filename -
+'''
+
+[tasks."flux:suspend-all"]
+description = 'Suspend all Flux Kustomizations in every namespace'
+run = "kubectl get ns -o jsonpath='{.items[*].metadata.name}' | xargs -n1 flux suspend ks --all --namespace"
+
+[tasks."flux:resume-all"]
+description = 'Resume all Flux Kustomizations in every namespace'
+run = "kubectl get ns -o jsonpath='{.items[*].metadata.name}' | xargs -n1 flux resume ks --all --namespace"
+
+# ---------------------------------------------------------------------------
+# kubernetes
+# ---------------------------------------------------------------------------
+
+[tasks."kubernetes:cleanup-pods"]
+description = 'Delete pods in Failed/Pending/Succeeded phase across all namespaces'
+run = '''
+for phase in Failed Pending Succeeded; do
+  kubectl delete pods --field-selector "status.phase=$phase" -A --ignore-not-found=true
+done
+'''
+
+[tasks."kubernetes:sync-externalsecrets"]
+description = 'Force sync all ExternalSecret resources'
+run = '''
+kubectl get externalsecret -A --no-headers -o custom-columns='NS:.metadata.namespace,NAME:.metadata.name' \
+  | while read -r ns name; do
+      kubectl --namespace "$ns" annotate externalsecret "$name" force-sync="$(date +%s)" --overwrite
+    done
+'''
+
+# ---------------------------------------------------------------------------
+# sops
+# ---------------------------------------------------------------------------
+
+[tasks."sops:encrypt"]
+description = 'Encrypt every *.sops.* file under kubernetes/ that is still plaintext'
+run = '''
+test -f "$SOPS_AGE_KEY_FILE" || { echo "Missing sops age key: $SOPS_AGE_KEY_FILE" >&2; exit 1; }
+find "$KUBERNETES_DIR" -type f -name '*.sops.*' -exec grep -L 'ENC\[AES256_GCM' {} + \
+  | while read -r file; do
+      echo "Encrypting $file"
+      sops --encrypt --in-place "$file"
+    done
+'''
