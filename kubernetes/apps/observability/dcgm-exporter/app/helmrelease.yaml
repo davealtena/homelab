@@ -75,6 +75,24 @@ spec:
     serviceAccount:
       dcgm-exporter: {}
 
+    # dcgm-exporter 4.5+ watches Pods to attribute GPU metrics (pod/namespace
+    # labels) in addition to the pod-resources socket.
+    rbac:
+      roles:
+        dcgm-exporter:
+          type: ClusterRole
+          rules:
+            - apiGroups: [""]
+              resources: ["pods"]
+              verbs: ["get", "list", "watch"]
+      bindings:
+        dcgm-exporter:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: dcgm-exporter
+          subjects:
+            - identifier: dcgm-exporter
+
     service:
       app:
         ports:
