@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/monitoring.coreos.com/prometheusrule_v1.json
+# Ref: https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus-smartctl-exporter/rules/rules.txt
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: smartctl-exporter-rules
+spec:
+  groups:
+    - name: smartctl-exporter.rules
+      rules:
+        - alert: SmartDeviceTestFailed
+          expr: smartctl_device_smart_status != 1 or smartctl_device_status != 1
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Drive {{ $labels.device }} on {{ $labels.instance }} failed its SMART health check"
+        - alert: SmartDeviceCriticalWarning
+          expr: smartctl_device_critical_warning != 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Drive {{ $labels.device }} on {{ $labels.instance }} reports a critical warning"
+        - alert: SmartDeviceMediaErrors
+          expr: smartctl_device_media_errors != 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Drive {{ $labels.device }} on {{ $labels.instance }} has media errors"
+        - alert: SmartDeviceAvailableSpareLow
+          expr: smartctl_device_available_spare_threshold > smartctl_device_available_spare
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Drive {{ $labels.device }} on {{ $labels.instance }} is below its available-spare threshold"
+        - alert: SmartDeviceHighTemperature
+          expr: smartctl_device_temperature{temperature_type="current"} > 70
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Drive {{ $labels.device }} on {{ $labels.instance }} is above 70°C"
+        - alert: SmartDevicePercentageUsedHigh
+          expr: smartctl_device_percentage_used > 90
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Drive {{ $labels.device }} on {{ $labels.instance }} has used {{ $value }}% of its rated endurance"
