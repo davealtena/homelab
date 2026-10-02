@@ -77,6 +77,10 @@ spec:
             port: &port 32400
     route:
       app:
+        annotations:
+          # Plex answers 401 on / without a token; /identity is the unauthenticated health endpoint.
+          gatus.home-operations.com/endpoint: |
+            url: https://plex.${CLUSTER_DOMAIN}/identity
         hostnames:
           - plex.${CLUSTER_DOMAIN}
         parentRefs:

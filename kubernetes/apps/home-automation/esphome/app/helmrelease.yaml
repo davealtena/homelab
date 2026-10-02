@@ -104,7 +104,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: esphome
+              - identifier: app
                 port: 6052
       code-server:
         hostnames:
@@ -115,7 +115,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: esphome-code-server
+              - identifier: code-server
                 port: 12321
 
     persistence:
