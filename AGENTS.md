@@ -63,6 +63,7 @@ Non-obvious "why is it like this" facts you can't infer from a single file:
 - **Cilium is bootstrapped imperatively then adopted by Flux.** CNI must exist before Flux; the running values live in `apps/kube-system/cilium/app/helm-values.yaml` and are re-installed by `mise run bootstrap:cilium`. L2 announcements advertise the Envoy gateway LB IPs (.130/.131) on the LAN.
 - **csi-driver-nfs has fsGroupPolicy disabled** (`feature.enableFSGroupPolicy: false`). NFS + kubelet's recursive fsGroup chown chokes on special files; apps run as their own UID and the restored data already owns the right UID. The CSIDriver object is immutable — changing this needs a delete + recreate.
 - **Flux postBuild `substituteFrom`** (cluster-settings + cluster-secrets) runs envsubst over every manifest. Shell `${VAR}` in a manifest (e.g. a CronJob script) must be escaped as `$${VAR}` or Flux replaces it with an empty string.
+- **1Password Connect credentials are not in Git.** `security/onepassword-secret` is created by `mise run bootstrap:onepassword` from the vault itself (document `onepassword-connect-credentials` + item `onepassword-connect`). `OP_SESSION` must be the base64-encoded credentials file, not the raw JSON — Connect fails with `illegal base64 data` otherwise.
 - **DB backups**: the CNPG cluster has no object store, so a nightly CronJob dumps globals + per-db (`apps/databases/cnpg/cluster/backup-cronjob.yaml`) to a Synology NFS PVC.
 
 ## Conventions reminder
