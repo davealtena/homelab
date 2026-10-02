@@ -5,6 +5,7 @@ kind: GrafanaDashboard
 metadata:
   name: envoy-gateway
 spec:
+  allowCrossNamespaceImport: true # Grafana lives in observability
   folder: Network
   instanceSelector:
     matchLabels:
@@ -20,6 +21,7 @@ kind: GrafanaDashboard
 metadata:
   name: envoy-proxy
 spec:
+  allowCrossNamespaceImport: true # Grafana lives in observability
   folder: Network
   instanceSelector:
     matchLabels:
