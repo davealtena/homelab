@@ -83,3 +83,20 @@ spec:
   datasources:
     - inputName: DS_VICTORIALOGS
       datasourceName: VictoriaLogs
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: nvidia-dcgm
+spec:
+  folder: Observability
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  # renovate: depName="NVIDIA DCGM Exporter Dashboard"
+  grafanaCom:
+    id: 12239
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus

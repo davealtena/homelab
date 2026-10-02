@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: dcgm-exporter
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: dcgm-exporter
+  values:
+    defaultPodOptions:
+      # Same recipe as the nvidia-device-plugin DaemonSet: the CDI runtime
+      # injects the GPU devices; do NOT request nvidia.com/gpu here or the
+      # exporter would take the node's only GPU away from workloads.
+      runtimeClassName: nvidia-cdi
+      automountServiceAccountToken: true
+      priorityClassName: system-node-critical
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+
+    controllers:
+      dcgm-exporter:
+        type: daemonset
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: nvcr.io/nvidia/k8s/dcgm-exporter
+              tag: 4.5.3-4.8.2-distroless
+            args:
+              - -f
+              - /etc/dcgm-exporter/default-counters.csv
+            env:
+              NVIDIA_VISIBLE_DEVICES: all
+              NVIDIA_DRIVER_CAPABILITIES: all
+              DCGM_EXPORTER_KUBERNETES: "true" # attribute GPU metrics to pods via pod-resources
+              DCGM_EXPORTER_LISTEN: ":9400"
+              NODE_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 9400
+                  initialDelaySeconds: 45
+                  periodSeconds: 15
+                  timeoutSeconds: 5
+              readiness: *probes
+            securityContext:
+              # DCGM needs root for the NVML/driver interfaces; everything
+              # else is dropped.
+              runAsNonRoot: false
+              runAsUser: 0
+              runAsGroup: 0
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+
+    serviceAccount:
+      dcgm-exporter: {}
+
+    service:
+      app:
+        ports:
+          metrics:
+            port: *port
+
+    persistence:
+      counters:
+        type: configMap
+        name: dcgm-exporter-counters
+        globalMounts:
+          - path: /etc/dcgm-exporter/default-counters.csv
+            subPath: default-counters.csv
+            readOnly: true
+      pod-gpu-resources:
+        type: hostPath
+        hostPath: /var/lib/kubelet/pod-resources
+        globalMounts:
+          - path: /var/lib/kubelet/pod-resources
+            readOnly: true
