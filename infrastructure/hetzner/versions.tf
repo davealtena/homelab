@@ -10,7 +10,7 @@ terraform {
     # minio provider against the S3 endpoint for this.
     minio = {
       source  = "aminueza/minio"
-      version = "3.43.0"
+      version = "3.44.0"
     }
   }
 
