@@ -68,9 +68,23 @@ helm upgrade --install flux-instance oci://ghcr.io/controlplaneio-fluxcd/charts/
   --values "$app/instance/helm-values.yaml" --wait
 '''
 
+[tasks."bootstrap:onepassword"]
+description = 'Create the onepassword-secret for 1Password Connect from the 1Password vault itself (chicken-and-egg: run once, by hand, with op CLI)'
+run = '''
+# OP_SESSION must be the *base64-encoded* 1password-credentials.json; the token is plain.
+creds="$(op document get onepassword-connect-credentials --vault Homelab --account my.1password.eu | base64 | tr -d '\n')"
+token="$(op item get onepassword-connect --vault Homelab --account my.1password.eu --fields credential --reveal)"
+kubectl create namespace security --dry-run=client -o yaml | kubectl apply -f -
+kubectl -n security create secret generic onepassword-secret \
+  --from-literal=1password-credentials.json="$creds" \
+  --from-literal=token="$token" \
+  --dry-run=client -o yaml | kubectl apply -f -
+kubectl -n security rollout restart deploy/onepassword-connect 2>/dev/null || true
+'''
+
 [tasks."bootstrap:all"]
 description = 'Full phobos bootstrap (nixos -> cilium -> flux)'
-depends = ['bootstrap:nixos', 'bootstrap:cilium', 'bootstrap:flux']
+depends = ['bootstrap:nixos', 'bootstrap:cilium', 'bootstrap:flux', 'bootstrap:onepassword']
 
 # ---------------------------------------------------------------------------
 # flux
