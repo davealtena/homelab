@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./ocirepository.yaml
+  - ./helmrelease.yaml
+  - ./servicemonitor.yaml
+  - ./prometheusrule.yaml
+configMapGenerator:
+  - name: dcgm-exporter-counters
+    files:
+      - default-counters.csv=./resources/default-counters.csv
+generatorOptions:
+  disableNameSuffixHash: true

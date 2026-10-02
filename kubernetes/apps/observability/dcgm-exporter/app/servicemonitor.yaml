@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: dcgm-exporter
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dcgm-exporter
+      app.kubernetes.io/service: dcgm-exporter
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s
+      honorLabels: true # keep the pod/namespace labels dcgm attaches for GPU attribution
+      relabelings:
+        - action: replace
+          sourceLabels: [__meta_kubernetes_pod_node_name]
+          targetLabel: instance

@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: dcgm-exporter-rules
+spec:
+  groups:
+    - name: dcgm-exporter.rules
+      rules:
+        - alert: GpuHighTemperature
+          expr: DCGM_FI_DEV_GPU_TEMP > 85
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU {{ $labels.gpu }} on {{ $labels.instance }} is at {{ $value }}°C"
+        - alert: GpuXidError
+          expr: DCGM_FI_DEV_XID_ERRORS > 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "GPU {{ $labels.gpu }} on {{ $labels.instance }} reported XID error {{ $value }}"
+        - alert: GpuExporterDown
+          expr: absent(up{job="dcgm-exporter"} == 1)
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "dcgm-exporter is not being scraped; GPU metrics are missing"
