@@ -3,12 +3,13 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: miniflux
+  name: cilium-agent
 spec:
+  folder: Network
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  url: https://raw.githubusercontent.com/miniflux/v2/main/contrib/grafana/dashboard.json
+  url: https://raw.githubusercontent.com/cilium/cilium/v1.20.2/install/kubernetes/cilium/files/cilium-agent/dashboards/cilium-dashboard.json
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
@@ -17,14 +18,13 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: unpackerr
+  name: cilium-operator
 spec:
+  folder: Network
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  # renovate: depName="Unpackerr"
-  grafanaCom:
-    id: 18817
+  url: https://raw.githubusercontent.com/cilium/cilium/v1.20.2/install/kubernetes/cilium/files/cilium-operator/dashboards/cilium-operator-dashboard.json
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
@@ -33,30 +33,15 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: zfs
+  name: external-dns
 spec:
+  folder: Network
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  # renovate: depName="ZFS"
+  # renovate: depName="External DNS"
   grafanaCom:
-    id: 7845
-  datasources:
-    - inputName: DS_PROMETHEUS
-      datasourceName: Prometheus
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: smart
-spec:
-  instanceSelector:
-    matchLabels:
-      grafana.internal/instance: grafana
-  # renovate: depName="Dashboard for smartctl_exporter"
-  grafanaCom:
-    id: 20204
+    id: 15038
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus

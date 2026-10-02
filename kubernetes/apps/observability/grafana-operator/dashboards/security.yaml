@@ -3,12 +3,15 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: nginx
+  name: cert-manager
 spec:
+  folder: Security
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
+  # renovate: depName="Cert-manager-Kubernetes"
+  grafanaCom:
+    id: 20842
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
@@ -17,12 +20,13 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: nginx-request-handling-performance
+  name: external-secrets
 spec:
+  folder: Security
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/request-handling-performance.json
+  url: https://raw.githubusercontent.com/external-secrets/external-secrets/main/docs/snippets/dashboard.json
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus

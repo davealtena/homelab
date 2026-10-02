@@ -3,16 +3,15 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: grafana-operator
+  name: cloudnative-pg
 spec:
-  allowCrossNamespaceImport: true
-  folder: Observability
+  folder: Databases
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
+  url: https://raw.githubusercontent.com/cloudnative-pg/grafana-dashboards/main/charts/cluster/grafana-dashboard.json
   datasources:
-    - datasourceName: Prometheus
-      inputName: DS_PROMETHEUS
-  configMapRef:
-    name: grafana-operator-dashboard
-    key: grafana-operator.json
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+    - inputName: DS_EXPRESSION
+      datasourceName: __expr__
