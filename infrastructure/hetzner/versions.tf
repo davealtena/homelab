@@ -4,7 +4,7 @@ terraform {
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "1.69.0"
+      version = "1.70.0"
     }
     # Hetzner has no API for Object Storage buckets; Hetzner's own docs use the
     # minio provider against the S3 endpoint for this.
