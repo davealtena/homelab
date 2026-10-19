@@ -119,9 +119,6 @@
     kubernetes-helm
     fluxcd
     cilium-cli
-    # secrets management
-    age
-    sops
     # backup
     kopia
   ];

@@ -1,7 +1,6 @@
 ---
 ignore: |
   .vscode/
-  *.sops.*
   .github/labels.yaml
 
 extends: default

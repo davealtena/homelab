@@ -69,7 +69,6 @@ kubernetes/
 kubernetes/components/        # reusable manifests (e.g. kanidm-oauth2)
 nixos/                        # NixOS flake for the phobos host
 .mise.toml                    # mise: pinned tools + operational tasks
-.sops.yaml                    # SOPS age encryption rules
 docs/                         # this documentation
 ```
 
@@ -84,9 +83,9 @@ replacement, with L2 announcements advertising LoadBalancer IPs on the LAN.
 Ingress is handled by Envoy Gateway (Gateway API). external-dns manages
 Cloudflare and UniFi records, and Cloudflare Tunnel provides external access.
 
-**Security** — Certificates via cert-manager + Let's Encrypt. Secrets come from
-1Password Connect (via External Secrets); SOPS/age encrypts the few secrets
-stored in Git. Single sign-on is provided by Kanidm (OIDC).
+**Security** — Certificates via cert-manager + Let's Encrypt. All secrets come from
+1Password Connect (via External Secrets); nothing secret is stored in Git. The
+Connect credentials themselves are seeded once from the vault at bootstrap. Single sign-on is provided by Kanidm (OIDC).
 
 **Storage** — csi-driver-nfs backs PVCs on the Synology NAS (default class);
 OpenEBS hostpath provides a fast local-NVMe tier for latency-sensitive
