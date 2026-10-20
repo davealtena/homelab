@@ -23,20 +23,25 @@ spec:
               OLLAMA_HOST: 0.0.0.0
               # Keep models resident so memini's embeddings never cold-start.
               OLLAMA_KEEP_ALIVE: "-1"
+              # qwen3.6:35b-a3b is a MoE; leave num_gpu unset so Ollama parks the
+              # experts in RAM and keeps attention on the 16 GB GPU.
+              OLLAMA_CONTEXT_LENGTH: "65536"
+              OLLAMA_FLASH_ATTENTION: "1"
+              OLLAMA_KV_CACHE_TYPE: q8_0
             lifecycle:
               postStart:
                 exec:
                   command:
                     - /bin/sh
                     - -c
-                    - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull bge-m3 && ollama pull qwen3:14b && ollama run bge-m3 warmup >/dev/null 2>&1 || true
+                    - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull bge-m3 && ollama pull qwen3.6:35b-a3b-mtp-q4_K_M && ollama run bge-m3 warmup >/dev/null 2>&1 || true
             resources:
               requests:
                 cpu: 200m
-                memory: 1Gi
+                memory: 4Gi
               limits:
                 nvidia.com/gpu: 1
-                memory: 8Gi
+                memory: 40Gi
     service:
       app:
         ports:
