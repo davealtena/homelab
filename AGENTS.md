@@ -14,11 +14,10 @@ kubernetes/
 ├── apps/<namespace>/<app>/   # applications (Flux-managed)
 └── flux/                     # Flux entrypoint; flux/ks.yaml defines the
 │                             #   `phobos-apps` Kustomization (path ./apps,
-│                             #   SOPS-decrypted, substituteFrom cluster-settings + cluster-secrets)
+│                             #   substituteFrom cluster-settings)
 nixos/                        # NixOS flake for the phobos host (k3s, Cilium, networking)
 infrastructure/hetzner/       # OpenTofu: edge VPS + Object Storage (ADR-0002/0003); secrets via `op run`
-.mise.toml                    # mise: pinned tools (yq, flate) + ops tasks (bootstrap, flux, kubernetes, sops)
-.sops.yaml                    # SOPS age creation rules (phobos key)
+.mise.toml                    # mise: pinned tools (yq, flate) + ops tasks (bootstrap, flux, kubernetes, tofu)
 ```
 
 ## Stack
@@ -32,7 +31,7 @@ infrastructure/hetzner/       # OpenTofu: edge VPS + Object Storage (ADR-0002/00
 | Network       | Cilium (kube-proxy replacement, L2 announcements), Envoy Gateway, external-dns, Cloudflare Tunnel |
 | Storage       | csi-driver-nfs → Synology NFS (`nfs-csi-sc`, default); OpenEBS hostpath (local NVMe) |
 | Backups       | Synology-native (PVCs live on the NAS) + nightly CNPG logical dump to the NAS |
-| Secrets       | External Secrets + 1Password (ClusterSecretStore `onepassword`); SOPS (age) for in-git secrets |
+| Secrets       | External Secrets + 1Password (ClusterSecretStore `onepassword`); nothing secret lives in Git |
 | Observability | Metrics: kube-prometheus-stack (Prometheus/Alertmanager); Logs: VictoriaLogs; Dashboards: Grafana (grafana-operator); badges: kromgo |
 
 ## App conventions
@@ -50,7 +49,7 @@ Each app: `kubernetes/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrel
 
 - Reconcile: `flux reconcile source git flux-system` then `flux reconcile kustomization <name>` or `flux reconcile hr <name> -n <ns>`.
 - Status: `flux get kustomizations -A`, `flux get hr -A`.
-- mise tasks (`mise tasks` lists them): `mise run bootstrap:*` (nixos/cilium/flux), `flux:*` (reconcile, diff, build/apply/delete-ks), `kubernetes:*`, `sops:*`. Bootstrap reads chart versions from the OCIRepository manifests, so it never drifts from Flux.
+- mise tasks (`mise tasks` lists them): `mise run bootstrap:*` (nixos/cilium/onepassword/flux), `flux:*` (reconcile, diff, build/apply/delete-ks), `kubernetes:*`, `tofu:*`. Bootstrap reads chart versions from the OCIRepository manifests, so it never drifts from Flux.
 - Hetzner infra: `mise run tofu:plan` / `tofu:apply` (1Password `op run` supplies creds); `tofu:fmt` validates without creds.
 - Local render/diff: `mise run flux:diff` (same `flate` check as CI) or `mise run flux:build-ks <ks-name>`.
 - Host changes: edit `nixos/`, then `mise run bootstrap:nixos` (rsync + `nixos-rebuild switch --flake .#phobos`).
@@ -62,8 +61,8 @@ Non-obvious "why is it like this" facts you can't infer from a single file:
 
 - **Cilium is bootstrapped imperatively then adopted by Flux.** CNI must exist before Flux; the running values live in `apps/kube-system/cilium/app/helm-values.yaml` and are re-installed by `mise run bootstrap:cilium`. L2 announcements advertise the Envoy gateway LB IPs (.130/.131) on the LAN.
 - **csi-driver-nfs has fsGroupPolicy disabled** (`feature.enableFSGroupPolicy: false`). NFS + kubelet's recursive fsGroup chown chokes on special files; apps run as their own UID and the restored data already owns the right UID. The CSIDriver object is immutable — changing this needs a delete + recreate.
-- **Flux postBuild `substituteFrom`** (cluster-settings + cluster-secrets) runs envsubst over every manifest. Shell `${VAR}` in a manifest (e.g. a CronJob script) must be escaped as `$${VAR}` or Flux replaces it with an empty string.
-- **1Password Connect credentials are not in Git.** `security/onepassword-secret` is created by `mise run bootstrap:onepassword` from the vault itself (document `onepassword-connect-credentials` + item `onepassword-connect`). `OP_SESSION` must be the base64-encoded credentials file, not the raw JSON — Connect fails with `illegal base64 data` otherwise.
+- **Flux postBuild `substituteFrom`** (cluster-settings) runs envsubst over every manifest. Shell `${VAR}` in a manifest (e.g. a CronJob script) must be escaped as `$${VAR}` or Flux replaces it with an empty string.
+- **1Password Connect credentials are the only out-of-band secret.** `security/onepassword-secret` is created by `mise run bootstrap:onepassword` from the vault itself (before Flux, so External Secrets can start) (document `onepassword-connect-credentials` + item `onepassword-connect`). `OP_SESSION` must be the base64-encoded credentials file, not the raw JSON — Connect fails with `illegal base64 data` otherwise.
 - **DB backups**: the CNPG cluster has no object store, so a nightly CronJob dumps globals + per-db (`apps/databases/cnpg/cluster/backup-cronjob.yaml`) to a Synology NFS PVC.
 
 ## Conventions reminder
@@ -84,8 +83,8 @@ problem; only `critical`/`high` fail the check. Default to silence over nitpicki
 **Flag (high-value, evaluable from the diff):**
 
 - **Leaked secrets** → `critical`. Any plaintext credential/token/key/password added
-  inline. Secrets MUST be `external-secrets` (1Password) or SOPS-encrypted. A SOPS
-  ciphertext blob or an `ExternalSecret`/`*SecretStore` reference is correct, not a leak.
+  inline. Secrets MUST come from `external-secrets` (1Password). An
+  `ExternalSecret`/`*SecretStore` reference is correct, not a leak.
 - **Security/privilege relaxations** → `high`. `privileged: true`, `hostNetwork`/`hostPID`,
   dropping a `securityContext`/`readOnlyRootFilesystem`, loosening a Pod Security
   Admission label (e.g. `restricted` → `privileged`), or broad RBAC (`cluster-admin`,

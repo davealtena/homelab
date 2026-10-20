@@ -6,3 +6,5 @@ metadata:
   namespace: flux-system
 data:
   CLUSTER_DOMAIN: altena.io
+  NFS_SERVER_ADDRESS: 192.168.1.200
+  NFS_SERVER_PATH: /volume1/k8s

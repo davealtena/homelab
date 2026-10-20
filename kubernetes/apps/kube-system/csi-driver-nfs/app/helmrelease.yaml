@@ -23,7 +23,7 @@ spec:
     feature:
       enableFSGroupPolicy: false
     # Primary storage for phobos: PVCs live on the Synology over NFS.
-    # NFS_SERVER_ADDRESS / NFS_SERVER_PATH come from the SOPS cluster-secrets.
+    # NFS_SERVER_ADDRESS / NFS_SERVER_PATH come from the cluster-settings ConfigMap.
     storageClass:
       create: true
       name: nfs-csi-sc
