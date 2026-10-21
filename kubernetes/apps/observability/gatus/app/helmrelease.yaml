@@ -28,7 +28,7 @@ spec:
           gatus-sidecar:
             image:
               repository: ghcr.io/home-operations/gatus-sidecar
-              tag: 0.5.4
+              tag: 0.5.5
             args:
               - --auto-httproute
               - --gateway-name=envoy-internal
