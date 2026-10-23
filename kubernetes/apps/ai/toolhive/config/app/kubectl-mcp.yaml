@@ -4,7 +4,7 @@ kind: MCPServer
 metadata:
   name: kubectl-mcp
 spec:
-  image: docker.io/rohitghumare64/kubectl-mcp-server:1.24.0
+  image: docker.io/rohitghumare64/kubectl-mcp-server:2.0.0
   transport: streamable-http
   proxyMode: streamable-http
   proxyPort: 8080
