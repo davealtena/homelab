@@ -14,3 +14,4 @@ resources:
   - ./databases.yaml
   - ./observability.yaml
   - ./ai.yaml
+  - ./media.yaml

@@ -74,6 +74,13 @@ spec:
           http:
             appProtocol: kubernetes.io/ws
             port: *port
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: http
+            path: /metrics
+            interval: 1m
+
     route:
       app:
         annotations:

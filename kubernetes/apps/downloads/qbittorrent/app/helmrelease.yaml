@@ -109,6 +109,25 @@ spec:
                 drop:
                   - ALL
 
+          exporter:
+            image:
+              repository: ghcr.io/esanchezm/prometheus-qbittorrent-exporter
+              tag: v1.7.0@sha256:02dbf86bd2850dcb94e7df5684159b954386e978e20f6b473f92efa62335f552
+            env:
+              QBITTORRENT_HOST: localhost
+              QBITTORRENT_PORT: "8080"
+              EXPORTER_PORT: "8000"
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+
           port-forward:
             image:
               repository: ghcr.io/bjw-s-labs/gluetun-qb-port-sync
@@ -137,6 +156,14 @@ spec:
         ports:
           http:
             port: *port
+          metrics:
+            port: 8000
+
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: metrics
+            interval: 1m
 
     route:
       app:
