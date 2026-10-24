@@ -1,7 +1,6 @@
 ---
 # Interim until kopiur (ADR-0002): jellyfin config lives on single-disk NVMe,
-# so tar it nightly to the Synology NFS PVC. Jellyfin v12 keeps its own daily
-# DB backups under /config/data/backups, which ride along in the archive.
+# so tar it nightly to the Synology NFS PVC (hot copy of the SQLite DB).
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -33,7 +32,7 @@ spec:
                   ts="$$(date +%Y-%m-%d_%H%M%S)"
                   out="/backup/jellyfin-config_$${ts}.tar.gz"
                   echo "==> Archiving /config to $${out}"
-                  tar -C /config --exclude=./cache --exclude=./transcodes \
+                  tar -C /config --exclude=./transcodes --exclude=./data/transcodes \
                     --exclude=./log \
                     -czf "$${out}" .
                   ls -lh "$${out}"

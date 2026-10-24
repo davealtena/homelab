@@ -16,10 +16,12 @@ spec:
           reloader.stakater.com/auto: "true"
         pod:
           securityContext:
+            runAsNonRoot: true
             runAsUser: 2000
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: "OnRootMismatch"
+            seccompProfile: { type: RuntimeDefault }
           # jellyfin/jellyfin#17831: v12 runs VACUUM+ANALYZE on shutdown; 30s SIGKILLs it
           terminationGracePeriodSeconds: 120
         containers:

@@ -44,13 +44,6 @@ spec:
             severity: warning
           annotations:
             summary: "qBittorrent reports itself firewalled: the gluetun port-forward is not reaching it"
-        - alert: BazarrSubtitlesBacklog
-          expr: bazarr_subtitles_wanted_total > 25
-          for: 24h
-          labels:
-            severity: info
-          annotations:
-            summary: "Bazarr has {{ $value }} episodes waiting for subtitles for over a day"
         - alert: MediaRootFolderLowSpace
           expr: sonarr_rootfolder_freespace_bytes < 200e9 or radarr_rootfolder_freespace_bytes < 200e9
           for: 1h
