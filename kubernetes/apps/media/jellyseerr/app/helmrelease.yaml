@@ -25,8 +25,8 @@ spec:
         containers:
           app:
             image:
-              repository: fallenbagel/jellyseerr
-              tag: 2.7.3
+              repository: ghcr.io/seerr-team/seerr
+              tag: v3.5.1@sha256:d8fab675b55ad293ded98fd71efcfd46054cbad9746534ae1cc4794a88c0b3be
             env:
               TZ: Europe/Amsterdam
               LOG_LEVEL: "info"
