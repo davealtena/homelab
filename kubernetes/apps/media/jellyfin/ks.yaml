@@ -12,6 +12,8 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/jellyfin/app
   prune: true
+  dependsOn:
+    - name: external-secrets-stores
   sourceRef:
     kind: GitRepository
     name: flux-system
