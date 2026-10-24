@@ -12,6 +12,8 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/jellyseerr/app
   prune: true
+  dependsOn:
+    - name: jellyfin
   sourceRef:
     kind: GitRepository
     name: flux-system
