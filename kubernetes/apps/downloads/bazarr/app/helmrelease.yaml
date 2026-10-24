@@ -53,22 +53,6 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 1Gi
-          subcleaner:
-            image:
-              repository: registry.k8s.io/git-sync/git-sync
-              tag: v4.8.0@sha256:a20644562fba94773e594885cb001aadb5a3172175f13ac1215e5b2033c9200e
-            env:
-              GITSYNC_REPO: https://github.com/KBlixt/subcleaner
-              GITSYNC_REF: master
-              GITSYNC_PERIOD: 24h
-              GITSYNC_ROOT: /add-ons
-            resources:
-              requests:
-                cpu: 10m
-                memory: 64Mi
-              limits:
-                memory: 128Mi
-            securityContext: *securityContext
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -98,8 +82,6 @@ spec:
                 port: *port
 
     persistence:
-      add-ons:
-        type: emptyDir
       cache:
         type: emptyDir
         globalMounts:
@@ -116,11 +98,5 @@ spec:
         path: /volume1/media
         globalMounts:
           - path: /media
-      scripts:
-        type: configMap
-        name: bazarr-scripts
-        defaultMode: 0775
-        globalMounts:
-          - readOnly: true
       tmp:
         type: emptyDir

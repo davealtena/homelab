@@ -5,7 +5,7 @@ metadata:
   name: bazarr
 spec:
   accessModes: ["ReadWriteOnce"]
-  storageClassName: nfs-csi-sc
+  storageClassName: openebs-hostpath
   resources:
     requests:
       storage: 10Gi
