@@ -31,13 +31,15 @@ spec:
               repository: ghcr.io/home-operations/radarr
               tag: 6.4.4.10685@sha256:1902ad2c08e9bac276ff9a1429af2eaa2f3c635a51f138f1b3eb734995171537
             env:
-              RADARR__INSTANCE_NAME: Radarr
-              RADARR__PORT: &port 7878
-              RADARR__AUTHENTICATION_METHOD: External
-              RADARR__AUTHENTICATION_REQUIRED: DisabledForLocalAddresses
-              RADARR__APPLICATION_URL: "https://radarr.${CLUSTER_DOMAIN}"
-              RADARR__LOG_LEVEL: info
-              RADARR__API_KEY:
+              RADARR__APP__INSTANCENAME: Radarr
+              RADARR__SERVER__PORT: &port 7878
+              RADARR__SERVER__ALLOWEDHOSTS: "*"
+              RADARR__AUTH__METHOD: External
+              RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              RADARR__APP__APPLICATIONURL: "https://radarr.${CLUSTER_DOMAIN}"
+              RADARR__LOG__LEVEL: info
+              RADARR__LOG__DBENABLED: "False"
+              RADARR__AUTH__APIKEY:
                 valueFrom:
                   secretKeyRef:
                     name: radarr-secret
