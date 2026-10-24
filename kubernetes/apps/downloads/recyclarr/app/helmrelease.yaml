@@ -58,7 +58,7 @@ spec:
                   - ALL
     persistence:
       config:
-        existingClaim: recyclarr-config
+        type: emptyDir
         advancedMounts:
           recyclarr:
             app:
