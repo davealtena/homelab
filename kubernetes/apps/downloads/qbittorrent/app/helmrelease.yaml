@@ -61,7 +61,7 @@ spec:
               PORT_FORWARD_ONLY: "on"
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
-              FIREWALL_INPUT_PORTS: 8080
+              FIREWALL_INPUT_PORTS: 8080,9710
               FIREWALL_OUTBOUND_SUBNETS: 10.96.0.0/12,10.244.0.0/16
             envFrom:
               - secretRef:
@@ -116,7 +116,7 @@ spec:
             env:
               QBITTORRENT_HOST: localhost
               QBITTORRENT_PORT: "8080"
-              EXPORTER_PORT: "8000"
+              EXPORTER_PORT: "9710"
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -157,7 +157,7 @@ spec:
           http:
             port: *port
           metrics:
-            port: 8000
+            port: 9710
 
     serviceMonitor:
       app:
