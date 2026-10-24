@@ -5,7 +5,7 @@ metadata:
   name: qbittorrent
 spec:
   accessModes: ["ReadWriteOnce"]
-  storageClassName: nfs-csi-sc
+  storageClassName: openebs-hostpath
   resources:
     requests:
-      storage: 75Gi
+      storage: 5Gi
