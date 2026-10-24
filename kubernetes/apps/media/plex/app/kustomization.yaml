@@ -5,5 +5,7 @@ kind: Kustomization
 resources:
   - ./pvc.yaml
   - ./pvc-cache.yaml
+  - ./backup-pvc.yaml
+  - ./backup-cronjob.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
