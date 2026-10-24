@@ -1,0 +1,60 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: media-rules
+spec:
+  groups:
+    - name: media.rules
+      rules:
+        - alert: MediaExporterDown
+          expr: up{namespace=~"downloads|media", job=~"sonarr|radarr|prowlarr|bazarr|qbittorrent|jellyfin"} == 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Metrics for {{ $labels.job }} have been unreachable for 15 minutes"
+        - alert: MediaAppUnhealthy
+          expr: |
+            sonarr_system_status == 0 or radarr_system_status == 0 or prowlarr_system_status == 0 or bazarr_system_status == 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $labels.job }} reports itself unhealthy"
+        - alert: ProwlarrIndexerUnavailable
+          expr: prowlarr_indexer_unavailable > 0
+          for: 6h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Prowlarr indexer {{ $labels.indexer }} has been unavailable for 6 hours"
+        - alert: QbittorrentVpnDisconnected
+          expr: qbittorrent_connected == 0
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "qBittorrent has had no peer connectivity for 30 minutes (VPN or network issue)"
+        - alert: QbittorrentFirewalled
+          expr: qbittorrent_firewalled == 1
+          for: 2h
+          labels:
+            severity: warning
+          annotations:
+            summary: "qBittorrent reports itself firewalled: the gluetun port-forward is not reaching it"
+        - alert: BazarrSubtitlesBacklog
+          expr: bazarr_subtitles_wanted_total > 25
+          for: 24h
+          labels:
+            severity: info
+          annotations:
+            summary: "Bazarr has {{ $value }} episodes waiting for subtitles for over a day"
+        - alert: MediaRootFolderLowSpace
+          expr: sonarr_rootfolder_freespace_bytes < 200e9 or radarr_rootfolder_freespace_bytes < 200e9
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Less than 200 GB free on the media root folder seen by {{ $labels.job }}"
