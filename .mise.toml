@@ -7,7 +7,7 @@
 [tools]
 yq = "4.54.1"
 "ubi:home-operations/flate" = "0.6.5"
-opentofu = "1.13.2"
+opentofu = "1.13.1"
 
 [env]
 KUBERNETES_DIR = '{{config_root}}/kubernetes'
