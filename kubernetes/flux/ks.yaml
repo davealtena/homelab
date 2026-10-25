@@ -15,12 +15,13 @@ spec:
     kind: GitRepository
     name: flux-system
   postBuild:
-    substituteFrom:
-      - name: cluster-settings
-        kind: ConfigMap
-        optional: false
+    substitute:
+      CLUSTER_DOMAIN: altena.io
+      NFS_SERVER_ADDRESS: 192.168.1.200
+      NFS_SERVER_PATH: /volume1/k8s
   patches:
-    - # Propagate substitution to every child Kustomization
+    - # Propagate cluster-wide substitutions to every child Kustomization (a ConfigMap
+      # can't be read across namespaces now that each Kustomization lives in its app namespace)
       patch: |-
         apiVersion: kustomize.toolkit.fluxcd.io/v1
         kind: Kustomization
@@ -28,10 +29,10 @@ spec:
           name: not-used
         spec:
           postBuild:
-            substituteFrom:
-              - name: cluster-settings
-                kind: ConfigMap
-                optional: false
+            substitute:
+              CLUSTER_DOMAIN: altena.io
+              NFS_SERVER_ADDRESS: 192.168.1.200
+              NFS_SERVER_PATH: /volume1/k8s
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization

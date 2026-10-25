@@ -4,7 +4,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app victoria-logs
-  namespace: flux-system
 spec:
   targetNamespace: observability
   commonMetadata:
@@ -12,11 +11,13 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: prometheus-operator-crds
+      namespace: observability
   path: ./kubernetes/apps/observability/victoria-logs/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m
@@ -27,7 +28,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app victoria-logs-collector
-  namespace: flux-system
 spec:
   targetNamespace: observability
   commonMetadata:
@@ -35,12 +35,15 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: victoria-logs
+      namespace: observability
     - name: prometheus-operator-crds
+      namespace: observability
   path: ./kubernetes/apps/observability/victoria-logs/collector
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m

@@ -42,12 +42,12 @@ Each app: `kubernetes/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrel
 - `OCIRepository.spec.ref.tag` pinned to an explicit version (Renovate bumps via PR).
 - `HelmRelease.spec.chartRef` → the OCIRepository; app-template apps configure `values.controllers/containers/service/route/persistence`.
 - `ExternalSecret` pulls from 1Password (`remoteRef.key: <1pw item>`) via ClusterSecretStore `onepassword`, consumed via `envFrom: secretRef` or `valueFrom`.
-- `ks.yaml`: `metadata.name: &app <name>`, `targetNamespace`, `healthChecks`, `wait: true`, `dependsOn` where ordering matters.
+- `ks.yaml`: `metadata.name: &app <name>` (no `metadata.namespace`: the namespace `kustomization.yaml` sets `namespace: <ns>`), `targetNamespace`, `sourceRef.namespace: flux-system`, `healthChecks`, `wait: true`, `dependsOn` entries always carry `namespace:` (cross-namespace).
 - New app → also add its `ks.yaml` to the namespace `kustomization.yaml`. See the `add-app` skill.
 
 ## Common operations
 
-- Reconcile: `flux reconcile source git flux-system` then `flux reconcile kustomization <name>` or `flux reconcile hr <name> -n <ns>`.
+- Reconcile: `flux reconcile source git flux-system` then `flux reconcile kustomization <name> -n <ns>` or `flux reconcile hr <name> -n <ns>`. Flux Kustomizations live in their app namespace (bjw-s layout); only `phobos-apps` is in `flux-system`.
 - Status: `flux get kustomizations -A`, `flux get hr -A`.
 - mise tasks (`mise tasks` lists them): `mise run bootstrap:*` (nixos/cilium/onepassword/flux), `flux:*` (reconcile, diff, build/apply/delete-ks), `kubernetes:*`, `tofu:*`. Bootstrap reads chart versions from the OCIRepository manifests, so it never drifts from Flux.
 - Hetzner infra: `mise run tofu:plan` / `tofu:apply` (1Password `op run` supplies creds); `tofu:fmt` validates without creds.

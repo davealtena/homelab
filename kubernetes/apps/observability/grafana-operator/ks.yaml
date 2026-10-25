@@ -4,7 +4,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app grafana-operator
-  namespace: flux-system
 spec:
   targetNamespace: observability
   commonMetadata:
@@ -12,12 +11,14 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: prometheus-operator-crds
+      namespace: observability
   interval: 10m
   path: ./kubernetes/apps/observability/grafana-operator/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -25,7 +26,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app grafana-operator-instance
-  namespace: flux-system
 spec:
   targetNamespace: observability
   commonMetadata:
@@ -33,14 +33,18 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: grafana-operator
+      namespace: observability
     - name: prometheus-operator-crds
+      namespace: observability
     - name: kanidm
+      namespace: security
   interval: 10m
   path: ./kubernetes/apps/observability/grafana-operator/instance
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -48,7 +52,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app grafana-operator-dashboards
-  namespace: flux-system
 spec:
   targetNamespace: observability
   commonMetadata:
@@ -56,10 +59,12 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: grafana-operator-instance
+      namespace: observability
   interval: 10m
   path: ./kubernetes/apps/observability/grafana-operator/dashboards
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
