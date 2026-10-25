@@ -19,7 +19,7 @@ spec:
     - name: ollama
       namespace: ai
   components:
-    - ../../../../components/kopiur/policy
+    - ../../../../components/kopiur/backup
   path: ./kubernetes/apps/ai/memini/app
   prune: true
   postBuild:

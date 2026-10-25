@@ -20,7 +20,7 @@ spec:
       namespace: security
   components:
     - ../../../../components/kanidm-oauth2
-    - ../../../../components/kopiur/policy
+    - ../../../../components/kopiur/backup
   path: ./kubernetes/apps/ai/open-webui/app
   prune: true
   postBuild:
