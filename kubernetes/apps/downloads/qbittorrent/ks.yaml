@@ -10,10 +10,19 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: external-secrets-stores
       namespace: security
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/downloads/qbittorrent/app
   prune: true
+  postBuild:
+    substitute:
+      APP: qbittorrent
+      KOPIUR_CLAIM: qbittorrent
+      KOPIUR_CAPACITY: 5Gi
   sourceRef:
     kind: GitRepository
     name: flux-system

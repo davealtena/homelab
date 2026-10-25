@@ -10,14 +10,23 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: external-secrets-stores
       namespace: security
     - name: litellm
       namespace: ai
     - name: ollama
       namespace: ai
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/ai/memini/app
   prune: true
+  postBuild:
+    substitute:
+      APP: memini
+      KOPIUR_CLAIM: memini
+      KOPIUR_CAPACITY: 5Gi
   sourceRef:
     kind: GitRepository
     name: flux-system

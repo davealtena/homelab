@@ -9,8 +9,15 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/downloads/prowlarr/app
   prune: true
+  postBuild:
+    substitute:
+      APP: prowlarr
+      KOPIUR_CLAIM: prowlarr
+      KOPIUR_CAPACITY: 15Gi
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -20,5 +27,7 @@ spec:
   retryInterval: 1m
   timeout: 5m
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: external-secrets-stores
       namespace: security
