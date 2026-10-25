@@ -22,7 +22,7 @@ spec:
             runAsGroup: 0
           containers:
             - name: tar
-              image: docker.io/library/alpine:3.22.2
+              image: docker.io/library/alpine:3.24.3
               env:
                 - name: RETENTION_DAYS
                   value: "14"
