@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotpolicy_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: ${APP}
+  annotations:
+    kopiur.home-operations.com/allow-identity-change: "true"
+spec:
+  repository:
+    kind: ClusterRepository
+    name: nas
+  # openebs-hostpath has no CSI snapshots: read the live PVC (crash-consistent)
+  copyMethod: Direct
+  sources:
+    - pvc:
+        name: "${KOPIUR_CLAIM:-${APP}}"
+  mover:
+    securityContext:
+      runAsUser: ${KOPIUR_MOVER_UID:=2000}
+      runAsGroup: ${KOPIUR_MOVER_GID:=2000}
+  compression:
+    compressor: zstd
+  files:
+    ignoreRules:
+      - /lost+found
+      - "System Volume Information"
+      - "$$RECYCLE.BIN"
+      - "@eaDir"
+      - .snapshot
+      - "${KOPIUR_IGNORE:=/.kopiur-nothing-to-ignore}"
+  retention:
+    keepHourly: ${KOPIUR_KEEP_HOURLY:=0}
+    keepDaily: 7
+    keepWeekly: 4
+    keepMonthly: 3
+  verification:
+    quick:
+      schedule:
+        cron: "H 3 * * 0"
+    deep:
+      schedule:
+        cron: "H 5 1 * *"
