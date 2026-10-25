@@ -19,9 +19,8 @@ spec:
     - name: kanidm
       namespace: security
   components:
-    - ../../../../components/kopiur/policy
-  components:
     - ../../../../components/kanidm-oauth2
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/ai/open-webui/app
   prune: true
   postBuild:
@@ -29,7 +28,6 @@ spec:
       APP: open-webui
       KOPIUR_CLAIM: open-webui
       KOPIUR_CAPACITY: 5Gi
-      APP: open-webui
       OAUTH2_DISPLAYNAME: Open WebUI
       OAUTH2_HOST: chat
       OAUTH2_REDIRECT_PATH: /oauth/oidc/callback
