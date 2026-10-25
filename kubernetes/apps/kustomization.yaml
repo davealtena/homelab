@@ -16,3 +16,4 @@ resources:
   - ./media
   - ./downloads
   - ./home-automation
+  - ./system

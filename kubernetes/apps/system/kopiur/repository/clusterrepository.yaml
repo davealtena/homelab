@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/clusterrepository_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: nas
+spec:
+  allowedNamespaces:
+    all: true
+  backend:
+    filesystem:
+      path: /repo
+      volume:
+        nfs:
+          server: 192.168.1.200
+          path: /volume1/kopiur
+  create:
+    enabled: true
+  encryption:
+    passwordSecretRef:
+      name: kopiur-nas-secret
+      namespace: system
+      key: KOPIA_PASSWORD
+  identityDefaults:
+    hostnameExpr: namespace
+    usernameExpr: policyName
+  maintenance:
+    schedule:
+      quick:
+        cron: "0 */6 * * *"
+        jitter: 30m
+      full:
+        cron: "0 4 * * *"
+        jitter: 1h
+  scheduleDefaults:
+    timezone: Europe/Amsterdam
+    jitter: 15m
+  concurrency:
+    maxConcurrentJobs: 2
+  moverDefaults:
+    cache:
+      contentCacheSizeMb: 512
+      metadataCacheSizeMb: 1024
+  parameters:
+    epoch:
+      minDuration: 1h
