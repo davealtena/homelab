@@ -9,9 +9,20 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/media/jellyseerr/app
   prune: true
+  postBuild:
+    substitute:
+      APP: jellyseerr
+      KOPIUR_CLAIM: jellyseerr
+      KOPIUR_CAPACITY: 15Gi
+      KOPIUR_MOVER_UID: "1000"
+      KOPIUR_MOVER_GID: "1000"
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: jellyfin
       namespace: media
   sourceRef:

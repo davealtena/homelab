@@ -9,9 +9,20 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/downloads/bazarr/app
   prune: true
+  postBuild:
+    substitute:
+      APP: bazarr
+      KOPIUR_CLAIM: bazarr
+      KOPIUR_CAPACITY: 10Gi
+      KOPIUR_MOVER_UID: "568"
+      KOPIUR_MOVER_GID: "568"
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: external-secrets-stores
       namespace: security
   sourceRef:

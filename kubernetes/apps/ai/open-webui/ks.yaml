@@ -10,6 +10,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: external-secrets-stores
       namespace: security
     - name: litellm
@@ -17,11 +19,16 @@ spec:
     - name: kanidm
       namespace: security
   components:
+    - ../../../../components/kopiur/policy
+  components:
     - ../../../../components/kanidm-oauth2
   path: ./kubernetes/apps/ai/open-webui/app
   prune: true
   postBuild:
     substitute:
+      APP: open-webui
+      KOPIUR_CLAIM: open-webui
+      KOPIUR_CAPACITY: 5Gi
       APP: open-webui
       OAUTH2_DISPLAYNAME: Open WebUI
       OAUTH2_HOST: chat

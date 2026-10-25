@@ -9,8 +9,16 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/media/plex/app
   prune: true
+  postBuild:
+    substitute:
+      APP: plex
+      KOPIUR_CLAIM: plex-config
+      KOPIUR_CAPACITY: 15Gi
+      KOPIUR_IGNORE: "/Library/Application Support/Plex Media Server/Cache"
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -19,3 +27,6 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
+  dependsOn:
+    - name: kopiur-repository
+      namespace: system

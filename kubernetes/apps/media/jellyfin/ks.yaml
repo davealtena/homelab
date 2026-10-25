@@ -9,9 +9,19 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/media/jellyfin/app
   prune: true
+  postBuild:
+    substitute:
+      APP: jellyfin
+      KOPIUR_CLAIM: jellyfin
+      KOPIUR_CAPACITY: 20Gi
+      KOPIUR_IGNORE: /cache
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: external-secrets-stores
       namespace: security
   sourceRef:
