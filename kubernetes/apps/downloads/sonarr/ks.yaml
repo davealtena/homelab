@@ -9,8 +9,14 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/downloads/sonarr/app
   prune: true
+  postBuild:
+    substitute:
+      APP: sonarr
+      KOPIUR_CAPACITY: 15Gi
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -22,3 +28,5 @@ spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: security
+    - name: kopiur-repository
+      namespace: system
