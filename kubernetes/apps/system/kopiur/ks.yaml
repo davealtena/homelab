@@ -4,7 +4,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app kopiur
-  namespace: flux-system
 spec:
   targetNamespace: system
   commonMetadata:
@@ -15,6 +14,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
@@ -26,14 +26,15 @@ spec:
   timeout: 5m
   dependsOn:
     - name: external-secrets-stores
+      namespace: security
     - name: prometheus-operator-crds
+      namespace: observability
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: kopiur-repository
-  namespace: flux-system
 spec:
   targetNamespace: system
   commonMetadata:
@@ -44,6 +45,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   healthChecks:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: ClusterRepository
@@ -54,26 +56,4 @@ spec:
   timeout: 10m
   dependsOn:
     - name: kopiur
-    - name: kopiur-secrets
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: kopiur-secrets
-  namespace: flux-system
-spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: kopiur
-  path: ./kubernetes/apps/system/kopiur/secrets
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  wait: true
-  interval: 30m
-  retryInterval: 1m
-  timeout: 5m
-  dependsOn:
-    - name: external-secrets-stores
+      namespace: system
