@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+# Backup + deploy-or-restore: the PVC is populated from the latest snapshot (empty on a fresh repo).
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - ./snapshotpolicy.yaml
+  - ./snapshotschedule.yaml
+  - ./restore.yaml
+  - ./pvc.yaml
