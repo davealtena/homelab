@@ -109,8 +109,7 @@ spec:
           - path: /cache
       transcode:
         type: emptyDir
-        medium: Memory
-        sizeLimit: 4Gi
+        sizeLimit: 60Gi
         globalMounts:
           - path: /transcode
       tmp:
