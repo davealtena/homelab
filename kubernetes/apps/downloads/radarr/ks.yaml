@@ -15,7 +15,7 @@ spec:
     - name: external-secrets-stores
       namespace: security
   components:
-    - ../../../../components/kopiur/policy
+    - ../../../../components/kopiur/backup
   path: ./kubernetes/apps/downloads/radarr/app
   prune: true
   postBuild:
