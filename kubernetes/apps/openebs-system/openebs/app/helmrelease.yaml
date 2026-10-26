@@ -17,8 +17,8 @@ spec:
     remediation:
       retries: 3
   values:
-    # Local NVMe hostpath tier for cache/scratch (e.g. Plex transcode).
-    # Non-default; persistent PVCs use nfs-csi-sc (Synology) by default.
+    # Default StorageClass: all application state lives on local NVMe (ADR-0002),
+    # backed up by kopiur. nfs-csi-sc is only for bulk/shared data.
     localpv-provisioner:
       rbac:
         create: true
@@ -29,7 +29,7 @@ spec:
       hostpathClass:
         enabled: true
         name: openebs-hostpath
-        isDefaultClass: false
+        isDefaultClass: true
         basePath: *hostPath
       helperPod:
         image:
