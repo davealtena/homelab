@@ -27,6 +27,8 @@ spec:
       APP: memini
       KOPIUR_CLAIM: memini
       KOPIUR_CAPACITY: 5Gi
+      KOPIUR_MOVER_UID: "1000"
+      KOPIUR_MOVER_GID: "1000"
   sourceRef:
     kind: GitRepository
     name: flux-system
