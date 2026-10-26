@@ -10,3 +10,5 @@ resources:
   - ./bookboss/ks.yaml
   - ./forgejo/ks.yaml
   - ./mealie/ks.yaml
+components:
+  - ../../components/kopiur/secret

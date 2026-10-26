@@ -10,12 +10,23 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: mosquitto
       namespace: databases
     - name: external-secrets-stores
       namespace: security
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/home-automation/home-assistant/app
   prune: true
+  postBuild:
+    substitute:
+      APP: home-assistant
+      KOPIUR_CLAIM: home-assistant
+      KOPIUR_CAPACITY: 15Gi
+      KOPIUR_MOVER_UID: "1000"
+      KOPIUR_MOVER_GID: "1000"
   sourceRef:
     kind: GitRepository
     name: flux-system

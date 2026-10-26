@@ -10,12 +10,23 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: external-secrets-stores
       namespace: security
     - name: cnpg-cluster
       namespace: databases
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/selfhosted/bookboss/app
   prune: true
+  postBuild:
+    substitute:
+      APP: bookboss
+      KOPIUR_CLAIM: bookboss
+      KOPIUR_CAPACITY: 25Gi
+      KOPIUR_MOVER_UID: "1000"
+      KOPIUR_MOVER_GID: "100"
   sourceRef:
     kind: GitRepository
     name: flux-system
