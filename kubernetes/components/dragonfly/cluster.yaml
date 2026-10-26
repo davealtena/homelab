@@ -27,7 +27,7 @@ spec:
     - --maxmemory=$(MAX_MEMORY)Mi
     - --proactor_threads=2
     - --cluster_mode=emulated
-    - "${DRAGONFLY_EXTRA_ARG:=--version}"
+    - --cache_mode=${DRAGONFLY_CACHE_MODE:=false}
   resources:
     requests:
       cpu: 25m

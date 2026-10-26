@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./ocirepository.yaml
-  - ./cache.yaml
   - ./job-init-db.yaml
   - ./litellmproxy.yaml
   - ./mcpserver-toolhive.yaml

@@ -10,6 +10,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: dragonfly-operator
+      namespace: databases
     - name: kopiur-repository
       namespace: system
     - name: external-secrets-stores
@@ -17,6 +19,7 @@ spec:
     - name: kanidm
       namespace: security
   components:
+    - ../../../../components/dragonfly
     - ../../../../components/kopiur/backup
   path: ./kubernetes/apps/selfhosted/paperless/app
   prune: true
