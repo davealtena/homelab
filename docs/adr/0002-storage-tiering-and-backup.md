@@ -107,3 +107,17 @@ configuration. Revisit if the node ever grows to 3+ nodes (replicated block
 storage becomes worth it) or if Hetzner Object Storage pricing/reliability
 disappoints (swap the replication target; the primary repository is
 unaffected).
+
+## Amendment 2026-10-26
+
+kopiur is live (chart 0.10.16, `apps/system/kopiur`): one `ClusterRepository nas` with the
+Kopia `filesystem` backend on the Synology NFS export `/volume1/kopiur`, `copyMethod: Direct`
+everywhere (no CSI snapshots on hostpath), nightly GFS snapshots for every NVMe app volume via
+the `components/kopiur/{backup,policy}` components, hourly for Kanidm, and a `pg_dumpall`
+stream source for CNPG every 6 h. Apps on the `backup` component are deploy-or-restore: the
+PVC carries a `dataSourceRef` to a `Restore`, so a lost cluster comes back from the latest
+snapshot (verified with a drill on 2026-10-25). The interim tar/pg_dump CronJobs are gone.
+
+Deviation from decision 2: **no off-site replication to Hetzner for now** (owner's call,
+cost). The second copy is the Synology's own Hyper Backup of `/volume1/kopiur` (owner's
+action, outside Git). `RepositoryReplication` remains the path if that changes.
