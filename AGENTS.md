@@ -29,8 +29,8 @@ infrastructure/hetzner/       # OpenTofu: edge VPS + Object Storage (ADR-0002/00
 | CI            | Renovate + GitHub Actions                                       |
 | Charts        | bjw-s `app-template` for most apps                              |
 | Network       | Cilium (kube-proxy replacement, L2 announcements), Envoy Gateway, external-dns, Cloudflare Tunnel |
-| Storage       | csi-driver-nfs → Synology NFS (`nfs-csi-sc`, default); OpenEBS hostpath (local NVMe) |
-| Backups       | Synology-native (PVCs live on the NAS) + nightly CNPG logical dump to the NAS |
+| Storage       | OpenEBS hostpath (`openebs-hostpath`, default; all app state on local NVMe); csi-driver-nfs → Synology NFS (`nfs-csi-sc`, bulk/shared only: media, kopiur repo, Paperless consume) |
+| Backups       | kopiur → Kopia repository on the Synology (`/volume1/kopiur`); CNPG via `pg_dumpall` stream source; second copy = Synology Hyper Backup |
 | Secrets       | External Secrets + 1Password (ClusterSecretStore `onepassword`); nothing secret lives in Git |
 | Observability | Metrics: kube-prometheus-stack (Prometheus/Alertmanager); Logs: VictoriaLogs; Dashboards: Grafana (grafana-operator); badges: kromgo |
 
