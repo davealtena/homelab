@@ -6,6 +6,7 @@ namespace: downloads
 resources:
   - ./namespace.yaml
   - ./bazarr/ks.yaml
+  - ./flaresolverr/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
