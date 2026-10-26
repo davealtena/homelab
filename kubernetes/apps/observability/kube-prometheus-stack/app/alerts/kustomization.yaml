@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - ./prometheusrule.yaml
   - ./media-prometheusrule.yaml
+  - ./ai-prometheusrule.yaml

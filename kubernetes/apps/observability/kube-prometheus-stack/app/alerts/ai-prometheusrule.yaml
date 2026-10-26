@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ai-rules
+spec:
+  groups:
+    - name: ai.rules
+      rules:
+        - alert: LiteLLMRequestFailures
+          expr: sum by (model) (increase(litellm_llm_api_failed_requests_metric_total[15m])) > 3
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "LiteLLM: {{ $value | humanize }} failed requests to {{ $labels.model }} in 15 minutes"
+        - alert: LiteLLMSlowFirstToken
+          expr: histogram_quantile(0.9, sum by (le, model) (rate(litellm_llm_api_time_to_first_token_metric_bucket[15m]))) > 30
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "LiteLLM: p90 time-to-first-token for {{ $labels.model }} is {{ $value | humanize }}s (model reloading or spilled to CPU?)"
+        - alert: OllamaInferenceOnCpu
+          expr: sum(rate(container_cpu_usage_seconds_total{namespace="ai", pod=~"ollama-.*", container="app"}[5m])) > 6
+          for: 20m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Ollama has used {{ $value | humanize }} CPU cores for 20 minutes; a model is probably running on the CPU instead of the GPU"
+        - alert: GpuMemoryExhausted
+          expr: DCGM_FI_DEV_FB_FREE < 200
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "GPU has only {{ $value | humanize }} MiB VRAM free; the next model load will spill to CPU"
+        - alert: LiteLLMDown
+          expr: kube_deployment_status_replicas_available{namespace="ai", deployment="litellm"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "LiteLLM gateway has no available replicas; every AI client (open-webui, memini, CI review) is down"
