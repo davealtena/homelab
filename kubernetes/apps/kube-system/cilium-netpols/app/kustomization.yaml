@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+# All five together: allow-dns selects every pod (egress default-deny), allow-default hands it back.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./allow-default-egress.yaml
+  - ./allow-dns-egress.yaml
+  - ./allow-internet-egress.yaml
+  - ./allow-kube-api-egress.yaml
+  - ./block-all-egress.yaml
