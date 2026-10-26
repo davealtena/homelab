@@ -17,7 +17,7 @@ spec:
     - name: kanidm
       namespace: security
   components:
-    - ../../../../components/kopiur/policy
+    - ../../../../components/kopiur/backup
   path: ./kubernetes/apps/selfhosted/paperless/app
   prune: true
   postBuild:
