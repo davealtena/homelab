@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumclusterwidenetworkpolicy_v2.json
+# Pods without any egress.policy.home.arpa/* label keep allow-all egress.
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: allow-default-egress
+spec:
+  endpointSelector:
+    matchExpressions:
+      - key: egress.policy.home.arpa/block-all
+        operator: DoesNotExist
+      - key: egress.policy.home.arpa/internet
+        operator: DoesNotExist
+      - key: egress.policy.home.arpa/kube-api
+        operator: DoesNotExist
+  egress:
+    - toEndpoints:
+        - {}
+    - toEntities:
+        - cluster
+    - toEntities:
+        - world
