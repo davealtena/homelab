@@ -10,12 +10,25 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: kaniop
       namespace: security
     - name: cert-manager-issuers
       namespace: cert-manager
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/security/kanidm/app
   prune: true
+  postBuild:
+    substitute:
+      APP: kanidm
+      KOPIUR_CLAIM: kanidm-data-kanidm-default-0
+      KOPIUR_CAPACITY: 2Gi
+      KOPIUR_MOVER_UID: "0"
+      KOPIUR_MOVER_GID: "0"
+      KOPIUR_SCHEDULE: "H * * * *"
+      KOPIUR_KEEP_HOURLY: "24"
   sourceRef:
     kind: GitRepository
     name: flux-system
