@@ -7,6 +7,5 @@ resources:
   - ./namespace.yaml
   - ./jellyfin/ks.yaml
   - ./jellyseerr/ks.yaml
-  - ./plex/ks.yaml
 components:
   - ../../components/kopiur/secret
