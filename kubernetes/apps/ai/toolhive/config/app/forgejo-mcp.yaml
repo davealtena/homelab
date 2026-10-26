@@ -16,13 +16,6 @@ spec:
   secrets:
     - name: toolhive-forgejo
       key: GITEA_ACCESS_TOKEN
-  podTemplateSpec:
-    spec:
-      containers:
-        - name: mcp
-          args:
-            - -t
-            - stdio
   resources:
     requests:
       cpu: 50m
