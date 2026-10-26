@@ -90,6 +90,13 @@ spec:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
                 capabilities: {drop: ["ALL"]}
+              volumeMounts:
+                - name: grafana-data
+                  mountPath: /var/lib/grafana
+          volumes:
+            - name: grafana-data
+              persistentVolumeClaim:
+                claimName: grafana-pvc
           securityContext:
             runAsNonRoot: true
             runAsUser: 472
