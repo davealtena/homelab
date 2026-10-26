@@ -9,8 +9,17 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/databases/mosquitto/app
   prune: true
+  postBuild:
+    substitute:
+      APP: mosquitto
+      KOPIUR_CLAIM: mosquitto-config
+      KOPIUR_CAPACITY: 1Gi
+      KOPIUR_MOVER_UID: "1000"
+      KOPIUR_MOVER_GID: "1000"
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -19,3 +28,6 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
+  dependsOn:
+    - name: kopiur-repository
+      namespace: system

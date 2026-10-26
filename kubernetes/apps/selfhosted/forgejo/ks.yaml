@@ -10,14 +10,25 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: external-secrets-stores
       namespace: security
     - name: cnpg-cluster
       namespace: databases
     - name: kanidm
       namespace: security
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/selfhosted/forgejo/app
   prune: true
+  postBuild:
+    substitute:
+      APP: forgejo
+      KOPIUR_CLAIM: forgejo
+      KOPIUR_CAPACITY: 20Gi
+      KOPIUR_MOVER_UID: "1000"
+      KOPIUR_MOVER_GID: "1000"
   sourceRef:
     kind: GitRepository
     name: flux-system

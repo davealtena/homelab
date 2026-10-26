@@ -10,10 +10,19 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: kanidm
       namespace: security
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/selfhosted/actual-finance/app
   prune: true
+  postBuild:
+    substitute:
+      APP: actual-finance
+      KOPIUR_CLAIM: actual
+      KOPIUR_CAPACITY: 10Gi
   sourceRef:
     kind: GitRepository
     name: flux-system

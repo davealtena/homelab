@@ -10,10 +10,19 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: kopiur-repository
+      namespace: system
     - name: external-secrets-stores
       namespace: security
+  components:
+    - ../../../../components/kopiur/policy
   path: ./kubernetes/apps/home-automation/esphome/app
   prune: true
+  postBuild:
+    substitute:
+      APP: esphome
+      KOPIUR_CLAIM: esphome
+      KOPIUR_CAPACITY: 5Gi
   sourceRef:
     kind: GitRepository
     name: flux-system
