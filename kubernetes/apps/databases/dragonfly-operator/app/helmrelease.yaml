@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: dragonfly-operator
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: dragonfly-operator
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    manager:
+      image:
+        repository: ghcr.io/dragonflydb/operator
+    grafanaDashboard:
+      enabled: true
+      folder: Databases
+      grafanaOperator:
+        enabled: true
+        allowCrossNamespaceImport: true
+        matchLabels:
+          grafana.internal/instance: grafana

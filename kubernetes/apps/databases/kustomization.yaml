@@ -6,6 +6,7 @@ namespace: databases
 resources:
   - ./namespace.yaml
   - ./cnpg/ks.yaml
+  - ./dragonfly-operator/ks.yaml
   - ./mosquitto/ks.yaml
 components:
   - ../../components/kopiur/secret
