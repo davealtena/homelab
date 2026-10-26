@@ -67,7 +67,7 @@ spec:
           "title": "GPU utilisation",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 0,
@@ -87,7 +87,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_GPU_UTIL",
               "legendFormat": "util",
@@ -110,7 +110,7 @@ spec:
           "title": "VRAM used",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 6,
@@ -130,7 +130,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_FB_USED",
               "legendFormat": "used",
@@ -153,7 +153,7 @@ spec:
           "title": "GPU temperature",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 12,
@@ -171,7 +171,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_GPU_TEMP",
               "legendFormat": "gpu",
@@ -180,7 +180,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_MEMORY_TEMP",
               "legendFormat": "mem",
@@ -203,7 +203,7 @@ spec:
           "title": "Power",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 18,
@@ -221,7 +221,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_POWER_USAGE",
               "legendFormat": "W",
@@ -244,7 +244,7 @@ spec:
           "title": "GPU utilisation / memory copy",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 0,
@@ -264,7 +264,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_GPU_UTIL",
               "legendFormat": "sm util",
@@ -273,7 +273,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_MEM_COPY_UTIL",
               "legendFormat": "mem copy",
@@ -296,7 +296,7 @@ spec:
           "title": "VRAM used vs free",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 8,
@@ -314,7 +314,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_FB_USED",
               "legendFormat": "used",
@@ -323,7 +323,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_FB_FREE",
               "legendFormat": "free",
@@ -346,7 +346,7 @@ spec:
           "title": "Temperature and power",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 16,
@@ -364,7 +364,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_GPU_TEMP",
               "legendFormat": "\u00b0C",
@@ -373,7 +373,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "DCGM_FI_DEV_POWER_USAGE",
               "legendFormat": "W",
@@ -409,7 +409,7 @@ spec:
           "title": "Requests / min by model",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 0,
@@ -427,7 +427,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum by (model) (rate(litellm_requests_metric_total[5m])) * 60",
               "legendFormat": "{{model}}",
@@ -450,7 +450,7 @@ spec:
           "title": "Tokens / min by model",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 8,
@@ -468,7 +468,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum by (model) (rate(litellm_input_tokens_metric_total[5m])) * 60",
               "legendFormat": "in {{model}}",
@@ -477,7 +477,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum by (model) (rate(litellm_output_tokens_metric_total[5m])) * 60",
               "legendFormat": "out {{model}}",
@@ -500,7 +500,7 @@ spec:
           "title": "Failed requests / 15m",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 16,
@@ -518,7 +518,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum by (model) (increase(litellm_llm_api_failed_requests_metric_total[15m]))",
               "legendFormat": "{{model}}",
@@ -541,7 +541,7 @@ spec:
           "title": "Time to first token p90",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 0,
@@ -559,7 +559,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "histogram_quantile(0.9, sum by (le, model) (rate(litellm_llm_api_time_to_first_token_metric_bucket[15m])))",
               "legendFormat": "{{model}}",
@@ -582,7 +582,7 @@ spec:
           "title": "Total request latency p50 / p90",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 8,
@@ -600,7 +600,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "histogram_quantile(0.5, sum by (le, model) (rate(litellm_request_total_latency_metric_bucket[15m])))",
               "legendFormat": "p50 {{model}}",
@@ -609,7 +609,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "histogram_quantile(0.9, sum by (le, model) (rate(litellm_request_total_latency_metric_bucket[15m])))",
               "legendFormat": "p90 {{model}}",
@@ -632,7 +632,7 @@ spec:
           "title": "Latency per output token p90",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 16,
@@ -650,7 +650,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "histogram_quantile(0.9, sum by (le, model) (rate(litellm_deployment_latency_per_output_token_bucket[15m])))",
               "legendFormat": "{{model}}",
@@ -673,7 +673,7 @@ spec:
           "title": "In-flight requests",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 0,
@@ -691,7 +691,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum by (model) (litellm_in_flight_requests)",
               "legendFormat": "{{model}}",
@@ -714,7 +714,7 @@ spec:
           "title": "Spend (cumulative, USD)",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 8,
@@ -732,7 +732,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum by (model) (litellm_spend_metric_total)",
               "legendFormat": "{{model}}",
@@ -755,7 +755,7 @@ spec:
           "title": "Requests by status (24h)",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 16,
@@ -773,7 +773,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum by (model, status_code) (increase(litellm_proxy_total_requests_metric_total[24h]))",
               "legendFormat": "{{model}} {{status_code}}",
@@ -809,7 +809,7 @@ spec:
           "title": "Ollama CPU (cores)",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 0,
@@ -827,7 +827,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"ai\",pod=~\"ollama-.*\",container=\"app\"}[2m]))",
               "legendFormat": "cores",
@@ -850,7 +850,7 @@ spec:
           "title": "Ollama memory",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 8,
@@ -868,7 +868,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum(container_memory_working_set_bytes{namespace=\"ai\",pod=~\"ollama-.*\",container=\"app\"})",
               "legendFormat": "working set",
@@ -891,7 +891,7 @@ spec:
           "title": "Ollama request rate (via LiteLLM)",
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$${DS_PROMETHEUS}"
           },
           "gridPos": {
             "x": 16,
@@ -909,7 +909,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$${DS_PROMETHEUS}"
               },
               "expr": "sum by (model) (rate(litellm_requests_metric_total{model=~\"qwen.*|bge.*\"}[5m])) * 60",
               "legendFormat": "{{model}}",
