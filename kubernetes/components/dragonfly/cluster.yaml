@@ -32,4 +32,4 @@ spec:
     requests:
       cpu: 25m
     limits:
-      memory: ${DRAGONFLY_MEMORY:=256Mi}
+      memory: ${DRAGONFLY_MEMORY:=512Mi}
