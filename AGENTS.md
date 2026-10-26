@@ -15,6 +15,7 @@ kubernetes/
 └── flux/                     # Flux entrypoint; flux/ks.yaml defines the
 │                             #   `phobos-apps` Kustomization (path ./apps,
 │                             #   substituteFrom cluster-settings)
+.forgejo/workflows/           # CI on Forgejo Actions (flux-diff, labeler, tofu-validate, pr-review)
 nixos/                        # NixOS flake for the phobos host (k3s, Cilium, networking)
 infrastructure/hetzner/       # OpenTofu: edge VPS + Object Storage (ADR-0002/0003); secrets via `op run`
 .mise.toml                    # mise: pinned tools (yq, flate) + ops tasks (bootstrap, flux, kubernetes, tofu)
@@ -26,7 +27,7 @@ infrastructure/hetzner/       # OpenTofu: edge VPS + Object Storage (ADR-0002/00
 | ------------- | ---------------------------------------------------------------- |
 | Host          | NixOS 26.05 flake → single-node k3s (flannel/kube-proxy/servicelb/traefik/local-storage disabled) |
 | GitOps        | Flux (flux-operator + OCIRepository-sourced Helm charts)         |
-| CI            | Renovate + GitHub Actions                                       |
+| CI            | Forgejo Actions (in-cluster runner, k8s jobs) + renovate-operator; Git source of truth is Forgejo `dave/homelab`, GitHub is a push-mirror |
 | Charts        | bjw-s `app-template` for most apps                              |
 | Network       | Cilium (kube-proxy replacement, L2 announcements), Envoy Gateway, external-dns, Cloudflare Tunnel |
 | Storage       | OpenEBS hostpath (`openebs-hostpath`, default; all app state on local NVMe); csi-driver-nfs → Synology NFS (`nfs-csi-sc`, bulk/shared only: media, kopiur repo, Paperless consume) |
@@ -54,6 +55,7 @@ Each app: `kubernetes/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrel
 - Local render/diff: `mise run flux:diff` (same `flate` check as CI) or `mise run flux:build-ks <ks-name>`.
 - Host changes: edit `nixos/`, then `mise run bootstrap:nixos` (rsync + `nixos-rebuild switch --flake .#phobos`).
 - Prefer GitOps over live `kubectl` changes; if a live change is needed for triage, reconcile it back into Git.
+- Git: `origin` is Forgejo (`https://git.altena.io/dave/homelab`, API token in 1Password `forgejo`); PRs are opened/merged there (squash). GitHub `davealtena/homelab` is a read-only push-mirror of `main` — never push to it directly.
 
 ## Repo-specific notes
 
@@ -62,6 +64,8 @@ Non-obvious "why is it like this" facts you can't infer from a single file:
 - **Cilium is bootstrapped imperatively then adopted by Flux.** CNI must exist before Flux; the running values live in `apps/kube-system/cilium/app/helm-values.yaml` and are re-installed by `mise run bootstrap:cilium`. L2 announcements advertise the Envoy gateway LB IPs (.130/.131) on the LAN.
 - **csi-driver-nfs has fsGroupPolicy disabled** (`feature.enableFSGroupPolicy: false`). NFS + kubelet's recursive fsGroup chown chokes on special files; apps run as their own UID and the restored data already owns the right UID. The CSIDriver object is immutable — changing this needs a delete + recreate.
 - **Flux postBuild `substituteFrom`** (cluster-settings) runs envsubst over every manifest. Shell `${VAR}` in a manifest (e.g. a CronJob script) must be escaped as `$${VAR}` or Flux replaces it with an empty string.
+- **Flux reads Git from Forgejo, which Flux itself deploys.** On a cold rebuild Forgejo does not exist yet: temporarily set `sync.url` in `apps/flux-system/flux-operator/instance/helm-values.yaml` to the GitHub mirror, bootstrap, then switch back once `selfhosted/forgejo` is up (the mirror is always current: `sync_on_commit`).
+- **Forgejo Actions runner uses the k8s plugin**, every job is a Kubernetes Job in `selfhosted` (image `ghcr.io/bjw-s-labs/forgejo-runner`); only the `ubuntu-latest` label exists, there is no Docker/DinD. Workflows `uses:` full `https://github.com/...@<sha>` refs. The runner is registered with a shared secret (`forgejo-cli actions register`), uuid/token in 1Password `forgejo-runner`.
 - **1Password Connect credentials are the only out-of-band secret.** `security/onepassword-secret` is created by `mise run bootstrap:onepassword` from the vault itself (before Flux, so External Secrets can start) (document `onepassword-connect-credentials` + item `onepassword-connect`). `OP_SESSION` must be the base64-encoded credentials file, not the raw JSON — Connect fails with `illegal base64 data` otherwise.
 - **Backups are kopiur** (`apps/system/kopiur`): ClusterRepository `nas` on the Synology NFS export `/volume1/kopiur`; apps opt in via `components/kopiur/backup` (policy + schedule + Restore + PVC with `dataSourceRef`, deploy-or-restore) or `components/kopiur/policy` (backup-only for chart-owned PVCs) with `postBuild.substitute` (`APP`, `KOPIUR_CLAIM`, `KOPIUR_CAPACITY`, `KOPIUR_MOVER_UID/GID`, `KOPIUR_SCHEDULE`, `KOPIUR_IGNORE`). `copyMethod: Direct` (no CSI snapshots on hostpath). CNPG is dumped via a kopiur stream source (`pg_dumpall`), no CronJob. Cutover of an existing PVC is snapshot-gated: snapshot → suspend HR + Kustomization → delete deployment, finished mover jobs and PVC → reconcile → populator restores → resume.
 
@@ -91,9 +95,9 @@ problem; only `critical`/`high` fail the check. Default to silence over nitpicki
   `*` verbs/resources) — unless the diff/commit gives a clear reason.
 - **Broken GitOps structure** → `high`. A new app missing its `ks.yaml` (or not wired
   into the namespace `kustomization.yaml`), a HelmRelease/OCIRepository with an unpinned
-  version/tag, or a missing/wrong schema header. Note: GitHub Actions pinned by commit
-  SHA (e.g. `uses: actions/foo@abc1234 # v2`) is correct and intentional — Renovate is
-  configured with `helpers:pinGitHubActionDigests`. Never flag SHA-pinned Actions.
+  version/tag, or a missing/wrong schema header. Note: Actions pinned by commit SHA
+  (e.g. `uses: https://github.com/actions/foo@abc1234 # v2`) is correct and intentional —
+  Renovate is configured with `helpers:pinGitHubActionDigests`. Never flag SHA-pinned Actions.
 - **Breaking / data-loss changes** → `high` (or `critical` for data loss). Removing or
   renaming a resource others depend on, API-version or CRD changes, deleting a PVC, or
   changing a StorageClass / reclaim policy.

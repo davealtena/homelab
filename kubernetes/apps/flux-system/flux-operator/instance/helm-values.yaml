@@ -10,10 +10,13 @@ instance:
     - kustomize-controller
     - helm-controller
     - notification-controller
-  # Public repo -> Flux pulls read-only over HTTPS, no credentials needed.
+  # Forgejo is the source of truth; the repo is public so Flux pulls in-cluster
+  # without credentials. GitHub (https://github.com/davealtena/homelab) is a
+  # push-mirror: point sync.url there when rebuilding a cluster that has no
+  # Forgejo yet.
   sync:
     kind: GitRepository
-    url: https://github.com/davealtena/homelab
+    url: http://forgejo-http.selfhosted.svc.cluster.local:3000/dave/homelab.git
     ref: refs/heads/main
     path: kubernetes/flux
   kustomize:

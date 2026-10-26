@@ -49,9 +49,13 @@ several weak ones. See `docs/adr/` for the host-OS decision record.
 Git push → Flux Git source sync → Kustomization → HelmRelease → k8s resources
 ```
 
-1. A change is committed and pushed to this repo.
-2. **Renovate** opens PRs for dependency/image updates; routine bumps auto-merge.
-3. **Flux** detects the change via its Git source.
+1. A change is committed and pushed to this repo on **Forgejo** (`dave/homelab`,
+   self-hosted in the cluster). A push-mirror keeps `github.com/davealtena/homelab`
+   identical; it is the read-only fallback for a cold rebuild (see `AGENTS.md`).
+2. **renovate-operator** (in-cluster) opens PRs for dependency/image updates;
+   **Forgejo Actions** (in-cluster runner) runs flux-diff / labeler / AI review;
+   routine bumps auto-merge.
+3. **Flux** detects the change via its Git source (Forgejo, in-cluster HTTP).
 4. Flux applies the `phobos-apps` Kustomization (`kubernetes/flux/ks.yaml`),
    which recursively applies everything under `kubernetes/apps/`.
 5. Each app's `HelmRelease` renders and installs the workload.

@@ -64,7 +64,6 @@ unless noted. Tick them off as they merge.
 - **Additional nodes** (3-node control plane, replicated storage via miroir,
   Spegel). Only when the single node becomes a real problem; two cheap
   nodes for quorum beat a second big one.
-- **renovate-operator** in-cluster instead of the GitHub app.
 - **k3s version bumps via Renovate** on the NixOS flake input + a rebuild
   flow (the Talos/tuppr equivalent for ADR-0001).
 

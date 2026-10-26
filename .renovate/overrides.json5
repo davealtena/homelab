@@ -10,12 +10,12 @@
     {
       "description": [
         "All major bumps: never auto-merge (the default, made explicit) and pull",
-        "me in — request review + label so the AI reviewer runs and GitHub",
+        "me in — request review + label so the AI reviewer runs and Forgejo",
         "notifies me. Trivial minor/patch/digest stay silently auto-merged."
       ],
       "matchUpdateTypes": ["major"],
       "automerge": false,
-      "reviewers": ["davealtena"],
+      "reviewers": ["dave"],
       "addLabels": ["review/required"]
     },
     {
@@ -45,7 +45,7 @@
       ],
       "matchUpdateTypes": ["minor"],
       "automerge": false,
-      "reviewers": ["davealtena"],
+      "reviewers": ["dave"],
       "addLabels": ["review/required"]
     }
   ]

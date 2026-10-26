@@ -23,7 +23,7 @@
       "description": ["Auto-merge mise-pinned CLI tools (yq, flate) - local tooling only"],
       "matchManagers": ["mise"],
       "automerge": true,
-      "automergeType": "branch",
+      "automergeType": "pr",
       "matchUpdateTypes": ["minor", "patch"],
       "minimumReleaseAge": "3 days",
       "ignoreTests": true
@@ -32,7 +32,7 @@
       "description": ["Auto-merge GitHub Actions"],
       "matchManagers": ["github-actions"],
       "automerge": true,
-      "automergeType": "branch",
+      "automergeType": "pr",
       "matchUpdateTypes": ["minor", "patch", "digest"],
       "minimumReleaseAge": "3 days",
       "ignoreTests": true
@@ -45,7 +45,7 @@
         "^renovatebot/"
       ],
       "automerge": true,
-      "automergeType": "branch",
+      "automergeType": "pr",
       "matchUpdateTypes": ["minor", "patch", "digest"],
       "minimumReleaseAge": "1 minute",
       "ignoreTests": true
@@ -54,7 +54,7 @@
       "description": ["Auto-merge GitHub Releases"],
       "matchDatasources": ["github-releases"],
       "automerge": true,
-      "automergeType": "branch",
+      "automergeType": "pr",
       "matchUpdateTypes": ["minor", "patch"],
       "matchPackagePatterns": ["/external-dns/", "/gateway-api/", "/prometheus-operator/"],
       "ignoreTests": true

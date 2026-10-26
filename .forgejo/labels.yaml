@@ -1,21 +1,23 @@
 ---
+# Reference list of the labels on git.altena.io/dave/homelab (created via the API; not synced automatically)
 # Area
-- { name: "area/bootstrap",          color: "0e8a16" }
-- { name: "area/github",             color: "0e8a16" }
+- { name: "area/ci",                 color: "0e8a16" }
+- { name: "area/docs",               color: "0e8a16" }
 - { name: "area/infrastructure",     color: "0e8a16" }
 - { name: "area/kubernetes",         color: "0e8a16" }
 - { name: "area/mise",               color: "0e8a16" }
-# Distro
-- { name: "distro/nixos",            color: "ffc300" }
+- { name: "area/nixos",              color: "0e8a16" }
 # Renovate
 - { name: "renovate/container",      color: "027fa0" }
 - { name: "renovate/github-action",  color: "027fa0" }
 - { name: "renovate/github-release", color: "027fa0" }
+- { name: "renovate/grafana-dashboard", color: "027fa0" }
 - { name: "renovate/helm",           color: "027fa0" }
 # Semantic Type
 - { name: "type/patch",              color: "ffec19" }
 - { name: "type/minor",              color: "ff9800" }
 - { name: "type/major",              color: "f6412d" }
 - { name: "type/break",              color: "f6412d" }
-# Uncategorized
+# Review gating / misc
+- { name: "review/required",         color: "d93f0b" }
 - { name: "hold/upstream",           color: "ee0701" }
