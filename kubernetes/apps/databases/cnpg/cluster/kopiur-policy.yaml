@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotpolicy_v1alpha1.json
+# Logical dump streamed from the CNPG primary into the repository (no PVC, no object store).
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: cnpg-homelab-logical
+spec:
+  repository:
+    kind: ClusterRepository
+    name: nas
+  sources:
+    - stream:
+        fileName: postgres.sql
+        workloadExec:
+          podSelector:
+            matchLabels:
+              cnpg.io/cluster: homelab
+              cnpg.io/instanceRole: primary
+          container: postgres
+          command: ["sh", "-ec", "exec pg_dumpall -U postgres"]
+          timeout: 1h
+  compression:
+    compressor: zstd
+  retention:
+    keepDaily: 14
+    keepWeekly: 8
+    keepMonthly: 6
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotschedule_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotSchedule
+metadata:
+  name: cnpg-homelab-logical
+spec:
+  policyRef:
+    name: cnpg-homelab-logical
+  schedule:
+    cron: "H */6 * * *"
