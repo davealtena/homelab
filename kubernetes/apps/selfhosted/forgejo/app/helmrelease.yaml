@@ -81,8 +81,14 @@ spec:
           UPDATE_AVATAR: true
         actions:
           ENABLED: true
+          DEFAULT_ACTIONS_URL: github
         mirror:
           ENABLED: true
+        "repository.pull-request":
+          DEFAULT_MERGE_STYLE: squash
+        webhook:
+          # renovate-operator's webhook receiver is a cluster-internal Service
+          ALLOWED_HOST_LIST: external,private
 
     resources:
       requests:

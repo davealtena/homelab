@@ -1,0 +1,210 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: forgejo-runner
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: forgejo-runner
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    configMaps:
+      config:
+        suffix: config
+        data:
+          runner.yaml: |-
+            cache:
+              enabled: true
+              dir: /data/cache
+              port: 8088
+              proxy_port: 8089
+            container:
+              docker_host: "-"
+              workdir_parent: shared/workdir
+            host:
+              workdir_parent: /data/act
+            log:
+              level: info
+            plugins:
+              k8s:
+                address: unix:///plugin/forgejo-runner-k8s.sock
+                options:
+                  namespace: selfhosted
+                  poll_timeout: 10m
+                  labels: "app.kubernetes.io/name=forgejo-runner-job"
+                  resources: |
+                    requests:
+                      cpu: 100m
+                      memory: 256Mi
+                    limits:
+                      memory: 2Gi
+            runner:
+              capacity: 2
+              labels:
+                - ubuntu-latest:k8s:///config/podspec-default.yaml
+                - default:k8s:///config/podspec-default.yaml
+              timeout: 1h
+              shutdown_timeout: 3m
+          podspec-default.yaml: |-
+            containers:
+              - env:
+                  - name: DEBIAN_FRONTEND
+                    value: noninteractive
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-26.04@sha256:21002399163431ffe9e8fbe63e0d9197e847676b2e8c2ec1a7c4faec7a54507a
+                imagePullPolicy: IfNotPresent
+                name: main
+                resources:
+                  limits:
+                    memory: 2Gi
+                  requests:
+                    cpu: 100m
+                    memory: 256Mi
+            restartPolicy: Never
+    controllers:
+      forgejo-runner:
+        type: deployment
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          automountServiceAccountToken: true
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          # runner.shutdown_timeout + the plugin's 60s job-cleanup budget
+          terminationGracePeriodSeconds: 300
+        replicas: 1
+        strategy: RollingUpdate
+        initContainers:
+          # native sidecar: outlives the runner container so the plugin socket
+          # is still there while jobs drain on shutdown
+          k8s-plugin:
+            image:
+              repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
+              tag: 13.2.1
+            args:
+              - --listen
+              - unix:///plugin/forgejo-runner-k8s.sock
+            restartPolicy: Always
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+        containers:
+          runner:
+            image:
+              repository: data.forgejo.org/forgejo/runner
+              tag: 13.2.0
+            command:
+              - sh
+              - -ec
+              - |
+                exec /bin/forgejo-runner daemon \
+                  --config /config/runner.yaml \
+                  --url "http://forgejo-http.selfhosted.svc.cluster.local:3000" \
+                  --uuid "$(cat /etc/forgejo-runner-secret/uuid)" \
+                  --token-url file:///etc/forgejo-runner-secret/token
+            resources:
+              requests:
+                cpu: 5m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+    persistence:
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /config
+      plugin:
+        type: emptyDir
+        globalMounts:
+          - path: /plugin
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+            subPath: data
+          - path: /tmp
+            subPath: tmp
+      runner-secret:
+        type: secret
+        name: forgejo-runner-secret
+        advancedMounts:
+          forgejo-runner:
+            runner:
+              - path: /etc/forgejo-runner-secret
+                readOnly: true
+    rbac:
+      bindings:
+        forgejo-runner:
+          type: RoleBinding
+          roleRef:
+            identifier: forgejo-runner
+          subjects:
+            - identifier: forgejo-runner
+      roles:
+        forgejo-runner:
+          type: Role
+          rules:
+            - apiGroups:
+                - batch
+              resources:
+                - jobs
+              verbs:
+                - create
+                - get
+                - list
+                - watch
+                - delete
+            - apiGroups:
+                - ""
+              resources:
+                - pods
+              verbs:
+                - list
+                - watch
+                - get
+            - apiGroups:
+                - ""
+              resources:
+                - pods/exec
+              verbs:
+                - create
+                - get
+            - apiGroups:
+                - ""
+              resources:
+                - pods/log
+              verbs:
+                - list
+                - watch
+                - get
+    serviceAccount:
+      forgejo-runner: {}

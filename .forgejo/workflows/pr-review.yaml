@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: AI PR Review
+
+on:
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened, synchronize, ready_for_review, labeled]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to (re-)review
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: AI PR Review
+    # Renovate PRs are only reviewed when gated with review/required (see AGENTS.md)
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (!github.event.pull_request.draft &&
+       (!startsWith(github.head_ref, 'renovate/') || contains(github.event.pull_request.labels.*.name, 'review/required')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: AI PR Review
+        uses: https://github.com/misospace/pr-reviewer-action@0a2d2732f7358e509e6a85e11160eb25cc5b1b80 # v3.8.0
+        with:
+          platform: forgejo
+          forgejo-api-url: http://forgejo-http.selfhosted.svc.cluster.local:3000/
+          forgejo-auth-method: token
+          ai-base-url: http://litellm.ai.svc.cluster.local:4000/v1
+          ai-api-format: openai
+          ai-model: gpt-4.1
+          ai-api-key: ${{ secrets.LITELLM_API_KEY }}
+          ai-fallback-model: qwen3.6-35b
+          pr-number: ${{ github.event.pull_request.number || inputs.pr_number }}
+          force-review: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
+          standards-file: AGENTS.md
+          fail-on-request-changes: "true"
