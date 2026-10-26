@@ -6,4 +6,5 @@ metadata:
   labels:
     pod-security.kubernetes.io/enforce: privileged
   annotations:
+    kopiur.home-operations.com/stream-exec-movers: "true"
     kustomize.toolkit.fluxcd.io/prune: disabled
