@@ -6,5 +6,6 @@ namespace: system
 resources:
   - ./namespace.yaml
   - ./kopiur/ks.yaml
+  - ./renovate-operator/ks.yaml
 components:
   - ../../components/kopiur/secret

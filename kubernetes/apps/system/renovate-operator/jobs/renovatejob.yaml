@@ -1,0 +1,40 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/renovate-operator.mogenius.com/renovatejob_v1alpha1.json
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: forgejo
+spec:
+  discoveryFilters:
+    - dave/*
+  extraEnv:
+    - name: LOG_LEVEL
+      value: info
+    - name: RENOVATE_GIT_AUTHOR
+      value: Renovate Bot <renovate@altena.io>
+    - name: RENOVATE_HOST_RULES
+      value: >-
+        [
+          {
+            "matchHost": "http://forgejo-http.selfhosted.svc.cluster.local:3000",
+            "allowInternal": true
+          }
+        ]
+  image: ghcr.io/renovatebot/renovate:44.182.2
+  parallelism: 1
+  provider:
+    name: forgejo
+    endpoint: http://forgejo-http.selfhosted.svc.cluster.local:3000/api/v1
+    publicEndpoint: https://git.${CLUSTER_DOMAIN}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 2Gi
+  schedule: 0 * * * *
+  secretRef: renovate-secret
+  webhook:
+    enabled: true
+    authentication:
+      enabled: false

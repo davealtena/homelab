@@ -9,6 +9,7 @@ resources:
   - ./paperless/ks.yaml
   - ./bookboss/ks.yaml
   - ./forgejo/ks.yaml
+  - ./forgejo-runner/ks.yaml
   - ./mealie/ks.yaml
 components:
   - ../../components/kopiur/secret

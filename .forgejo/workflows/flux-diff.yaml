@@ -1,0 +1,56 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Flux Diff
+
+on:
+  pull_request:
+    branches: ["main"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flux-diff:
+    name: Flux Diff
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup flate
+        uses: https://github.com/home-operations/flate/action@631b76b69c4e58c6f4d1cb01e23616fa61aebafa # v0.6.5
+        with:
+          cache: "true"
+
+      - name: Diff
+        id: diff
+        run: |
+          output=$(flate diff all --path ./kubernetes 2>&1 || true)
+          output=$(echo "${output}" | head -c 60000)
+          echo "diff<<EOF" >> "$GITHUB_OUTPUT"
+          echo "${output}" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Comment
+        if: ${{ steps.diff.outputs.diff != '' }}
+        env:
+          TOKEN: ${{ github.token }}
+          API: ${{ github.api_url }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          DIFF: ${{ steps.diff.outputs.diff }}
+        run: |
+          marker="<!-- flux-diff -->"
+          body=$(printf '%s\n```diff\n%s\n```\n' "$marker" "$DIFF" | jq -Rs '{body: .}')
+          existing=$(curl -fsS -H "Authorization: token $TOKEN" "$API/repos/$REPO/issues/$PR/comments?limit=100" \
+            | jq -r --arg m "$marker" '[.[] | select(.body | startswith($m))][0].id // empty')
+          if [ -n "$existing" ]; then
+            curl -fsS -X PATCH -H "Authorization: token $TOKEN" -H "Content-Type: application/json" \
+              "$API/repos/$REPO/issues/comments/$existing" -d "$body" > /dev/null
+          else
+            curl -fsS -X POST -H "Authorization: token $TOKEN" -H "Content-Type: application/json" \
+              "$API/repos/$REPO/issues/$PR/comments" -d "$body" > /dev/null
+          fi
