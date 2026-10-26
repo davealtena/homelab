@@ -17,7 +17,7 @@ spec:
     - name: mosquitto
       namespace: databases
   components:
-    - ../../../../components/kopiur/policy
+    - ../../../../components/kopiur/backup
   path: ./kubernetes/apps/home-automation/zigbee2mqtt/app
   prune: true
   postBuild:
