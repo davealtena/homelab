@@ -10,19 +10,32 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: dragonfly-operator
+      namespace: databases
     - name: external-secrets-stores
       namespace: security
     - name: cnpg-cluster
       namespace: databases
     - name: litellm-operator
       namespace: ai
+  components:
+    - ../../../../components/dragonfly
   path: ./kubernetes/apps/ai/litellm/app
   prune: true
+  postBuild:
+    substitute:
+      APP: litellm
+      DRAGONFLY_CACHE_MODE: "true"
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   wait: true
+  healthCheckExprs:
+    - apiVersion: dragonflydb.io/v1alpha1
+      kind: Dragonfly
+      failed: status.phase != 'ready'
+      current: status.phase == 'ready'
   interval: 30m
   retryInterval: 1m
   timeout: 10m

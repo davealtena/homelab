@@ -30,7 +30,7 @@ spec:
     - name: LITELLM_MODE
       value: PRODUCTION
     - name: REDIS_HOST
-      value: litellm-cache.ai.svc.cluster.local
+      value: litellm-dragonfly.ai.svc.cluster.local
     - name: REDIS_PORT
       value: "6379"
     - name: LITELLM_MASTER_KEY
