@@ -34,8 +34,8 @@ spec:
   healthCheckExprs:
     - apiVersion: dragonflydb.io/v1alpha1
       kind: Dragonfly
-      failed: status.phase != 'ready'
-      current: status.phase == 'ready'
+      failed: status.phase in ['Error', 'Failed']
+      current: status.phase == 'Ready'
   interval: 30m
   retryInterval: 1m
   timeout: 10m

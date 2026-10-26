@@ -27,8 +27,11 @@ jobs:
 
       - name: Diff
         id: diff
+        env:
+          # 48 parallel helm renders (the default) blow past the 4Gi job pod limit
+          FLATE_CONCURRENCY: "8"
         run: |
-          output=$(flate diff all --path ./kubernetes 2>&1 || true)
+          output=$(flate diff all --path ./kubernetes --base origin/main 2>&1 || true)
           output=$(echo "${output}" | head -c 60000)
           echo "diff<<EOF" >> "$GITHUB_OUTPUT"
           echo "${output}" >> "$GITHUB_OUTPUT"
