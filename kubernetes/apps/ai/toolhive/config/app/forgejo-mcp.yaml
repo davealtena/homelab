@@ -1,0 +1,33 @@
+---
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: forgejo-mcp
+spec:
+  # Gitea's MCP server; Forgejo exposes the same API. Runs as the Forgejo bot
+  # user `agent` (collaborator with write, not on the merge whitelist).
+  image: docker.gitea.com/gitea-mcp-server:1.11.0
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  env:
+    - name: GITEA_HOST
+      value: http://forgejo-http.selfhosted.svc.cluster.local:3000
+  secrets:
+    - name: toolhive-forgejo
+      key: GITEA_ACCESS_TOKEN
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: mcp
+          args:
+            - -t
+            - stdio
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+  groupRef:
+    name: mcp-tools

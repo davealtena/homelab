@@ -6,6 +6,7 @@ resources:
   - ./externalsecret.yaml
   - ./kubectl-mcp.yaml
   - ./github-mcp.yaml
+  - ./forgejo-mcp.yaml
   - ./garmin-mcp.yaml
   - ./hass-mcp.yaml
   - ./unifi-mcp.yaml
