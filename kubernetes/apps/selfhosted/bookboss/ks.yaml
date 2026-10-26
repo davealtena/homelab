@@ -17,7 +17,7 @@ spec:
     - name: cnpg-cluster
       namespace: databases
   components:
-    - ../../../../components/kopiur/policy
+    - ../../../../components/kopiur/backup
   path: ./kubernetes/apps/selfhosted/bookboss/app
   prune: true
   postBuild:

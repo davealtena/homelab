@@ -19,7 +19,7 @@ spec:
     - name: kanidm
       namespace: security
   components:
-    - ../../../../components/kopiur/policy
+    - ../../../../components/kopiur/backup
     - ../../../../components/kanidm-oauth2
   path: ./kubernetes/apps/selfhosted/mealie/app
   prune: true
