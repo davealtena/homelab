@@ -27,6 +27,13 @@ cp /seed/config.yaml "$data/config.yaml"
 cp /seed/SOUL.md "$data/SOUL.md"
 mkdir -p "$data/workspace"
 
+# The image only autostarts the gateway at boot when the last recorded state was
+# `running` (hermes_cli/container_boot.py); a fresh volume has no state and the
+# heartbeat probe would never pass. Named profiles fold into this root gateway.
+if [[ ! -f $data/gateway_state.json ]]; then
+  printf '{"gateway_state": "running", "desired_state": "running"}\n' > "$data/gateway_state.json"
+fi
+
 cat > "$data/.hermes-terminal-env.sh" <<'EOT'
 # Bash sources this file through BASH_ENV for every Hermes terminal command.
 for directory in /opt/data/.local/bin /opt/hermes/.venv/bin /opt/hermes/bin; do
@@ -61,6 +68,24 @@ LITELLM_API_KEY=$LITELLM_API_KEY
 SEARXNG_URL=$SEARXNG_URL
 FORGEJO_TOKEN=$FORGEJO_TOKEN
 EOT
+
+# Role profiles are Hermes profile distributions kept in the repo; reinstall them
+# from main on every boot (config/SOUL/skills from Git, memories and sessions kept).
+repo=/tmp/homelab
+rm -rf "$repo"
+git clone --quiet --depth 1 http://forgejo-http.selfhosted.svc.cluster.local:3000/dave/homelab.git "$repo"
+dists=$repo/kubernetes/apps/ai/hermes/app/resources/profiles
+export HOME=$data PATH=/opt/hermes/.venv/bin:/opt/hermes/bin:$PATH
+for dist in "$dists"/*/; do
+  name=$(basename "$dist")
+  if [[ $name == gitops-engineer ]]; then
+    # the repo's own agent skills (add-app, ...) travel with the GitOps profile
+    cp -r "$repo"/.agents/skills/. "$dist/skills/"
+  fi
+  hermes profile install "$dist" --name "$name" --force --yes >/dev/null
+  echo "profile $name installed from git"
+done
+rm -rf "$repo"
 
 for profile in "$data"/profiles/*; do
   [[ -d $profile ]] || continue

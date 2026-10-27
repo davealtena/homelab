@@ -1,0 +1,96 @@
+---
+_config_version: 46
+
+providers:
+  litellm:
+    name: LiteLLM
+    api: http://litellm.ai.svc.cluster.local:4000/v1
+    key_env: LITELLM_API_KEY
+    transport: chat_completions
+    discover_models: true
+
+model:
+  api_key: ${LITELLM_API_KEY}
+  base_url: http://litellm.ai.svc.cluster.local:4000/v1
+  # cheap OpenAI tier; /model gpt-6.1-sol for hard tasks, qwen3.6-35b stays local/free
+  default: gpt-6-luna
+  provider: litellm
+
+web:
+  search_backend: searxng
+
+mcp_servers:
+  toolhive:
+    url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
+    tools:
+      include:
+        - "hass-mcp_*"
+
+secrets:
+  command:
+    enabled: true
+    command: |
+      printf 'LITELLM_API_KEY=%s\n' "$LITELLM_API_KEY"
+    helper_timeout_seconds: 3
+    override_existing: true
+
+security:
+  redact_secrets: true
+
+terminal:
+  backend: local
+  cwd: ${HERMES_HOME}/workspace
+  persistent_shell: true
+  timeout: 180
+
+timezone: Europe/Amsterdam
+
+privacy:
+  redact_pii: true
+
+approvals:
+  mode: smart
+
+toolsets:
+  - hermes-cli
+
+agent:
+  max_turns: 60
+  gateway_timeout: 1800
+  restart_drain_timeout: 60
+  api_max_retries: 2
+  reasoning_effort: medium
+  disabled_toolsets:
+    - a2a
+    - browser
+    - computer_use
+    - desktop_ui
+    - feishu_doc
+    - feishu_drive
+    - homeassistant
+    - image_gen
+    - spotify
+    - video
+    - video_gen
+    - x_search
+    - yuanbao
+
+platform_toolsets:
+  cli:
+    - clarify
+    - code_execution
+    - context_engine
+    - file
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - web
+
+telemetry:
+  shared_metrics:
+    enabled: false
+
+streaming:
+  enabled: true

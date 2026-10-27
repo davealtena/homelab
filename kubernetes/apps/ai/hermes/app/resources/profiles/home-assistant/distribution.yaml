@@ -1,0 +1,9 @@
+name: home-assistant
+version: 1.0.0
+description: "Home Assistant helper: inspects entities, areas, history and automations, controls devices and edits dashboards through the hass MCP tools."
+hermes_requires: ">=0.21.0"
+author: dave
+env_requires:
+  - name: LITELLM_API_KEY
+    description: "LiteLLM virtual key (seeded by the init container)"
+    required: true

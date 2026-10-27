@@ -1,0 +1,9 @@
+name: gitops-engineer
+version: 1.0.0
+description: "Operates Dave's single-node Kubernetes homelab through Git: inspects the live cluster read-only, writes Flux/app-template manifests in the repo's conventions and opens pull requests on Forgejo."
+hermes_requires: ">=0.21.0"
+author: dave
+env_requires:
+  - name: LITELLM_API_KEY
+    description: "LiteLLM virtual key (seeded by the init container)"
+    required: true

@@ -1,0 +1,9 @@
+name: network-engineer
+version: 1.0.0
+description: "UniFi network engineer: reports on clients, devices, WiFi and alerts, and changes network settings only after explicit confirmation, through the UniFi Network MCP tools."
+hermes_requires: ">=0.21.0"
+author: dave
+env_requires:
+  - name: LITELLM_API_KEY
+    description: "LiteLLM virtual key (seeded by the init container)"
+    required: true

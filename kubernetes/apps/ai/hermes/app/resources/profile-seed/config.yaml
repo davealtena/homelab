@@ -19,9 +19,12 @@ model:
 web:
   search_backend: searxng
 
+# MCP tools live in the role profiles (gitops-engineer, home-assistant, network-engineer);
+# the root profile is a plain assistant with web search and memory.
 mcp_servers:
   toolhive:
     url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
+    enabled: false
 
 secrets:
   command:
