@@ -12,8 +12,8 @@ providers:
 model:
   api_key: ${LITELLM_API_KEY}
   base_url: http://litellm.ai.svc.cluster.local:4000/v1
-  # local qwen on the GPU; switch to gpt-4.1 with /model when a task needs it
-  default: qwen3.6-35b
+  # cheap OpenAI tier for agent work; /model gpt-6.1-sol for hard tasks, qwen3.6-35b stays local/free
+  default: gpt-6-luna
   provider: litellm
 
 web:

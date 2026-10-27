@@ -6,4 +6,6 @@ resources:
   - ./minimax.yaml
   - ./gpt-4-1.yaml
   - ./gpt-4-1-mini.yaml
+  - ./gpt-6-luna.yaml
+  - ./gpt-6-1-sol.yaml
   - ./qwen3-6-35b.yaml
