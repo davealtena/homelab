@@ -1,0 +1,58 @@
+---
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: grafana-mcp
+spec:
+  # Official Grafana MCP: Prometheus queries, dashboards, alert rules/silences and
+  # VictoriaLogs (LogsQL through the Loki tools). Read-only: Viewer service account
+  # `hermes-mcp` plus every write/SaaS tool category disabled.
+  image: docker.io/grafana/mcp-grafana:2.1.1
+  transport: streamable-http
+  proxyMode: streamable-http
+  proxyPort: 8080
+  mcpPort: 8000
+  env:
+    - name: GRAFANA_URL
+      value: http://grafana-service.observability.svc.cluster.local:3000
+  secrets:
+    - name: toolhive-grafana
+      key: GRAFANA_SERVICE_ACCOUNT_TOKEN
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: mcp
+          args:
+            - -t
+            - streamable-http
+            - --address
+            - 0.0.0.0:8000
+            - --disable-write
+            - --disable-admin
+            - --disable-provisioning
+            - --disable-rendering
+            - --disable-snapshot
+            - --disable-oncall
+            - --disable-incident
+            - --disable-asserts
+            - --disable-assistant
+            - --disable-agento
+            - --disable-cloudwatch
+            - --disable-cloudlogging
+            - --disable-athena
+            - --disable-clickhouse
+            - --disable-elasticsearch
+            - --disable-influxdb
+            - --disable-graphite
+            - --disable-pyroscope
+            - --disable-quickwit
+            - --disable-snowflake
+            - --disable-sql
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+  groupRef:
+    name: mcp-tools
