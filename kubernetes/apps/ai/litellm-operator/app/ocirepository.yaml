@@ -11,5 +11,5 @@ spec:
     operation: copy
   # Held at 0.0.9 (Renovate hold): 0.0.10+ chart RBAC omits its new CRDs -> crash-loop.
   ref:
-    tag: 0.0.9
+    tag: 0.0.25
   url: oci://ghcr.io/home-operations/charts/litellm-operator
