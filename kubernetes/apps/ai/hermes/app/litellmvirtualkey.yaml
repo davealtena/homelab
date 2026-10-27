@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmvirtualkey_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMVirtualKey
+metadata:
+  name: hermes
+spec:
+  keyAlias: hermes
+  models:
+    - qwen3.6-35b
+    - gpt-4.1
+    - gpt-4.1-mini
+    - minimax
+  proxyRef: litellm
+  secretName: hermes-litellm
+  teamID: hermes

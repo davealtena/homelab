@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app hermes
+spec:
+  targetNamespace: ai
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: kopiur-repository
+      namespace: system
+    - name: external-secrets-stores
+      namespace: security
+    - name: litellm-operator
+      namespace: ai
+    - name: litellm
+      namespace: ai
+    - name: searxng
+      namespace: selfhosted
+  components:
+    - ../../../../components/kopiur/backup
+  path: ./kubernetes/apps/ai/hermes/app
+  prune: true
+  postBuild:
+    substitute:
+      APP: hermes
+      KOPIUR_CLAIM: hermes
+      KOPIUR_CAPACITY: 10Gi
+      KOPIUR_MOVER_UID: "10000"
+      KOPIUR_MOVER_GID: "10000"
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: hermes
+      namespace: ai
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 10m

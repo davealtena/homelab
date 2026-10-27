@@ -11,5 +11,6 @@ resources:
   - ./forgejo/ks.yaml
   - ./forgejo-runner/ks.yaml
   - ./mealie/ks.yaml
+  - ./searxng/ks.yaml
 components:
   - ../../components/kopiur/secret

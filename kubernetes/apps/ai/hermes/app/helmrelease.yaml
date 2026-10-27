@@ -1,0 +1,316 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hermes
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: hermes
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      hermes:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            fsGroup: 10000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 10000
+            runAsNonRoot: true
+            runAsUser: 10000
+            seccompProfile:
+              type: RuntimeDefault
+          terminationGracePeriodSeconds: 60
+        strategy: Recreate
+        initContainers:
+          profile-seed:
+            image: &image
+              repository: docker.io/nousresearch/hermes-agent
+              tag: v2026.9.24@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
+            command:
+              - /bin/bash
+              - /seed/seed.sh
+            env:
+              LITELLM_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-litellm
+                    key: key
+              SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080
+            envFrom:
+              - secretRef:
+                  name: hermes
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+          # The image's own boot hook runs this through s6-setuidgid, which needs
+          # CAP_SETGID and fails as non-root; run it here instead.
+          config-migrate:
+            image: *image
+            command:
+              - /bin/sh
+              - -c
+              - >-
+                [ ! -f /opt/data/config.yaml ] ||
+                exec /opt/hermes/.venv/bin/python /opt/hermes/scripts/docker_config_migrate.py
+            env:
+              HOME: /opt/data
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+        containers:
+          app:
+            image: *image
+            args:
+              - sleep
+              - infinity
+            env:
+              BASH_ENV: /opt/data/.hermes-terminal-env.sh
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: "1"
+              HERMES_DISABLE_LAZY_INSTALLS: "true"
+              HERMES_HOME: /opt/data
+              HERMES_WRITE_SAFE_ROOT: /opt/data
+              HOME: /opt/data
+              LITELLM_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
+              LITELLM_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-litellm
+                    key: key
+              # Terminal HOME moves into each named profile; mise stays on the shared PVC.
+              MISE_CACHE_DIR: /opt/data/.cache/mise
+              MISE_CONFIG_DIR: /opt/data/.config/mise
+              MISE_DATA_DIR: /opt/data/.local/share/mise
+              MISE_STATE_DIR: /opt/data/.local/state/mise
+              SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080
+            envFrom:
+              - secretRef:
+                  name: hermes
+            probes:
+              # The gateway's cron ticker writes a heartbeat every 60s.
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: &healthcheck
+                      - /bin/sh
+                      - -c
+                      - >-
+                        hb=$(cut -d. -f1 /opt/data/cron/ticker_heartbeat) &&
+                        [ $(( $(date +%s) - hb )) -lt 300 ]
+                  failureThreshold: 3
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  failureThreshold: 3
+                  exec:
+                    command: *healthcheck
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: *healthcheck
+                  failureThreshold: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+          webui:
+            image:
+              repository: ghcr.io/nesquena/hermes-webui
+              tag: 0.52.555@sha256:d0bbb1c5371b1f4b0a28e4cffa5f403780eb81601b66a6d6843f6fc338f08523
+            env:
+              HERMES_API_URL: http://127.0.0.1:8642
+              HERMES_HOME: /home/hermeswebui/.hermes
+              HERMES_WEBUI_CHAT_BACKEND: gateway
+              HERMES_WEBUI_DEFAULT_WORKSPACE: /home/hermeswebui/.hermes/workspace
+              HERMES_WEBUI_GATEWAY_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes
+                    key: API_SERVER_KEY
+              HERMES_WEBUI_GATEWAY_BASE_URL: http://127.0.0.1:8642
+              HERMES_WEBUI_GATEWAY_USE_RUNS_API: "true"
+              HERMES_WEBUI_HOST: 0.0.0.0
+              HERMES_WEBUI_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes
+                    key: HERMES_WEBUI_PASSWORD
+              HERMES_WEBUI_PORT: &port 8787
+              HERMES_WEBUI_STATE_DIR: /home/hermeswebui/.hermes/webui
+              HOME: /home/hermeswebui
+              LITELLM_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-litellm
+                    key: key
+              UV_CACHE_DIR: /uv_cache
+              WANTED_GID: "10000"
+              WANTED_UID: "10000"
+            # The init script runs as PID 1 without forwarding SIGTERM; signal server.py directly.
+            lifecycle:
+              preStop:
+                exec:
+                  command:
+                    - /bin/sh
+                    - -c
+                    - kill -TERM $(cat /proc/1/task/1/children)
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  failureThreshold: 90
+                  httpGet:
+                    path: /health
+                    port: *port
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    persistence:
+      data:
+        existingClaim: hermes
+        advancedMounts:
+          hermes:
+            app:
+              - path: /opt/data
+            config-migrate:
+              - path: /opt/data
+            profile-seed:
+              - path: /opt/data
+            webui:
+              - path: /home/hermeswebui/.hermes
+      agent-source:
+        type: image
+        image: *image
+        advancedMounts:
+          hermes:
+            webui:
+              - path: /home/hermeswebui/.hermes/hermes-agent
+                subPath: opt/hermes
+                readOnly: true
+      app:
+        type: emptyDir
+        advancedMounts:
+          hermes:
+            webui:
+              - path: /app
+      profile-seed:
+        type: configMap
+        name: hermes-profile-seed
+        advancedMounts:
+          hermes:
+            profile-seed:
+              - path: /seed
+                readOnly: true
+      mise:
+        type: image
+        image: ghcr.io/jdx/mise:2026.10.19
+        advancedMounts:
+          hermes:
+            app:
+              - path: /opt/mise
+                subPath: usr/local/bin
+                readOnly: true
+            profile-seed:
+              - path: /opt/mise
+                subPath: usr/local/bin
+                readOnly: true
+      run:
+        type: emptyDir
+        globalMounts:
+          - path: /run
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+      uv-cache:
+        type: emptyDir
+        advancedMounts:
+          hermes:
+            webui:
+              - path: /uv_cache
+    route:
+      app:
+        hostnames:
+          - hermes.${CLUSTER_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    service:
+      app:
+        ports:
+          http:
+            port: *port

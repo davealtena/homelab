@@ -1,0 +1,41 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app searxng
+spec:
+  targetNamespace: selfhosted
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: dragonfly-operator
+      namespace: databases
+    - name: external-secrets-stores
+      namespace: security
+  components:
+    - ../../../../components/dragonfly
+  path: ./kubernetes/apps/selfhosted/searxng/app
+  prune: true
+  postBuild:
+    substitute:
+      APP: searxng
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: searxng
+      namespace: selfhosted
+  healthCheckExprs:
+    - apiVersion: dragonflydb.io/v1alpha1
+      kind: Dragonfly
+      failed: status.phase in ['Error', 'Failed']
+      current: status.phase == 'Ready'
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
