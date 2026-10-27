@@ -8,6 +8,11 @@ spec:
   # renovate: datasource=docker depName=ghcr.io/berriai/litellm
   image: ghcr.io/berriai/litellm:v1.83.14-stable
   replicas: 1
+  # admin API access: lets the operator manage LiteLLMTeam / LiteLLMVirtualKey
+  apiAccess:
+    masterKeyRef:
+      name: litellm
+      key: LITELLM_MASTER_KEY
   generalSettings:
     health_check_endpoint: /v1/health
   routerSettings:
