@@ -9,6 +9,16 @@ spec:
     kind: OCIRepository
     name: litellm-operator
   interval: 30m
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   values:
     controller:
       leaderElection:
