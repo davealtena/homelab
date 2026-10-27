@@ -27,6 +27,8 @@ spec:
             - streamable-http
             - --address
             - 0.0.0.0:8000
+            # the ToolHive proxy fronts this pod; its Host header is the in-cluster Service name
+            - --allowed-hosts=*
             - --disable-write
             - --disable-admin
             - --disable-provisioning
