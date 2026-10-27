@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: NixOS Eval
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths: ["nixos/**"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eval:
+    name: nix eval phobos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Nix
+        uses: https://github.com/DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+
+      # Evaluates the whole system (modules, options, package set) without building it;
+      # the same thing comin does on phobos before switching.
+      - name: Evaluate phobos
+        run: |
+          cd nixos
+          nix flake metadata --json > /dev/null
+          nix eval --raw '.#nixosConfigurations.phobos.config.system.build.toplevel.drvPath'
+          echo
+          echo "k3s: $(nix eval --raw '.#nixosConfigurations.phobos.config.services.k3s.package.version')"

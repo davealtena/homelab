@@ -74,3 +74,14 @@ Reversing this decision means a full host re-provision and reworking the k3s and
 GPU modules, so it is treated as hard-to-reverse. It should only be revisited if
 a concrete, blocking problem emerges (for example, if a required GPU driver
 cannot be made to work on NixOS), not on the basis of community popularity.
+
+## Amendment 2026-10-27: host upgrades are GitOps now
+
+The "host-level changes are not GitOps-reconciled" trade-off is closed:
+[comin](https://github.com/nlewo/comin) runs on phobos, polls `dave/homelab`
+on Forgejo and switches the system when `main` changes (`nixos/modules/comin.nix`).
+The Kubernetes minor is pinned (`k3sMinor` in `nixos/modules/k3s.nix`) and bumped
+by Renovate one minor at a time; nixpkgs patch updates arrive as weekly
+`flake.lock` PRs. Both carry `review/required`, since they restart k3s or reboot
+the node. A PR touching `nixos/` must pass the `NixOS Eval` check (full system
+evaluation) before merge. This is the NixOS equivalent of what tuppr did on Talos.

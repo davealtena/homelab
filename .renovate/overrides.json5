@@ -20,6 +20,17 @@
     },
     {
       "description": [
+        "Host changes (k3s minor, nixpkgs lock) switch the live node via comin:",
+        "never auto-merge, request review + label."
+      ],
+      "matchManagers": ["nix", "regex"],
+      "matchFileNames": ["nixos/**"],
+      "automerge": false,
+      "reviewers": ["dave"],
+      "addLabels": ["review/required", "area/nixos"]
+    },
+    {
+      "description": [
         "Cluster-critical charts: a semver-MINOR here can be breaking (e.g. a",
         "Cilium CSI/RBAC change). Don't auto-merge their minors — request review",
         "+ label so I approve in a maintenance window."

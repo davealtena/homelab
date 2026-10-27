@@ -25,7 +25,7 @@ infrastructure/hetzner/       # OpenTofu: edge VPS + Object Storage (ADR-0002/00
 
 | Area          | Tool                                                              |
 | ------------- | ---------------------------------------------------------------- |
-| Host          | NixOS 26.05 flake → single-node k3s (flannel/kube-proxy/servicelb/traefik/local-storage disabled) |
+| Host          | NixOS 26.05 flake → single-node k3s (flannel/kube-proxy/servicelb/traefik/local-storage disabled); host GitOps via comin |
 | GitOps        | Flux (flux-operator + OCIRepository-sourced Helm charts)         |
 | CI            | Forgejo Actions (in-cluster runner, k8s jobs) + renovate-operator; Git source of truth is Forgejo `dave/homelab`, GitHub is a push-mirror |
 | Charts        | bjw-s `app-template` for most apps                              |
@@ -53,7 +53,7 @@ Each app: `kubernetes/apps/<ns>/<app>/ks.yaml` + `.../app/{ocirepository,helmrel
 - mise tasks (`mise tasks` lists them): `mise run bootstrap:*` (nixos/cilium/onepassword/flux), `flux:*` (reconcile, diff, build/apply/delete-ks), `kubernetes:*`, `tofu:*`. Bootstrap reads chart versions from the OCIRepository manifests, so it never drifts from Flux.
 - Hetzner infra: `mise run tofu:plan` / `tofu:apply` (1Password `op run` supplies creds); `tofu:fmt` validates without creds.
 - Local render/diff: `mise run flux:diff` (same `flate` check as CI) or `mise run flux:build-ks <ks-name>`.
-- Host changes: edit `nixos/`, then `mise run bootstrap:nixos` (rsync + `nixos-rebuild switch --flake .#phobos`).
+- Host changes: edit `nixos/`, open a PR (the `NixOS Eval` check evaluates the system); after merge **comin** on phobos polls Forgejo and switches within ~2 min (`journalctl -u comin`, metrics :4243). `mise run bootstrap:nixos` is the manual fallback (first install, or when comin itself is broken). Kubernetes minor = `k3sMinor` in `nixos/modules/k3s.nix` (Renovate PR, one minor at a time); nixpkgs patch level = weekly flake.lock PR.
 - Prefer GitOps over live `kubectl` changes; if a live change is needed for triage, reconcile it back into Git.
 - Git: `origin` is Forgejo (`https://git.altena.io/dave/homelab`, API token in 1Password `forgejo`); PRs are opened/merged there (squash). GitHub `davealtena/homelab` is a read-only push-mirror of `main` — never push to it directly.
 

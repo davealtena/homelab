@@ -3,6 +3,15 @@
   "customManagers": [
     {
       "customType": "regex",
+      "description": ["Annotated version bindings in NixOS modules (e.g. k3sMinor)"],
+      "fileMatch": ["^nixos/.+\\.nix$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( extractVersion=(?<extractVersion>\\S+))?\\n\\s*\\w+ = \"(?<currentValue>[^\"]+)\";"
+      ],
+      "extractVersionTemplate": "{{#if extractVersion}}{{{extractVersion}}}{{/if}}"
+    },
+    {
+      "customType": "regex",
       "description": ["Process annotated dependencies"],
       "fileMatch": [
         "\\.env(?:\\.j2)?$",

@@ -8,6 +8,7 @@
     ../../modules/ssh.nix
     ../../modules/nvidia.nix
     ../../modules/k3s.nix
+    ../../modules/comin.nix
   ];
 
   networking.hostName = "phobos";

@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
-
+let
+  # renovate: datasource=github-releases depName=k3s-io/k3s extractVersion=^v(?<version>\d+\.\d+)
+  k3sMinor = "1.35";
+in
 {
   # ---------------------------------------------------------------------------
   # Kernel modules + sysctls required by Kubernetes / Cilium.
@@ -56,6 +59,9 @@
   services.k3s = {
     enable = true;
     role = "server";
+    # Kubernetes minor is pinned here (Renovate bumps it one minor at a time, k3s
+    # requires that); patch level follows nixpkgs via flake.lock maintenance.
+    package = pkgs."k3s_${builtins.replaceStrings [ "." ] [ "_" ] k3sMinor }";
     extraFlags = toString [
       "--flannel-backend=none"
       "--disable-network-policy"
@@ -82,7 +88,7 @@
   systemd.services.k3s.path = [ pkgs.nvidia-container-toolkit pkgs.nvidia-container-toolkit.tools ];
 
   # k3s CLI helpers (crictl, ctr) alongside the standalone kubectl in base.nix.
-  environment.systemPackages = [ pkgs.k3s ];
+  environment.systemPackages = [ config.services.k3s.package ];
 
   # Point root/dave at the k3s kubeconfig (world-readable via write-kubeconfig-mode).
   environment.variables.KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";

@@ -48,6 +48,11 @@
   // Update Nix flake inputs (nixpkgs) in nixos/flake.lock
   "nix": {
     "enabled": true,
-    "fileMatch": ["(^|/)flake\\.nix$"]
+    "fileMatch": ["(^|/)flake\\.nix$"],
+    // nixpkgs tracks a branch, so updates come as flake.lock refreshes; comin applies them on phobos
+    "lockFileMaintenance": {
+      "enabled": true,
+      "schedule": ["before 6am on saturday"]
+    }
   }
 }
