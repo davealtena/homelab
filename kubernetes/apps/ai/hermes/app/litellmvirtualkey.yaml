@@ -10,8 +10,6 @@ spec:
     - gpt-6-luna
     - gpt-6.1-sol
     - qwen3.6-35b
-    - gpt-4.1
-    - gpt-4.1-mini
     - minimax
   proxyRef: litellm
   secretName: hermes-litellm

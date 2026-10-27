@@ -40,7 +40,7 @@ jobs:
           forgejo-auth-method: token
           ai-base-url: http://litellm.ai.svc.cluster.local:4000/v1
           ai-api-format: openai
-          ai-model: gpt-4.1
+          ai-model: gpt-6-luna
           ai-api-key: ${{ secrets.LITELLM_API_KEY }}
           ai-fallback-model: qwen3.6-35b
           pr-number: ${{ github.event.pull_request.number || inputs.pr_number }}

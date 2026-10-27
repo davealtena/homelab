@@ -43,7 +43,7 @@ spec:
               MEMINI_LOG_FORMAT: json
               MEMINI_LLM_API: openai
               MEMINI_LLM_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
-              MEMINI_LLM_MODEL: gpt-4.1-mini
+              MEMINI_LLM_MODEL: gpt-6-luna
               MEMINI_LLM_API_KEY:
                 valueFrom:
                   secretKeyRef:
