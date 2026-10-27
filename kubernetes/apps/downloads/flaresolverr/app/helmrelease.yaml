@@ -42,7 +42,8 @@ spec:
                 cpu: 50m
                 memory: 256Mi
               limits:
-                memory: 2Gi
+                # Prowlarr syncs KAT/1337x/ExtraTorrent at once = 3 Chromium challenges in parallel
+                memory: 4Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
