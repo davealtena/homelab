@@ -89,6 +89,7 @@
   # Host packages (minimal: diagnostics + Kubernetes toolchain + secrets/backup)
   # ---------------------------------------------------------------------------
   environment.systemPackages = with pkgs; [
+    btop
     # editors & basics
     neovim
     vim
