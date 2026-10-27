@@ -6,3 +6,4 @@ namespace: flux-system
 resources:
   - ./provider.yaml
   - ./alert.yaml
+  - ./podmonitor.yaml

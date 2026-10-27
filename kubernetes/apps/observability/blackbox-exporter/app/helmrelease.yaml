@@ -60,3 +60,17 @@ spec:
         - module: icmp
           name: synology
           url: 192.168.1.200
+
+        # Internal HTTPS endpoints via envoy-internal (TLS + status + cert expiry)
+        - module: http_2xx
+          name: forgejo
+          url: https://git.${CLUSTER_DOMAIN}/api/v1/version
+        - module: http_2xx
+          name: grafana
+          url: https://grafana.${CLUSTER_DOMAIN}/api/health
+        - module: http_2xx
+          name: hermes
+          url: https://hermes.${CLUSTER_DOMAIN}/health
+        - module: http_2xx
+          name: jellyfin
+          url: https://jellyfin.${CLUSTER_DOMAIN}/health

@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: envoy-gateway
+spec:
+  selector:
+    matchLabels:
+      control-plane: envoy-gateway
+  namespaceSelector:
+    matchNames:
+      - network
+  endpoints:
+    - port: metrics
+      interval: 30s
