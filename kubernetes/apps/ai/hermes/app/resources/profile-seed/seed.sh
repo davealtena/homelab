@@ -85,6 +85,13 @@ for dist in "$dists"/*/; do
   hermes profile install "$dist" --name "$name" --force --yes >/dev/null
   echo "profile $name installed from git"
 done
+# Tools the agent needs for its own PRs, pinned to the repo's .mise.toml (flate = the CI diff check).
+export MISE_CACHE_DIR=$data/.cache/mise MISE_CONFIG_DIR=$data/.config/mise \
+  MISE_DATA_DIR=$data/.local/share/mise MISE_STATE_DIR=$data/.local/state/mise MISE_YES=1
+flate_version=$(sed -n 's/^"ubi:home-operations\/flate" = "\(.*\)"$/\1/p' "$repo/.mise.toml")
+if [[ -n $flate_version ]]; then
+  /opt/mise/mise use --global "ubi:home-operations/flate@$flate_version" >/dev/null && echo "flate $flate_version via mise"
+fi
 rm -rf "$repo"
 
 for profile in "$data"/profiles/*; do
