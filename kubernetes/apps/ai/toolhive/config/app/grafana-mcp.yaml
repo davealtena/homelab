@@ -36,7 +36,7 @@ spec:
             - --disable-incident
             - --disable-asserts
             - --disable-assistant
-            - --disable-agento
+            - --disable-agento11y
             - --disable-cloudwatch
             - --disable-cloudlogging
             - --disable-athena
