@@ -43,6 +43,7 @@ mcp_servers:
         - "kubectl-mcp_helm_get_values"
         - "kubectl-mcp_helm_history"
         - "grafana-mcp_*"
+        - "kubesearch-mcp_*"
 
 secrets:
   command:
