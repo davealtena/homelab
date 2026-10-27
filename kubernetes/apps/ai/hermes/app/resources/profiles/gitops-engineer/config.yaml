@@ -76,7 +76,8 @@ agent:
   gateway_timeout: 1800
   restart_drain_timeout: 60
   api_max_retries: 2
-  reasoning_effort: medium
+  # gpt-6-luna refuses function tools together with reasoning_effort on /v1/chat/completions
+  reasoning_effort: none
   disabled_toolsets:
     - a2a
     - browser
