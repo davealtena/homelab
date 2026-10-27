@@ -59,7 +59,7 @@ spec:
             - name: grafana
               env:
                 - name: GF_INSTALL_PLUGINS
-                  value: "grafana-clock-panel,grafana-piechart-panel,grafana-worldmap-panel,natel-discrete-panel,pr0ps-trackmap-panel,vonage-status-panel"
+                  value: "grafana-clock-panel,grafana-piechart-panel,grafana-worldmap-panel,natel-discrete-panel,pr0ps-trackmap-panel,vonage-status-panel,victoriametrics-logs-datasource"
                 - name: GF_SECURITY_ADMIN_USER
                   valueFrom:
                     secretKeyRef:
