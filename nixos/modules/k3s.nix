@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   # renovate: datasource=github-releases depName=k3s-io/k3s extractVersion=^v(?<version>\d+\.\d+)
-  k3sMinor = "1.35";
+  k3sMinor = "1.36";
 in
 {
   # ---------------------------------------------------------------------------
