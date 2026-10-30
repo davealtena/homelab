@@ -6,7 +6,7 @@ metadata:
 spec:
   # Gitea's MCP server; Forgejo exposes the same API. Runs as the Forgejo bot
   # user `agent` (collaborator with write, not on the merge whitelist).
-  image: docker.gitea.com/gitea-mcp-server:1.11.0
+  image: docker.gitea.com/gitea-mcp-server:1.12.0
   transport: stdio
   proxyMode: streamable-http
   proxyPort: 8080
