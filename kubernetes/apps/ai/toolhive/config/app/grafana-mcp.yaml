@@ -7,7 +7,7 @@ spec:
   # Official Grafana MCP: Prometheus queries, dashboards, alert rules/silences and
   # VictoriaLogs (LogsQL through the Loki tools). Read-only: Viewer service account
   # `hermes-mcp` plus every write/SaaS tool category disabled.
-  image: docker.io/grafana/mcp-grafana:2.1.1
+  image: docker.io/grafana/mcp-grafana:2.2.0
   transport: streamable-http
   proxyMode: streamable-http
   proxyPort: 8080
