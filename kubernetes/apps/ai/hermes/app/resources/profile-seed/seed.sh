@@ -96,6 +96,11 @@ rm -rf "$repo"
 
 for profile in "$data"/profiles/*; do
   [[ -d $profile ]] || continue
+  # terminal HOME of a named profile is <profile>/home (terminal.home_mode auto), so git
+  # must find its identity and Forgejo credentials there, not only in $data
+  mkdir -p "$profile/home"
+  cp "$data/.gitconfig" "$profile/home/.gitconfig"
+  cp "$data/.git-credentials" "$profile/home/.git-credentials"
   update_env "$profile/.env" '/^LITELLM_API_KEY=/d; /^API_SERVER_KEY=/d; /^SEARXNG_URL=/d; /^HERMES_WEBUI_GATEWAY_BASE_URL=/d' <<EOT
 LITELLM_API_KEY=$LITELLM_API_KEY
 API_SERVER_KEY=$API_SERVER_KEY

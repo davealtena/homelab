@@ -69,6 +69,9 @@ privacy:
 
 approvals:
   mode: smart
+  # WebUI sessions run as api_server (unattended): nobody can answer a prompt, so a flagged
+  # command would otherwise hang 5 minutes and then block the whole workflow
+  unattended_mode: approve
 
 toolsets:
   - hermes-cli

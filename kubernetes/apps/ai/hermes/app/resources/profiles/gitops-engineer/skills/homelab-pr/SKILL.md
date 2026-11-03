@@ -12,12 +12,12 @@ metadata:
 
 # Homelab pull request workflow
 
-The repo is `dave/homelab` on the in-cluster Forgejo. Your git credentials and identity are already configured (`~/.gitconfig`, `~/.git-credentials`, user `agent`). You can push branches and open PRs; you cannot merge.
+The repo is `dave/homelab` on the in-cluster Forgejo. Your git credentials and identity are already configured (`~/.gitconfig`, `~/.git-credentials`, user `agent`). You can push branches and open PRs; you cannot merge. If `git commit` or `git push` complains about identity or credentials, that is a bug in this profile's seed: report the exact error and the output of `git config --show-origin --list`, do not improvise with `git config --global` or a different route.
 
 ## 1. Clone or refresh
 
 ```bash
-cd "$HERMES_HOME/workspace"
+cd /opt/data/profiles/gitops-engineer/workspace
 [ -d homelab ] || git clone --depth 50 http://forgejo-http.selfhosted.svc.cluster.local:3000/dave/homelab.git
 cd homelab && git fetch origin && git checkout main && git reset --hard origin/main
 ```
