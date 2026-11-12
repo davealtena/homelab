@@ -2,22 +2,21 @@
 apiVersion: toolhive.stacklok.dev/v1alpha1
 kind: MCPServer
 metadata:
-  name: garmin-connect-mcp
+  name: garmin-mcp
 spec:
-  image: docker.io/node:24-alpine
+  # Garmin's official Personal API (read-only, revocable key) instead of a
+  # password login through the unofficial garminconnect library.
+  image: ghcr.io/mason-levyy/garmin-personal-mcp:0.3.0
   transport: stdio
   proxyMode: streamable-http
   proxyPort: 8080
   env:
-    - name: HOME
-      value: /tmp
-    - name: NPM_CONFIG_CACHE
-      value: /tmp/.npm
+    # tools that default to "today" use the container's date
+    - name: TZ
+      value: Europe/Amsterdam
   secrets:
-    - name: toolhive-garmin-email
-      key: GARMIN_EMAIL
-    - name: toolhive-garmin-password
-      key: GARMIN_PASSWORD
+    - name: toolhive-garmin
+      key: GARMIN_PERSONAL_API_KEY
   resources:
     requests:
       cpu: 50m
@@ -28,17 +27,12 @@ spec:
     spec:
       containers:
         - name: mcp
-          image: docker.io/node:24-alpine
-          command:
-            - npx
-          args:
-            - -y
-            - "@nicolasvegam/garmin-connect-mcp@1.1.1"
           volumeMounts:
-            - name: tmp
-              mountPath: /tmp
+            # read-only root filesystem: bearer-token cache and activity downloads live here
+            - name: home
+              mountPath: /home/garmin
       volumes:
-        - name: tmp
+        - name: home
           emptyDir: {}
   groupRef:
     name: mcp-tools

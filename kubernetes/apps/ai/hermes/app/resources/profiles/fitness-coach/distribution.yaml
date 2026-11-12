@@ -1,0 +1,9 @@
+name: fitness-coach
+version: 1.0.0
+description: "Fitness and weight-loss coach: reads training, sleep, recovery, weight and nutrition from Garmin through the garmin MCP tools and turns them into concrete advice."
+hermes_requires: ">=0.21.0"
+author: dave
+env_requires:
+  - name: LITELLM_API_KEY
+    description: "LiteLLM virtual key (seeded by the init container)"
+    required: true
