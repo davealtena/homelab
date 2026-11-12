@@ -58,7 +58,7 @@ security:
 
 terminal:
   backend: local
-  cwd: ${HERMES_HOME}/workspace
+  cwd: /opt/data/profiles/gitops-engineer/workspace
   persistent_shell: true
   timeout: 180
 
