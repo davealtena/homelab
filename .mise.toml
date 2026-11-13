@@ -5,7 +5,7 @@
 
 # Tools the tasks need that aren't assumed to be on the host (helm/kubectl/flux/op are).
 [tools]
-yq = "4.54.2"
+yq = "4.54.3"
 "ubi:home-operations/flate" = "0.7.3"
 opentofu = "1.13.9"
 
