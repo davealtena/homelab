@@ -33,7 +33,7 @@ jobs:
           fetch-depth: 0
 
       - name: AI PR Review
-        uses: https://github.com/misospace/pr-reviewer-action@25dae600b49c50c18d9b05cc8812943a1f5412ec # v3.9.0
+        uses: https://github.com/misospace/pr-reviewer-action@3d354d4ccf6ccdeaf1ad7a9547775426f25a0216 # v3.10.0
         with:
           platform: forgejo
           forgejo-api-url: http://forgejo-http.selfhosted.svc.cluster.local:3000/
